@@ -1,58 +1,61 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { useToast } from '../components/ui/Toast';
-import { PenTool, ArrowLeft, Lock, User } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { supabase } from '../lib/supabase';
+import { PenTool, ArrowLeft, Lock, Mail } from 'lucide-react';
+import { useAuth } from '../components/auth/AuthProvider';
 
 export function LoginPage() {
     const navigate = useNavigate();
     const { addToast } = useToast();
+    const { user } = useAuth();
+
+    const [isLogin, setIsLogin] = useState(false); // Default to Sign Up
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<{ username?: string; password?: string }>({});
 
-    const usernameRef = useRef<HTMLInputElement>(null);
-    const passwordRef = useRef<HTMLInputElement>(null);
+    // Form States
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    useEffect(() => {
-        // Redirect if already logged in
-        if (localStorage.getItem('demo_auth')) {
-            navigate('/');
-        }
-        // Focus first input
-        usernameRef.current?.focus();
-    }, [navigate]);
+    // Redirect if already logged in
+    if (user) {
+        navigate('/dashboard');
+    }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const username = usernameRef.current?.value || '';
-        const password = passwordRef.current?.value || '';
-        const newErrors: { username?: string; password?: string } = {};
-
-        // Validation
-        if (!username.trim()) {
-            newErrors.username = "Foydalanuvchi nomini kiriting";
-        }
-        if (!password.trim()) {
-            newErrors.password = "Parolni kiriting";
-        }
-
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            // Shake animation trigger could go here
-            return;
-        }
-
-        // Demo Login Logic
         setIsLoading(true);
-        setErrors({});
 
-        setTimeout(() => {
-            localStorage.setItem('demo_auth', 'true');
-            window.dispatchEvent(new Event('auth-change')); // Update Navbar state immediately
-            addToast('Kirish muvaffaqiyatli (Demo rejim)', 'success');
-            navigate('/dashboard');
-        }, 1500);
+        try {
+            if (isLogin) {
+                // LOGIN
+                const { error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                });
+                if (error) throw error;
+                addToast('Xush kelibsiz!', 'success');
+                // Navigate handled by AuthProvider state change
+            } else {
+                // SIGN UP
+                const { error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            username: email.split('@')[0], // Default username
+                        }
+                    }
+                });
+                if (error) throw error;
+                addToast('Ro\'yxatdan o\'tish muvaffaqiyatli! Iltimos emailni tasdiqlang.', 'success');
+            }
+        } catch (error: any) {
+            addToast(error.message || 'Xatolik yuz berdi', 'error');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -72,28 +75,28 @@ export function LoginPage() {
                     <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center text-white mx-auto mb-6 shadow-lg shadow-blue-600/30">
                         <PenTool className="w-7 h-7" />
                     </div>
-                    <h1 className="text-2xl font-bold text-slate-900 mb-2">Xush kelibsiz!</h1>
-                    <p className="text-slate-500">Davom etish uchun hisobingizga kiring.</p>
+                    <h1 className="text-2xl font-bold text-slate-900 mb-2">
+                        {isLogin ? 'Xush kelibsiz!' : 'Ro\'yxatdan o\'tish'}
+                    </h1>
+                    <p className="text-slate-500">
+                        {isLogin ? 'Davom etish uchun hisobingizga kiring.' : 'Yangi hisob yarating va jamiyatga qo\'shiling.'}
+                    </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-semibold text-slate-700 ml-1">Login</label>
+                        <label className="text-sm font-semibold text-slate-700 ml-1">Email</label>
                         <div className="relative">
-                            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                             <input
-                                ref={usernameRef}
-                                type="text"
-                                className={cn(
-                                    "w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all text-slate-900 font-medium placeholder:text-slate-400",
-                                    errors.username && "border-red-300 bg-red-50 focus:border-red-500"
-                                )}
-                                placeholder="Ismingiz"
+                                type="email"
+                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all text-slate-900 font-medium placeholder:text-slate-400"
+                                placeholder="name@company.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
                             />
                         </div>
-                        {errors.username && (
-                            <p className="text-red-500 text-xs font-semibold ml-1 animate-in-up">{errors.username}</p>
-                        )}
                     </div>
 
                     <div className="space-y-2">
@@ -101,18 +104,15 @@ export function LoginPage() {
                         <div className="relative">
                             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                             <input
-                                ref={passwordRef}
                                 type="password"
-                                className={cn(
-                                    "w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all text-slate-900 font-medium placeholder:text-slate-400",
-                                    errors.password && "border-red-300 bg-red-50 focus:border-red-500"
-                                )}
+                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all text-slate-900 font-medium placeholder:text-slate-400"
                                 placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                minLength={6}
                             />
                         </div>
-                        {errors.password && (
-                            <p className="text-red-500 text-xs font-semibold ml-1 animate-in-up">{errors.password}</p>
-                        )}
                     </div>
 
                     <Button
@@ -121,18 +121,22 @@ export function LoginPage() {
                         disabled={isLoading}
                         isLoading={isLoading}
                     >
-                        {isLoading ? 'Kirish...' : 'Kirish'}
+                        {isLogin ? 'Kirish' : 'Ro\'yxatdan o\'tish'}
                     </Button>
 
                     <div className="text-center mt-6">
-                        <a href="#" className="text-sm text-slate-400 hover:text-blue-600 transition-colors">Parolni unutdingizmi?</a>
+                        <button
+                            type="button"
+                            onClick={() => setIsLogin(!isLogin)}
+                            className="text-sm text-slate-500 hover:text-blue-600 transition-colors"
+                        >
+                            {isLogin
+                                ? "Hisobingiz yo'qmi? Ro'yxatdan o'tish"
+                                : "Hisobingiz bormi? Kirish"}
+                        </button>
                     </div>
                 </form>
             </div>
-
-            <p className="mt-8 text-center text-slate-400 text-sm">
-                Hisobingiz yo'qmi? <span className="text-blue-600 font-semibold cursor-pointer">So'rov yuborish</span>
-            </p>
         </div>
     );
 }

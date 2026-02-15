@@ -7,26 +7,30 @@ import { LoginPage } from './pages/LoginPage';
 import { CreatePost } from './pages/CreatePost';
 import { Profile } from './pages/Profile';
 
+import { AuthProvider } from './components/auth/AuthProvider';
+
 function App() {
   return (
-    <ToastProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
+    <AuthProvider>
+      <ToastProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
 
-          {/* Protected Routes */}
-          <Route element={<AppLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/explore" element={<Dashboard />} /> {/* Temp placeholder */}
-            <Route path="/bookmarks" element={<Dashboard />} /> {/* Temp placeholder */}
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/create-post" element={<CreatePost />} />
-          </Route>
+            {/* Protected Routes */}
+            <Route element={<AppLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/explore" element={<Dashboard />} /> {/* Temp placeholder */}
+              <Route path="/bookmarks" element={<Dashboard />} /> {/* Temp placeholder */}
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/create-post" element={<CreatePost />} />
+            </Route>
 
-        </Routes>
-      </Router>
-    </ToastProvider>
+          </Routes>
+        </Router>
+      </ToastProvider>
+    </AuthProvider>
   );
 }
 
