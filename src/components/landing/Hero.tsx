@@ -30,7 +30,14 @@ export function Hero() {
                         <Link to="/login">
                             <Button size="lg" className="w-full sm:w-auto shadow-blue-500/25">Hozir boshlash</Button>
                         </Link>
-                        <Button size="lg" variant="secondary" className="w-full sm:w-auto">Batafsil</Button>
+                        <Button
+                            size="lg"
+                            variant="secondary"
+                            className="w-full sm:w-auto shadow-sm"
+                            onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+                        >
+                            Batafsil
+                        </Button>
                     </div>
 
                     <div className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-slate-500">
