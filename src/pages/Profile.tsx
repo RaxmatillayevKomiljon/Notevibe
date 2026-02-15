@@ -1,5 +1,4 @@
 import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
 import { Settings, MapPin, Calendar, Link as LinkIcon, Edit3 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -87,8 +86,8 @@ export function Profile() {
                         key={tab}
                         onClick={() => setActiveTab(tab)}
                         className={`px-6 py-3 text-sm font-medium transition-colors relative ${activeTab === tab
-                                ? "text-blue-600"
-                                : "text-slate-500 hover:text-slate-900"
+                            ? "text-blue-600"
+                            : "text-slate-500 hover:text-slate-900"
                             }`}
                     >
                         {tab}
@@ -104,7 +103,7 @@ export function Profile() {
                 {activeTab === 'Maqolalar' && (
                     <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
                         <p className="text-slate-400">Hozircha maqolalar topilmadi</p>
-                        <Button variant="link" className="text-blue-600">Birinchi maqolani yozish</Button>
+                        <Button variant="ghost" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50">Birinchi maqolani yozish</Button>
                     </div>
                 )}
                 {activeTab !== 'Maqolalar' && (
