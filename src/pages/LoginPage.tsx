@@ -11,7 +11,7 @@ export function LoginPage() {
     const { addToast } = useToast();
     const { user } = useAuth();
 
-    const [isLogin, setIsLogin] = useState(false); // Default to Sign Up
+    const [isLogin, setIsLogin] = useState(false); // Default to Sign Up (Updated)
     const [isLoading, setIsLoading] = useState(false);
 
     // Form States
@@ -19,9 +19,11 @@ export function LoginPage() {
     const [password, setPassword] = useState('');
 
     // Redirect if already logged in
-    if (user) {
-        navigate('/dashboard');
-    }
+    useEffect(() => {
+        if (user) {
+            navigate('/dashboard');
+        }
+    }, [user, navigate]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
