@@ -63,9 +63,9 @@ export function Navbar() {
                 <div className="hidden md:flex items-center gap-4">
                     {isAuthenticated ? (
                         <div className="flex items-center gap-4">
-                            <span className="text-xs font-semibold px-2 py-1 bg-green-100 text-green-700 rounded-full border border-green-200">
-                                Demo: Logged in
-                            </span>
+                            <Link to="/dashboard">
+                                <Button variant="secondary" size="sm">Dashboard</Button>
+                            </Link>
                             <Button variant="ghost" size="sm" onClick={handleLogout} className="text-red-500 hover:text-red-600 hover:bg-red-50">
                                 <LogOut className="w-4 h-4 mr-2" />
                                 Chiqish

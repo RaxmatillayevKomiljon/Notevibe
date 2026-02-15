@@ -51,7 +51,7 @@ export function LoginPage() {
             localStorage.setItem('demo_auth', 'true');
             window.dispatchEvent(new Event('auth-change')); // Update Navbar state immediately
             addToast('Kirish muvaffaqiyatli (Demo rejim)', 'success');
-            navigate('/');
+            navigate('/dashboard');
         }, 1500);
     };
 
