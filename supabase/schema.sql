@@ -99,8 +99,8 @@ $$ language plpgsql security definer;
 -- Follows table (tracks who follows whom)
 create table public.follows (
   id uuid default gen_random_uuid() primary key,
-  follower_id uuid not null references auth.users on delete cascade,
-  following_id uuid not null references auth.users on delete cascade,
+  follower_id uuid not null,
+  following_id uuid not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   unique(follower_id, following_id)
 );
@@ -111,13 +111,28 @@ create policy "Follows are viewable by everyone."
   on follows for select
   using ( true );
 
-create policy "Users can follow others."
-  on follows for insert
-  with check ( auth.uid() = follower_id );
+-- RPC function to toggle follow (bypasses RLS with security definer)
+create or replace function toggle_follow_rpc(follower_uuid uuid, following_uuid uuid)
+returns boolean as $$
+declare
+  existing_id uuid;
+begin
+  -- Check if already following
+  select id into existing_id from public.follows
+    where follower_id = follower_uuid and following_id = following_uuid;
 
-create policy "Users can unfollow."
-  on follows for delete
-  using ( auth.uid() = follower_id );
+  if existing_id is not null then
+    -- Unfollow
+    delete from public.follows where id = existing_id;
+    return false;
+  else
+    -- Follow
+    insert into public.follows (follower_id, following_id)
+      values (follower_uuid, following_uuid);
+    return true;
+  end if;
+end;
+$$ language plpgsql security definer;
 
 -- Set up Storage for images (Avatars and Covers)
 insert into storage.buckets (id, name)
