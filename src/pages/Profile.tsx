@@ -56,7 +56,7 @@ export function Profile() {
                 .from('profiles')
                 .select('*')
                 .eq('id', user?.id)
-                .single();
+                .maybeSingle();
 
             setProfile(profileData);
 
@@ -341,9 +341,44 @@ export function Profile() {
                         )}
                     </div>
                 )}
-                {activeTab !== 'Maqolalar' && (
-                    <div className="text-center py-20 text-slate-400">
-                        Bu bo'lim tez orada ishga tushadi
+                {activeTab === 'Haqida' && (
+                    <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
+                        <h3 className="text-lg font-bold text-slate-900 mb-4">Bio</h3>
+                        <p className="text-slate-600 leading-relaxed mb-6">
+                            {profile?.bio || "Hozircha ma'lumot yo'q. Profilni tahrirlash orqali bio qo'shing."}
+                        </p>
+
+                        <h3 className="text-lg font-bold text-slate-900 mb-4">Ma'lumotlar</h3>
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-3">
+                                <Calendar className="w-5 h-5 text-slate-400" />
+                                <span className="text-slate-600">{new Date(user.created_at).getFullYear()} yildan beri a'zo</span>
+                            </div>
+                            {profile?.website && (
+                                <div className="flex items-center gap-3">
+                                    <LinkIcon className="w-5 h-5 text-slate-400" />
+                                    <a href={profile.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                                        {profile.website}
+                                    </a>
+                                </div>
+                            )}
+                            <div className="flex items-center gap-3">
+                                <MapPin className="w-5 h-5 text-slate-400" />
+                                <span className="text-slate-600">Toshkent, O'zbekiston</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {activeTab === 'Saqlanganlar' && (
+                    <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+                        <p className="text-slate-400 mb-2">Saqlangan maqolalar</p>
+                        <p className="text-sm text-slate-400 mb-4">Saqlanganlar sahifasidan foydalaning</p>
+                        <button
+                            onClick={() => navigate('/bookmarks')}
+                            className="text-blue-600 hover:text-blue-700 text-sm font-medium hover:underline"
+                        >
+                            Saqlanganlar sahifasiga o'tish →
+                        </button>
                     </div>
                 )}
             </div>

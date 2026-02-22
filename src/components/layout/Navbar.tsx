@@ -1,40 +1,16 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/Button';
-import { useToast } from '../ui/Toast';
 import { PenTool, LogOut, Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useAuth } from '../auth/AuthProvider';
 
 export function Navbar() {
     const navigate = useNavigate();
-    const { addToast } = useToast();
+    const { user, signOut } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    useEffect(() => {
-        // Check auth state on mount
-        const auth = localStorage.getItem('demo_auth');
-        setIsAuthenticated(!!auth);
-
-        // Listen for storage events to update state across tabs/windows
-        const handleStorageChange = () => {
-            setIsAuthenticated(!!localStorage.getItem('demo_auth'));
-        };
-
-        // Custom event for immediate local updates
-        window.addEventListener('auth-change', handleStorageChange);
-        window.addEventListener('storage', handleStorageChange);
-
-        return () => {
-            window.removeEventListener('auth-change', handleStorageChange);
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, []);
-
-    const handleLogout = () => {
-        localStorage.removeItem('demo_auth');
-        setIsAuthenticated(false);
-        window.dispatchEvent(new Event('auth-change'));
-        addToast('Tizimdan muvaffaqiyatli chiqildi', 'info');
+    const handleLogout = async () => {
+        await signOut();
         navigate('/');
     };
 
@@ -61,7 +37,7 @@ export function Navbar() {
 
                 {/* Auth Button (Desktop) */}
                 <div className="hidden md:flex items-center gap-4">
-                    {isAuthenticated ? (
+                    {user ? (
                         <div className="flex items-center gap-4">
                             <Link to="/dashboard">
                                 <Button variant="secondary" size="sm">Dashboard</Button>
@@ -95,12 +71,11 @@ export function Navbar() {
                     <a href="#awards" className="text-slate-600 font-medium p-2 block" onClick={() => setIsMenuOpen(false)}>G'oliblar</a>
                     <a href="#faq" className="text-slate-600 font-medium p-2 block" onClick={() => setIsMenuOpen(false)}>FAQ</a>
                     <div className="h-px bg-slate-100 my-2" />
-                    {isAuthenticated ? (
+                    {user ? (
                         <>
-                            <div className="flex items-center gap-2 px-2">
-                                <span className="w-2 h-2 bg-green-500 rounded-full" />
-                                <span className="text-sm font-medium text-slate-900">Tizimga kirilgan</span>
-                            </div>
+                            <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                                <Button variant="secondary" className="w-full justify-center">Dashboard</Button>
+                            </Link>
                             <Button variant="danger" className="w-full justify-center" onClick={() => { handleLogout(); setIsMenuOpen(false); }}>
                                 Chiqish
                             </Button>

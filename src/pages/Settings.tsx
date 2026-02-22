@@ -50,7 +50,6 @@ export function Settings() {
                 <Card className="p-0 overflow-hidden">
                     <div className="p-4 border-b border-slate-100 bg-slate-50/50">
                         <h2 className="font-semibold text-slate-900 flex items-center gap-2">
-                            <iframe className="w-5 h-5 text-purple-600" />
                             <Globe className="w-5 h-5 text-purple-600" />
                             Ilova sozlamalari
                         </h2>

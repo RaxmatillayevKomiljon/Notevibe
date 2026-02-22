@@ -7,7 +7,8 @@ import { LoginPage } from './pages/LoginPage';
 import { CreatePost } from './pages/CreatePost';
 import { Profile } from './pages/Profile';
 import { Settings } from './pages/Settings';
-import { PlaceholderPage } from './pages/PlaceholderPage';
+import { ExplorePage } from './pages/ExplorePage';
+import { BookmarksPage } from './pages/BookmarksPage';
 
 import { AuthProvider } from './components/auth/AuthProvider';
 
@@ -23,8 +24,8 @@ function App() {
             {/* Protected Routes */}
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/explore" element={<PlaceholderPage title="Kesht etish" />} />
-              <Route path="/bookmarks" element={<PlaceholderPage title="Saqlanganlar" />} />
+              <Route path="/explore" element={<ExplorePage />} />
+              <Route path="/bookmarks" element={<BookmarksPage />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/create-post" element={<CreatePost />} />

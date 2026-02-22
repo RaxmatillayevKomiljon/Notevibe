@@ -16,7 +16,13 @@ export function CreatePost() {
     const [isPublishing, setIsPublishing] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    // ... (handleInput remains same)
+    const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setContent(e.target.value);
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+        }
+    };
 
     const handlePublish = async () => {
         if (!title.trim() || !content.trim()) {
@@ -37,7 +43,7 @@ export function CreatePost() {
                 .from('profiles')
                 .select('id')
                 .eq('id', user.id)
-                .single();
+                .maybeSingle();
 
             if (!profile) {
                 const { error: profileError } = await supabase
@@ -46,21 +52,26 @@ export function CreatePost() {
                         id: user.id,
                         username: user.email?.split('@')[0] || 'user',
                         full_name: user.email?.split('@')[0],
-                        avatar_url: `https://api.dicebear.com/7.x/avataaHs/svg?seed=${user.id}`
+                        avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`
                     });
                 if (profileError) throw profileError;
             }
 
             // 2. Create Post
+            const parsedTags = tags.split(',').map(t => t.trim()).filter(Boolean);
+            const postData: Record<string, unknown> = {
+                author_id: user.id,
+                title,
+                content,
+                excerpt: content.substring(0, 150),
+            };
+            if (parsedTags.length > 0) {
+                postData.tags = parsedTags;
+            }
+
             const { error } = await supabase
                 .from('posts')
-                .insert({
-                    author_id: user.id,
-                    title,
-                    content,
-                    tags: tags.split(',').map(t => t.trim()).filter(Boolean),
-                    cover_image: null // TODO: Image upload later
-                });
+                .insert(postData);
 
             if (error) throw error;
 

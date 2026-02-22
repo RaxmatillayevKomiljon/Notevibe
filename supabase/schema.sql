@@ -5,6 +5,7 @@ create table public.profiles (
   username text unique,
   full_name text,
   avatar_url text,
+  bio text,
   website text,
 
   primary key (id),

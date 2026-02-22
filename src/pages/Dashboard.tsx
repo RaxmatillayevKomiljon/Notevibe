@@ -1,15 +1,17 @@
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Search, Flame, MessageSquare, Heart, Share2, MoreHorizontal } from 'lucide-react';
+import { Search, Flame, MessageSquare, Heart, Share2, MoreHorizontal, Bookmark } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Post } from '../lib/types';
+import { toggleBookmark, isBookmarked } from './BookmarksPage';
 
 export function Dashboard() {
     const [posts, setPosts] = useState<Post[]>([]);
-    const [suggestedUsers, setSuggestedUsers] = useState<any[]>([]);
+    const [suggestedUsers, setSuggestedUsers] = useState<{ username: string; full_name: string | null; avatar_url: string | null }[]>([]);
     const [trendingTags, setTrendingTags] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
+    const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         fetchData();
@@ -29,10 +31,18 @@ export function Dashboard() {
                 .order('created_at', { ascending: false });
 
             if (postsError) throw postsError;
-            setPosts(postsData || []);
+            const fetchedPosts = postsData || [];
+            setPosts(fetchedPosts);
+
+            // Initialize bookmark state
+            const bIds = new Set<string>();
+            fetchedPosts.forEach(p => {
+                if (isBookmarked(p.id)) bIds.add(p.id);
+            });
+            setBookmarkedIds(bIds);
 
             // 2. Process Tags for Trending
-            const allTags = postsData?.flatMap(p => p.tags || []) || [];
+            const allTags = fetchedPosts.flatMap(p => p.tags || []);
             const uniqueTags = Array.from(new Set(allTags)).slice(0, 5);
             setTrendingTags(uniqueTags);
 
@@ -51,6 +61,19 @@ export function Dashboard() {
         } finally {
             setLoading(false);
         }
+    }
+
+    function handleToggleBookmark(postId: string) {
+        const isNowBookmarked = toggleBookmark(postId);
+        setBookmarkedIds(prev => {
+            const next = new Set(prev);
+            if (isNowBookmarked) {
+                next.add(postId);
+            } else {
+                next.delete(postId);
+            }
+            return next;
+        });
     }
 
     return (
@@ -100,7 +123,7 @@ export function Dashboard() {
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex items-center gap-3">
                                         <img
-                                            src={post.author?.avatar_url || `https://api.dicebear.com/7.x/avataaHs/svg?seed=${post.author?.username || 'User'}`}
+                                            src={post.author?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.author?.username || 'User'}`}
                                             alt={post.author?.full_name || 'User'}
                                             className="w-10 h-10 rounded-full bg-slate-100"
                                         />
@@ -143,6 +166,16 @@ export function Dashboard() {
                                         </button>
                                     </div>
                                     <div className="flex items-center gap-4 text-xs text-slate-400 font-medium">
+                                        <button
+                                            onClick={() => handleToggleBookmark(post.id)}
+                                            className={`p-1.5 rounded-lg transition-colors ${bookmarkedIds.has(post.id)
+                                                    ? 'text-amber-500 bg-amber-50'
+                                                    : 'text-slate-400 hover:text-amber-500 hover:bg-amber-50'
+                                                }`}
+                                            title={bookmarkedIds.has(post.id) ? 'Saqlangandan olib tashlash' : 'Saqlash'}
+                                        >
+                                            <Bookmark className={`w-4 h-4 ${bookmarkedIds.has(post.id) ? 'fill-amber-500' : ''}`} />
+                                        </button>
                                         <span>3 min o'qish</span>
                                         <button className="hover:text-slate-800">
                                             <Share2 className="w-4 h-4" />
@@ -150,7 +183,8 @@ export function Dashboard() {
                                     </div>
                                 </div>
                             </Card>
-                        )))}
+                        )))
+                    }
                 </div>
             </div>
 
@@ -189,8 +223,8 @@ export function Dashboard() {
                             {suggestedUsers.map((user, i) => (
                                 <div key={i} className="flex items-center gap-3">
                                     <img
-                                        src={user.avatar_url || `https://api.dicebear.com/7.x/avataaHs/svg?seed=${user.username}`}
-                                        alt={user.full_name}
+                                        src={user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username}`}
+                                        alt={user.full_name || user.username}
                                         className="w-9 h-9 rounded-full bg-slate-100"
                                     />
                                     <div className="flex-1 min-w-0">
