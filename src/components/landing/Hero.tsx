@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
-import { BadgeCheck, Flame, MessageSquare, Repeat, Heart } from 'lucide-react';
+import { BadgeCheck, Flame, MessageSquare, Repeat, ThumbsUp } from 'lucide-react';
 
 export function Hero() {
     return (
@@ -43,7 +43,7 @@ export function Hero() {
                     <div className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-slate-500">
                         <div className="flex -space-x-2">
                             {[1, 2, 3, 4].map(i => (
-                                <img key={i} src={`https://api.dicebear.com/7.x/avataaHs/svg?seed=${i * 123}`} alt="User" className="w-8 h-8 rounded-full border-2 border-white bg-slate-100" />
+                                <img key={i} src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i * 123}`} alt="User" className="w-8 h-8 rounded-full border-2 border-white bg-slate-100" />
                             ))}
                         </div>
                         <p>1,200+ o'quvchi qo'shildi</p>
@@ -57,7 +57,7 @@ export function Hero() {
                     <Card className="relative p-6 max-w-md mx-auto transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500 border-slate-200/60 shadow-2xl">
                         {/* Mock Header */}
                         <div className="flex items-center gap-3 mb-4">
-                            <img src="https://api.dicebear.com/7.x/avataaHs/svg?seed=Felix" alt="Author" className="w-10 h-10 rounded-full bg-slate-100" />
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Author" className="w-10 h-10 rounded-full bg-slate-100" />
                             <div>
                                 <h4 className="font-bold text-slate-900">Asilbek T.</h4>
                                 <p className="text-xs text-slate-500">2 soat oldin • 5 min o'qish</p>
@@ -83,7 +83,7 @@ export function Hero() {
                         <div className="flex items-center justify-between border-t border-slate-100 pt-4">
                             <div className="flex gap-4">
                                 <button className="flex items-center gap-1.5 text-pink-500 text-sm font-semibold bg-pink-50 px-3 py-1.5 rounded-full hover:bg-pink-100 transition">
-                                    <Heart className="w-4 h-4 fill-pink-500" />
+                                    <ThumbsUp className="w-4 h-4 fill-blue-500" />
                                     24 Kudos
                                 </button>
                                 <button className="flex items-center gap-1.5 text-slate-500 text-sm bg-slate-50 px-3 py-1.5 rounded-full hover:bg-slate-100 transition">
