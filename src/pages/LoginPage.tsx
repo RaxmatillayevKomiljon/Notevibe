@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { useToast } from '../components/ui/Toast';
@@ -32,28 +32,35 @@ export function LoginPage() {
         try {
             if (isLogin) {
                 // LOGIN
-                const { error } = await supabase.auth.signInWithPassword({
+                const { data, error } = await supabase.auth.signInWithPassword({
                     email,
                     password,
                 });
                 if (error) throw error;
-                addToast('Xush kelibsiz!', 'success');
-                // Navigate handled by AuthProvider state change
+                console.log("Login success:", data);
             } else {
                 // SIGN UP
-                const { error } = await supabase.auth.signUp({
+                const { data, error } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
                         data: {
-                            username: email.split('@')[0], // Default username
+                            username: email.split('@')[0],
                         }
                     }
                 });
                 if (error) throw error;
-                addToast('Ro\'yxatdan o\'tish muvaffaqiyatli! Iltimos emailni tasdiqlang.', 'success');
+                console.log("Sign Up response:", data);
+
+                if (data.session) {
+                    addToast('Ro\'yxatdan o\'tish muvaffaqiyatli!', 'success');
+                } else {
+                    addToast('Ro\'yxatdan o\'tish muvaffaqiyatli! Iltimos, kirish tugmasini bosing.', 'success');
+                    setIsLogin(true); // Switch to login mode
+                }
             }
         } catch (error: any) {
+            console.error("Auth error:", error);
             addToast(error.message || 'Xatolik yuz berdi', 'error');
         } finally {
             setIsLoading(false);

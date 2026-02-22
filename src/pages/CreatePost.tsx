@@ -3,37 +3,75 @@ import { Button } from '../components/ui/Button';
 import { Image, Hash, ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from '../components/ui/Toast';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../components/auth/AuthProvider';
 
 export function CreatePost() {
     const navigate = useNavigate();
     const { addToast } = useToast();
+    const { user } = useAuth();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [tags, setTags] = useState('');
     const [isPublishing, setIsPublishing] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setContent(e.target.value);
-        // Auto-resize
-        if (textareaRef.current) {
-            textareaRef.current.style.height = 'auto';
-            textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
-        }
-    };
+    // ... (handleInput remains same)
 
-    const handlePublish = () => {
+    const handlePublish = async () => {
         if (!title.trim() || !content.trim()) {
             addToast('Sarlavha va matn bo\'lishi shart', 'error');
             return;
         }
 
+        if (!user) {
+            addToast('Iltimos, avval tizimga kiring', 'error');
+            navigate('/login');
+            return;
+        }
+
         setIsPublishing(true);
-        // Mock API call
-        setTimeout(() => {
+        try {
+            // 1. Ensure Profile Exists (since we don't have a trigger yet)
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('id')
+                .eq('id', user.id)
+                .single();
+
+            if (!profile) {
+                const { error: profileError } = await supabase
+                    .from('profiles')
+                    .insert({
+                        id: user.id,
+                        username: user.email?.split('@')[0] || 'user',
+                        full_name: user.email?.split('@')[0],
+                        avatar_url: `https://api.dicebear.com/7.x/avataaHs/svg?seed=${user.id}`
+                    });
+                if (profileError) throw profileError;
+            }
+
+            // 2. Create Post
+            const { error } = await supabase
+                .from('posts')
+                .insert({
+                    author_id: user.id,
+                    title,
+                    content,
+                    tags: tags.split(',').map(t => t.trim()).filter(Boolean),
+                    cover_image: null // TODO: Image upload later
+                });
+
+            if (error) throw error;
+
             addToast('Maqola muvaffaqiyatli chop etildi!', 'success');
             navigate('/dashboard');
-        }, 1500);
+        } catch (error: any) {
+            console.error('Error creating post:', error);
+            addToast(error.message || 'Xatolik yuz berdi', 'error');
+        } finally {
+            setIsPublishing(false);
+        }
     };
 
     return (

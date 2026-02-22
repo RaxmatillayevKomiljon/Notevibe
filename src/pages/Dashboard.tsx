@@ -1,34 +1,58 @@
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Search, Flame, MessageSquare, Heart, Share2, MoreHorizontal } from 'lucide-react';
-
-const MOCK_POSTS = [
-    {
-        id: 1,
-        author: { name: "Aziza Karimova", handle: "@aziza_k", avatar: "https://api.dicebear.com/7.x/avataaHs/svg?seed=Aziza" },
-        time: "2 soat oldin",
-        title: "Dasturlashni o'rganishdagi eng katta xato",
-        content: "Ko'pchilik dasturlashni boshlaganda birdaniga sintaksis yodlashga tushadi. Aslida esa mantiqiy fikrlashni rivojlantirish muhimroq. Men o'zim 6 oy vaqtimni behuda sarflaganman...",
-        tags: ["Dasturlash", "Tajriba", "Maslahat"],
-        likes: 45,
-        comments: 12,
-        readTime: "4 min o'qish"
-    },
-    {
-        id: 2,
-        author: { name: "Javohir N.", handle: "@javohir_dev", avatar: "https://api.dicebear.com/7.x/avataaHs/svg?seed=Javohir" },
-        time: "5 soat oldin",
-        title: "React 19 da nimalar yangi? Qisqacha sharh",
-        content: "React jamoasi yangi versiyani e'lon qildi va bu safar ular rostdan ham katta o'zgarishlar kiritishdi. Server Components endi standart bo'lishi kutilmoqda...",
-        tags: ["React", "Frontend", "News"],
-        likes: 128,
-        comments: 34,
-        readTime: "6 min o'qish",
-        hasImage: true
-    }
-];
+import { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase';
+import { Post } from '../lib/types';
 
 export function Dashboard() {
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [suggestedUsers, setSuggestedUsers] = useState<any[]>([]);
+    const [trendingTags, setTrendingTags] = useState<string[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    async function fetchData() {
+        try {
+            setLoading(true);
+
+            // 1. Fetch Posts
+            const { data: postsData, error: postsError } = await supabase
+                .from('posts')
+                .select(`
+                    *,
+                    author:profiles(username, full_name, avatar_url)
+                `)
+                .order('created_at', { ascending: false });
+
+            if (postsError) throw postsError;
+            setPosts(postsData || []);
+
+            // 2. Process Tags for Trending
+            const allTags = postsData?.flatMap(p => p.tags || []) || [];
+            const uniqueTags = Array.from(new Set(allTags)).slice(0, 5);
+            setTrendingTags(uniqueTags);
+
+            // 3. Fetch Suggested Users (Random 3 for now)
+            const { data: usersData, error: usersError } = await supabase
+                .from('profiles')
+                .select('username, full_name, avatar_url')
+                .limit(3);
+
+            if (!usersError) {
+                setSuggestedUsers(usersData || []);
+            }
+
+        } catch (error) {
+            console.error('Error fetching dashboard data:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <div className="grid lg:grid-cols-3 gap-8">
             {/* Main Feed */}
@@ -48,12 +72,12 @@ export function Dashboard() {
 
                 {/* Categories / Filter */}
                 <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                    {["Barchasi", "Dasturlash", "Dizayn", "Shaxsiy Rivojlanish", "Startaplar"].map((cat, i) => (
+                    {["Barchasi", ...trendingTags].map((cat, i) => (
                         <button
                             key={i}
                             className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${i === 0
-                                    ? "bg-slate-900 text-white"
-                                    : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+                                ? "bg-slate-900 text-white"
+                                : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
                                 }`}
                         >
                             {cat}
@@ -63,56 +87,70 @@ export function Dashboard() {
 
                 {/* Posts */}
                 <div className="space-y-6">
-                    {MOCK_POSTS.map(post => (
-                        <Card key={post.id} className="p-6 border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center gap-3">
-                                    <img src={post.author.avatar} alt={post.author.name} className="w-10 h-10 rounded-full bg-slate-100" />
-                                    <div>
-                                        <h3 className="font-bold text-slate-900 text-sm">{post.author.name}</h3>
-                                        <p className="text-xs text-slate-500">{post.author.handle} • {post.time}</p>
+                    {loading ? (
+                        <div className="text-center py-10 text-slate-500">Yuklanmoqda...</div>
+                    ) : posts.length === 0 ? (
+                        <div className="text-center py-10 text-slate-500 bg-white rounded-2xl border border-slate-200">
+                            <p>Hozircha postlar yo'q.</p>
+                            <p className="text-sm">Birinchi bo'lib siz yozing!</p>
+                        </div>
+                    ) : (
+                        posts.map(post => (
+                            <Card key={post.id} className="p-6 border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="flex items-center gap-3">
+                                        <img
+                                            src={post.author?.avatar_url || `https://api.dicebear.com/7.x/avataaHs/svg?seed=${post.author?.username || 'User'}`}
+                                            alt={post.author?.full_name || 'User'}
+                                            className="w-10 h-10 rounded-full bg-slate-100"
+                                        />
+                                        <div>
+                                            <h3 className="font-bold text-slate-900 text-sm">{post.author?.full_name || post.author?.username || 'Anonymous'}</h3>
+                                            <p className="text-xs text-slate-500">
+                                                @{post.author?.username} • {new Date(post.created_at).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button className="text-slate-400 hover:text-slate-600">
+                                        <MoreHorizontal className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                <div className="mb-4">
+                                    <h2 className="text-xl font-bold text-slate-900 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
+                                        {post.title}
+                                    </h2>
+                                    <p className="text-slate-600 leading-relaxed line-clamp-3">
+                                        {post.content}
+                                    </p>
+                                </div>
+
+                                {post.tags && post.tags.map(tag => (
+                                    <span key={tag} className="inline-block bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-md mr-2 mb-4 font-medium">
+                                        #{tag}
+                                    </span>
+                                ))}
+
+                                <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                                    <div className="flex gap-6">
+                                        <button className="flex items-center gap-2 text-slate-500 hover:text-pink-500 transition-colors text-sm group">
+                                            <Heart className="w-5 h-5 group-hover:fill-pink-500 transition-colors" />
+                                            <span>{post.likes_count || 0}</span>
+                                        </button>
+                                        <button className="flex items-center gap-2 text-slate-500 hover:text-blue-500 transition-colors text-sm">
+                                            <MessageSquare className="w-5 h-5" />
+                                            <span>0</span>
+                                        </button>
+                                    </div>
+                                    <div className="flex items-center gap-4 text-xs text-slate-400 font-medium">
+                                        <span>3 min o'qish</span>
+                                        <button className="hover:text-slate-800">
+                                            <Share2 className="w-4 h-4" />
+                                        </button>
                                     </div>
                                 </div>
-                                <button className="text-slate-400 hover:text-slate-600">
-                                    <MoreHorizontal className="w-5 h-5" />
-                                </button>
-                            </div>
-
-                            <div className="mb-4">
-                                <h2 className="text-xl font-bold text-slate-900 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
-                                    {post.title}
-                                </h2>
-                                <p className="text-slate-600 leading-relaxed line-clamp-3">
-                                    {post.content}
-                                </p>
-                            </div>
-
-                            {post.tags.map(tag => (
-                                <span key={tag} className="inline-block bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-md mr-2 mb-4 font-medium">
-                                    #{tag}
-                                </span>
-                            ))}
-
-                            <div className="flex items-center justify-between pt-4 border-t border-slate-50">
-                                <div className="flex gap-6">
-                                    <button className="flex items-center gap-2 text-slate-500 hover:text-pink-500 transition-colors text-sm group">
-                                        <Heart className="w-5 h-5 group-hover:fill-pink-500 transition-colors" />
-                                        <span>{post.likes}</span>
-                                    </button>
-                                    <button className="flex items-center gap-2 text-slate-500 hover:text-blue-500 transition-colors text-sm">
-                                        <MessageSquare className="w-5 h-5" />
-                                        <span>{post.comments}</span>
-                                    </button>
-                                </div>
-                                <div className="flex items-center gap-4 text-xs text-slate-400 font-medium">
-                                    <span>{post.readTime}</span>
-                                    <button className="hover:text-slate-800">
-                                        <Share2 className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </div>
-                        </Card>
-                    ))}
+                            </Card>
+                        )))}
                 </div>
             </div>
 
@@ -124,39 +162,46 @@ export function Dashboard() {
                         <Flame className="w-5 h-5 text-orange-500" />
                         <h3>Trenddagi mavzular</h3>
                     </div>
-                    <div className="space-y-4">
-                        {[
-                            { topic: "Sun'iy Intellekt", posts: "2.4k post" },
-                            { topic: "JavaScript", posts: "1.8k post" },
-                            { topic: "Freelance", posts: "956 post" },
-                            { topic: "Kitobxonlik", posts: "840 post" }
-                        ].map((item, i) => (
-                            <div key={i} className="flex justify-between items-center group cursor-pointer">
-                                <div>
-                                    <p className="text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">{item.topic}</p>
-                                    <p className="text-xs text-slate-400">{item.posts}</p>
+                    {trendingTags.length === 0 ? (
+                        <p className="text-sm text-slate-400">Hozircha mavzular yo'q</p>
+                    ) : (
+                        <div className="space-y-4">
+                            {trendingTags.map((tag, i) => (
+                                <div key={i} className="flex justify-between items-center group cursor-pointer">
+                                    <div>
+                                        <p className="text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">#{tag}</p>
+                                        <p className="text-xs text-slate-400">1.2k views</p>
+                                    </div>
+                                    <MoreHorizontal className="w-4 h-4 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
-                                <MoreHorizontal className="w-4 h-4 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </Card>
 
                 {/* Suggested Users */}
                 <Card className="p-5 border-slate-100 shadow-sm sticky top-64">
                     <h3 className="font-bold text-slate-900 mb-4">Tavsiya etilgan avtorlar</h3>
-                    <div className="space-y-4">
-                        {[1, 2, 3].map(i => (
-                            <div key={i} className="flex items-center gap-3">
-                                <img src={`https://api.dicebear.com/7.x/avataaHs/svg?seed=${i + 10}`} alt="User" className="w-9 h-9 rounded-full bg-slate-100" />
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-bold text-slate-900 truncate">User {i}</p>
-                                    <p className="text-xs text-slate-500 truncate">Fullstack Dev</p>
+                    {suggestedUsers.length === 0 ? (
+                        <p className="text-sm text-slate-400">Tavsiyalar yo'q</p>
+                    ) : (
+                        <div className="space-y-4">
+                            {suggestedUsers.map((user, i) => (
+                                <div key={i} className="flex items-center gap-3">
+                                    <img
+                                        src={user.avatar_url || `https://api.dicebear.com/7.x/avataaHs/svg?seed=${user.username}`}
+                                        alt={user.full_name}
+                                        className="w-9 h-9 rounded-full bg-slate-100"
+                                    />
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-bold text-slate-900 truncate">{user.full_name || user.username}</p>
+                                        <p className="text-xs text-slate-500 truncate">@{user.username}</p>
+                                    </div>
+                                    <Button size="sm" variant="outline" className="h-8 px-3 text-xs">A'zo bo'lish</Button>
                                 </div>
-                                <Button size="sm" variant="outline" className="h-8 px-3 text-xs">A'zo bo'lish</Button>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </Card>
             </div>
         </div>

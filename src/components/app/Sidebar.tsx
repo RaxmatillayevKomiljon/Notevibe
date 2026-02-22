@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Home, Compass, Bookmark, User, LogOut, PenSquare, Settings } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Button } from '../ui/Button';
+import { useAuth } from '../auth/AuthProvider';
 
 const navItems = [
     { icon: Home, label: 'Bosh sahifa', path: '/dashboard' },
@@ -13,10 +14,10 @@ const navItems = [
 
 export function Sidebar() {
     const location = useLocation();
+    const { user, signOut } = useAuth();
 
-    const handleLogout = () => {
-        localStorage.removeItem('demo_auth');
-        window.location.href = '/';
+    const handleLogout = async () => {
+        await signOut();
     };
 
     return (
@@ -64,13 +65,15 @@ export function Sidebar() {
             <div className="p-4 border-t border-slate-100">
                 <div className="flex items-center gap-3 p-3 mb-2 rounded-xl bg-slate-50">
                     <img
-                        src="https://api.dicebear.com/7.x/avataaHs/svg?seed=Felix"
+                        src={`https://api.dicebear.com/7.x/avataaHs/svg?seed=${user?.email || 'User'}`}
                         alt="User"
                         className="w-9 h-9 rounded-full bg-white border border-slate-200"
                     />
                     <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-slate-900 truncate">Asilbek T.</p>
-                        <p className="text-xs text-slate-500 truncate">@asilbek_dev</p>
+                        <p className="text-sm font-bold text-slate-900 truncate">
+                            {user?.user_metadata?.username || user?.email?.split('@')[0] || 'Foydalanuvchi'}
+                        </p>
+                        <p className="text-xs text-slate-500 truncate">{user?.email}</p>
                     </div>
                 </div>
                 <button
