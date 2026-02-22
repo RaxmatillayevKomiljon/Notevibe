@@ -51,41 +51,19 @@ export function Profile() {
         try {
             setLoading(true);
 
-            // 1. Fetch Profile
+            // Small delay to let AuthProvider create the profile if needed
+            await new Promise(r => setTimeout(r, 300));
+
+            // 1. Fetch Profile (AuthProvider ensures it exists)
             const { data: profileData } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('id', user?.id)
                 .maybeSingle();
 
-            // 2. If no profile exists, auto-create from Google metadata or email
-            if (!profileData && user) {
-                const meta = user.user_metadata || {};
-                const newProfile = {
-                    id: user.id,
-                    username: meta.preferred_username || meta.user_name || user.email?.split('@')[0] || 'user',
-                    full_name: meta.full_name || meta.name || user.email?.split('@')[0] || '',
-                    avatar_url: meta.avatar_url || meta.picture || null,
-                    bio: null,
-                    website: null,
-                };
+            setProfile(profileData);
 
-                const { data: created, error: insertError } = await supabase
-                    .from('profiles')
-                    .insert(newProfile)
-                    .select()
-                    .maybeSingle();
-
-                if (insertError) {
-                    console.error('Error creating profile:', insertError);
-                } else {
-                    setProfile(created);
-                }
-            } else {
-                setProfile(profileData);
-            }
-
-            // 3. Fetch User's Posts
+            // 2. Fetch User's Posts
             const { data: postsData } = await supabase
                 .from('posts')
                 .select('*')
