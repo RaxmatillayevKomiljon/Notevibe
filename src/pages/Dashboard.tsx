@@ -6,12 +6,15 @@ import { supabase } from '../lib/supabase';
 import { Post } from '../lib/types';
 import { toggleBookmark, isBookmarked } from './BookmarksPage';
 import { toggleKudos, getUserKudos } from '../lib/kudos';
+import { toggleFollow, getFollowingIds } from '../lib/follows';
 import { useAuth } from '../components/auth/AuthProvider';
 
 export function Dashboard() {
     const { user } = useAuth();
     const [posts, setPosts] = useState<Post[]>([]);
-    const [suggestedUsers, setSuggestedUsers] = useState<{ username: string; full_name: string | null; avatar_url: string | null }[]>([]);
+    const [suggestedUsers, setSuggestedUsers] = useState<{ id: string; username: string; full_name: string | null; avatar_url: string | null }[]>([]);
+    const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
+    const [followLoading, setFollowLoading] = useState<Set<string>>(new Set());
     const [trendingTags, setTrendingTags] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
@@ -58,14 +61,21 @@ export function Dashboard() {
             const uniqueTags = Array.from(new Set(allTags)).slice(0, 5);
             setTrendingTags(uniqueTags);
 
-            // 3. Fetch Suggested Users (Random 3 for now)
+            // 3. Fetch Suggested Users (exclude current user)
             const { data: usersData, error: usersError } = await supabase
                 .from('profiles')
-                .select('username, full_name, avatar_url')
-                .limit(3);
+                .select('id, username, full_name, avatar_url')
+                .neq('id', user?.id || '')
+                .limit(5);
 
-            if (!usersError) {
-                setSuggestedUsers(usersData || []);
+            if (!usersError && usersData) {
+                setSuggestedUsers(usersData);
+                // Load follow state
+                if (user) {
+                    const ids = usersData.map(u => u.id);
+                    const followSet = await getFollowingIds(user.id, ids);
+                    setFollowingIds(followSet);
+                }
             }
 
         } catch (error) {
@@ -206,8 +216,8 @@ export function Dashboard() {
                                             onClick={() => handleToggleKudos(post.id)}
                                             disabled={kudosLoading.has(post.id)}
                                             className={`flex items-center gap-2 transition-colors text-sm group ${kudosGiven.has(post.id)
-                                                    ? 'text-blue-600'
-                                                    : 'text-slate-500 hover:text-blue-600'
+                                                ? 'text-blue-600'
+                                                : 'text-slate-500 hover:text-blue-600'
                                                 }`}
                                         >
                                             <ThumbsUp className={`w-5 h-5 transition-all ${kudosGiven.has(post.id) ? 'fill-blue-600' : 'group-hover:scale-110'
@@ -285,7 +295,44 @@ export function Dashboard() {
                                         <p className="text-sm font-bold text-slate-900 truncate">{user.full_name || user.username}</p>
                                         <p className="text-xs text-slate-500 truncate">@{user.username}</p>
                                     </div>
-                                    <Button size="sm" variant="outline" className="h-8 px-3 text-xs">A'zo bo'lish</Button>
+                                    <Button
+                                        size="sm"
+                                        variant={followingIds.has(suggestedUsers[i]?.id) ? 'primary' : 'outline'}
+                                        className={`h-8 px-3 text-xs transition-all ${followingIds.has(suggestedUsers[i]?.id)
+                                            ? 'bg-blue-600 text-white hover:bg-red-500'
+                                            : ''
+                                            }`}
+                                        disabled={followLoading.has(suggestedUsers[i]?.id)}
+                                        onClick={async () => {
+                                            const targetId = suggestedUsers[i]?.id;
+                                            if (!user || !targetId || followLoading.has(targetId)) return;
+                                            setFollowLoading(prev => new Set(prev).add(targetId));
+                                            try {
+                                                const isNowFollowing = await toggleFollow(user.id, targetId);
+                                                setFollowingIds(prev => {
+                                                    const next = new Set(prev);
+                                                    if (isNowFollowing) next.add(targetId);
+                                                    else next.delete(targetId);
+                                                    return next;
+                                                });
+                                            } catch (e) {
+                                                console.error('Follow error:', e);
+                                            } finally {
+                                                setFollowLoading(prev => {
+                                                    const next = new Set(prev);
+                                                    next.delete(targetId);
+                                                    return next;
+                                                });
+                                            }
+                                        }}
+                                    >
+                                        {followLoading.has(suggestedUsers[i]?.id)
+                                            ? '...'
+                                            : followingIds.has(suggestedUsers[i]?.id)
+                                                ? 'Obuna'
+                                                : "A'zo bo'lish"
+                                        }
+                                    </Button>
                                 </div>
                             ))}
                         </div>

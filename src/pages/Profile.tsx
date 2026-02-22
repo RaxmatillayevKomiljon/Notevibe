@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase';
 import { Post, Profile as UserProfile } from '../lib/types';
 import { Card } from '../components/ui/Card';
 import { useNavigate } from 'react-router-dom';
+import { getFollowCounts } from '../lib/follows';
 
 const TABS = ['Notelar', 'Haqida', 'Saqlanganlar'];
 
@@ -16,6 +17,7 @@ export function Profile() {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
+    const [followCounts, setFollowCounts] = useState({ followers: 0, following: 0 });
 
     // Edit Mode State
     const [isEditing, setIsEditing] = useState(false);
@@ -73,6 +75,12 @@ export function Profile() {
                 .order('created_at', { ascending: false });
 
             setPosts(postsData || []);
+
+            // 3. Fetch Follow Counts
+            if (user) {
+                const counts = await getFollowCounts(user.id);
+                setFollowCounts(counts);
+            }
 
         } catch (error) {
             console.error('Error loading profile:', error);
@@ -295,11 +303,11 @@ export function Profile() {
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Note</p>
                 </div>
                 <div className="text-center p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
-                    <p className="text-2xl font-bold text-slate-900">0</p>
+                    <p className="text-2xl font-bold text-slate-900">{followCounts.followers}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Obunachi</p>
                 </div>
                 <div className="text-center p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
-                    <p className="text-2xl font-bold text-slate-900">0</p>
+                    <p className="text-2xl font-bold text-slate-900">{followCounts.following}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Obuna</p>
                 </div>
             </div>

@@ -96,6 +96,29 @@ begin
 end;
 $$ language plpgsql security definer;
 
+-- Follows table (tracks who follows whom)
+create table public.follows (
+  id uuid default gen_random_uuid() primary key,
+  follower_id uuid not null references auth.users on delete cascade,
+  following_id uuid not null references auth.users on delete cascade,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  unique(follower_id, following_id)
+);
+
+alter table public.follows enable row level security;
+
+create policy "Follows are viewable by everyone."
+  on follows for select
+  using ( true );
+
+create policy "Users can follow others."
+  on follows for insert
+  with check ( auth.uid() = follower_id );
+
+create policy "Users can unfollow."
+  on follows for delete
+  using ( auth.uid() = follower_id );
+
 -- Set up Storage for images (Avatars and Covers)
 insert into storage.buckets (id, name)
 values ('images', 'images');
