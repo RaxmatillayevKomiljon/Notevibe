@@ -15,17 +15,25 @@ export async function toggleFollow(followerId: string, followingId: string): Pro
 
     if (existing) {
         // Unfollow
-        await supabase
+        const { error } = await supabase
             .from('follows')
             .delete()
             .eq('follower_id', followerId)
             .eq('following_id', followingId);
+        if (error) {
+            console.error('Unfollow error:', error);
+            throw error;
+        }
         return false;
     } else {
         // Follow
-        await supabase
+        const { error } = await supabase
             .from('follows')
             .insert({ follower_id: followerId, following_id: followingId });
+        if (error) {
+            console.error('Follow error:', error);
+            throw error;
+        }
         return true;
     }
 }
