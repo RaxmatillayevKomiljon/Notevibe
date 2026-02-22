@@ -1,41 +1,22 @@
 import { supabase } from './supabase';
 
 /**
- * Toggle follow for a user.
+ * Toggle follow for a user via RPC (bypasses RLS issues).
  * Returns true if now following, false if unfollowed.
  */
 export async function toggleFollow(followerId: string, followingId: string): Promise<boolean> {
-    // Check if already following
-    const { data: existing } = await supabase
-        .from('follows')
-        .select('id')
-        .eq('follower_id', followerId)
-        .eq('following_id', followingId)
-        .maybeSingle();
+    const { data, error } = await supabase.rpc('toggle_follow_rpc', {
+        follower_uuid: followerId,
+        following_uuid: followingId
+    });
 
-    if (existing) {
-        // Unfollow
-        const { error } = await supabase
-            .from('follows')
-            .delete()
-            .eq('follower_id', followerId)
-            .eq('following_id', followingId);
-        if (error) {
-            console.error('Unfollow error:', error);
-            throw error;
-        }
-        return false;
-    } else {
-        // Follow
-        const { error } = await supabase
-            .from('follows')
-            .insert({ follower_id: followerId, following_id: followingId });
-        if (error) {
-            console.error('Follow error:', error);
-            throw error;
-        }
-        return true;
+    if (error) {
+        console.error('toggleFollow RPC error:', error);
+        throw error;
     }
+
+    // RPC returns true if now following, false if unfollowed
+    return data as boolean;
 }
 
 /**
