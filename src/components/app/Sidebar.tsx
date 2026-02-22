@@ -68,7 +68,7 @@ export function Sidebar() {
                 <Link to="/create-post">
                     <Button className="w-full justify-start gap-2 shadow-lg shadow-blue-500/20 mb-6">
                         <PenSquare className="w-4 h-4" />
-                        Maqola yozish
+                        Note yozish
                     </Button>
                 </Link>
             </div>

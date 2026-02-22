@@ -75,7 +75,7 @@ export function CreatePost() {
 
             if (error) throw error;
 
-            addToast('Maqola muvaffaqiyatli chop etildi!', 'success');
+            addToast('Note muvaffaqiyatli chop etildi!', 'success');
             navigate('/dashboard');
         } catch (error: any) {
             console.error('Error creating post:', error);

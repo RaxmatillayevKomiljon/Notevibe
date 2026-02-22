@@ -7,12 +7,12 @@ import { Post, Profile as UserProfile } from '../lib/types';
 import { Card } from '../components/ui/Card';
 import { useNavigate } from 'react-router-dom';
 
-const TABS = ['Maqolalar', 'Haqida', 'Saqlanganlar'];
+const TABS = ['Notelar', 'Haqida', 'Saqlanganlar'];
 
 export function Profile() {
     const { user } = useAuth();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('Maqolalar');
+    const [activeTab, setActiveTab] = useState('Notelar');
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
@@ -32,6 +32,8 @@ export function Profile() {
     useEffect(() => {
         if (user) {
             fetchProfileData();
+        } else {
+            setLoading(false);
         }
     }, [user]);
 
@@ -290,7 +292,7 @@ export function Profile() {
             <div className="grid grid-cols-3 gap-4 mb-8 max-w-lg">
                 <div className="text-center p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
                     <p className="text-2xl font-bold text-slate-900">{posts.length}</p>
-                    <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Maqola</p>
+                    <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Note</p>
                 </div>
                 <div className="text-center p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
                     <p className="text-2xl font-bold text-slate-900">0</p>
@@ -323,12 +325,12 @@ export function Profile() {
 
             {/* Content based on Tab */}
             <div className="min-h-[200px]">
-                {activeTab === 'Maqolalar' && (
+                {activeTab === 'Notelar' && (
                     <div className="space-y-4">
                         {posts.length === 0 ? (
                             <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                                <p className="text-slate-400">Hozircha maqolalar topilmadi</p>
-                                <Button variant="ghost" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50" onClick={() => window.location.href = '/create-post'}>Birinchi maqolani yozish</Button>
+                                <p className="text-slate-400">Hozircha notelar topilmadi</p>
+                                <Button variant="ghost" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50" onClick={() => window.location.href = '/create-post'}>Birinchi noteni yozish</Button>
                             </div>
                         ) : (
                             posts.map(post => (
@@ -375,7 +377,7 @@ export function Profile() {
                 )}
                 {activeTab === 'Saqlanganlar' && (
                     <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                        <p className="text-slate-400 mb-2">Saqlangan maqolalar</p>
+                        <p className="text-slate-400 mb-2">Saqlangan notelar</p>
                         <p className="text-sm text-slate-400 mb-4">Saqlanganlar sahifasidan foydalaning</p>
                         <button
                             onClick={() => navigate('/bookmarks')}

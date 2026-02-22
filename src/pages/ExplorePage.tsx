@@ -77,7 +77,7 @@ export function ExplorePage() {
                     <TrendingUp className="w-7 h-7 text-blue-600" />
                     <h1 className="text-2xl font-bold text-slate-900">Kashf eting</h1>
                 </div>
-                <p className="text-slate-500">Yangi maqolalar, mualliflar va g'oyalarni toping</p>
+                <p className="text-slate-500">Yangi notelar, mualliflar va g'oyalarni toping</p>
             </div>
 
             {/* Search Bar */}
@@ -85,7 +85,7 @@ export function ExplorePage() {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
                     type="text"
-                    placeholder="Maqola, muallif yoki mavzu qidiring..."
+                    placeholder="Note, muallif yoki mavzu qidiring..."
                     className="w-full pl-12 pr-4 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 shadow-sm transition-all"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -103,8 +103,8 @@ export function ExplorePage() {
                         <button
                             onClick={() => setSelectedTag(null)}
                             className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedTag === null
-                                    ? 'bg-slate-900 text-white'
-                                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                                ? 'bg-slate-900 text-white'
+                                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
                                 }`}
                         >
                             Barchasi
@@ -114,8 +114,8 @@ export function ExplorePage() {
                                 key={tag}
                                 onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
                                 className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedTag === tag
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
                                     }`}
                             >
                                 #{tag}
@@ -137,7 +137,7 @@ export function ExplorePage() {
                         <Search className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                         <p className="text-slate-500 font-medium mb-1">Hech narsa topilmadi</p>
                         <p className="text-sm text-slate-400">
-                            {searchQuery ? `"${searchQuery}" bo'yicha natija yo'q` : "Hozircha maqolalar yo'q"}
+                            {searchQuery ? `"${searchQuery}" bo'yicha natija yo'q` : "Hozircha notelar yo'q"}
                         </p>
                     </div>
                 ) : (

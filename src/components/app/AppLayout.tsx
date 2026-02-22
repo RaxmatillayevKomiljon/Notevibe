@@ -1,11 +1,32 @@
 import { Sidebar } from './Sidebar';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Home, Compass, PenSquare, User } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
+import { useAuth } from '../auth/AuthProvider';
+import { useEffect } from 'react';
 
 export function AppLayout() {
     const location = useLocation();
+    const navigate = useNavigate();
+    const { user, loading } = useAuth();
+
+    // Redirect to login if not authenticated
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate('/login', { replace: true });
+        }
+    }, [user, loading, navigate]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-50/50">
+                <div className="animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full" />
+            </div>
+        );
+    }
+
+    if (!user) return null;
 
     return (
         <div className="min-h-screen bg-slate-50/50">
@@ -18,7 +39,7 @@ export function AppLayout() {
                 </div>
             </main>
 
-            {/* Mobile Actions (Floating) - Optional addition for mobile UX */}
+            {/* Mobile Actions (Floating) */}
             <div className="md:hidden fixed bottom-20 right-4 z-50">
                 <Link to="/create-post">
                     <button className="bg-blue-600 text-white p-4 rounded-full shadow-lg shadow-blue-600/30 hover:scale-105 transition-transform">

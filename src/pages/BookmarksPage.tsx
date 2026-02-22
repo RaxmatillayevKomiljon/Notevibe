@@ -93,7 +93,7 @@ export function BookmarksPage() {
                     <Bookmark className="w-7 h-7 text-blue-600" />
                     <h1 className="text-2xl font-bold text-slate-900">Saqlanganlar</h1>
                 </div>
-                <p className="text-slate-500">Saqlangan maqolalaringiz ({bookmarkIds.length})</p>
+                <p className="text-slate-500">Saqlangan notelaringiz ({bookmarkIds.length})</p>
             </div>
 
             {/* Content */}
@@ -106,9 +106,9 @@ export function BookmarksPage() {
                 ) : posts.length === 0 ? (
                     <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
                         <Bookmark className="w-14 h-14 text-slate-300 mx-auto mb-4" />
-                        <p className="text-slate-500 font-medium mb-2">Hozircha saqlangan maqolalar yo'q</p>
+                        <p className="text-slate-500 font-medium mb-2">Hozircha saqlangan notelar yo'q</p>
                         <p className="text-sm text-slate-400 mb-6">
-                            Dashboard dan maqolalarni saqlash uchun 🔖 tugmasini bosing
+                            Dashboard dan notelarni saqlash uchun 🔖 tugmasini bosing
                         </p>
                         <Button variant="outline" onClick={() => navigate('/dashboard')}>
                             Dashboard ga o'tish
