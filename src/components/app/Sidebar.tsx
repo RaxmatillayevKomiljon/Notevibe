@@ -20,6 +20,19 @@ export function Sidebar() {
         await signOut();
     };
 
+    // Resolve avatar and display name from Google metadata or fallback
+    const displayName =
+        user?.user_metadata?.full_name ||
+        user?.user_metadata?.name ||
+        user?.user_metadata?.username ||
+        user?.email?.split('@')[0] ||
+        'Foydalanuvchi';
+
+    const avatarUrl =
+        user?.user_metadata?.avatar_url ||
+        user?.user_metadata?.picture ||
+        `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email || 'User'}`;
+
     return (
         <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-50">
             {/* Logo */}
@@ -65,13 +78,14 @@ export function Sidebar() {
             <div className="p-4 border-t border-slate-100">
                 <div className="flex items-center gap-3 p-3 mb-2 rounded-xl bg-slate-50">
                     <img
-                        src={`https://api.dicebear.com/7.x/avataaHs/svg?seed=${user?.email || 'User'}`}
+                        src={avatarUrl}
                         alt="User"
-                        className="w-9 h-9 rounded-full bg-white border border-slate-200"
+                        className="w-9 h-9 rounded-full bg-white border border-slate-200 object-cover"
+                        referrerPolicy="no-referrer"
                     />
                     <div className="flex-1 min-w-0">
                         <p className="text-sm font-bold text-slate-900 truncate">
-                            {user?.user_metadata?.username || user?.email?.split('@')[0] || 'Foydalanuvchi'}
+                            {displayName}
                         </p>
                         <p className="text-xs text-slate-500 truncate">{user?.email}</p>
                     </div>

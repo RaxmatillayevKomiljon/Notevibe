@@ -58,9 +58,34 @@ export function Profile() {
                 .eq('id', user?.id)
                 .maybeSingle();
 
-            setProfile(profileData);
+            // 2. If no profile exists, auto-create from Google metadata or email
+            if (!profileData && user) {
+                const meta = user.user_metadata || {};
+                const newProfile = {
+                    id: user.id,
+                    username: meta.preferred_username || meta.user_name || user.email?.split('@')[0] || 'user',
+                    full_name: meta.full_name || meta.name || user.email?.split('@')[0] || '',
+                    avatar_url: meta.avatar_url || meta.picture || null,
+                    bio: null,
+                    website: null,
+                };
 
-            // 2. Fetch User's Posts
+                const { data: created, error: insertError } = await supabase
+                    .from('profiles')
+                    .insert(newProfile)
+                    .select()
+                    .maybeSingle();
+
+                if (insertError) {
+                    console.error('Error creating profile:', insertError);
+                } else {
+                    setProfile(created);
+                }
+            } else {
+                setProfile(profileData);
+            }
+
+            // 3. Fetch User's Posts
             const { data: postsData } = await supabase
                 .from('posts')
                 .select('*')
@@ -223,9 +248,10 @@ export function Profile() {
                 <div className="absolute -bottom-12 left-4 md:left-10 flex items-end">
                     <div className="p-1.5 bg-white rounded-2xl">
                         <img
-                            src={profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`}
+                            src={profile?.avatar_url || user.user_metadata?.avatar_url || user.user_metadata?.picture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`}
                             alt="Profile"
                             className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-slate-100 object-cover"
+                            referrerPolicy="no-referrer"
                         />
                     </div>
                 </div>
@@ -242,7 +268,7 @@ export function Profile() {
             <div className="px-2 md:px-4 mb-8 flex flex-col md:flex-row justify-between items-start gap-4">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1">
-                        {profile?.full_name || user.user_metadata?.username || 'Foydalanuvchi'}
+                        {profile?.full_name || user.user_metadata?.full_name || user.user_metadata?.name || user.user_metadata?.username || 'Foydalanuvchi'}
                     </h1>
                     <p className="text-slate-500 font-medium mb-4">
                         @{profile?.username || user.email?.split('@')[0]}
