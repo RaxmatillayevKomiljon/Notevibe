@@ -54,6 +54,48 @@ create policy "Users can update own posts."
   on posts for update
   using ( auth.uid() = author_id );
 
+-- Kudos table (tracks who gave kudos to which post)
+create table public.kudos (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid not null references auth.users on delete cascade,
+  post_id uuid not null references public.posts(id) on delete cascade,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  unique(user_id, post_id)
+);
+
+alter table public.kudos enable row level security;
+
+create policy "Kudos are viewable by everyone."
+  on kudos for select
+  using ( true );
+
+create policy "Users can give kudos."
+  on kudos for insert
+  with check ( auth.uid() = user_id );
+
+create policy "Users can remove their own kudos."
+  on kudos for delete
+  using ( auth.uid() = user_id );
+
+-- RPC functions for atomic kudos count updates
+create or replace function increment_kudos(post_id_arg uuid)
+returns void as $$
+begin
+  update public.posts
+  set likes_count = coalesce(likes_count, 0) + 1
+  where id = post_id_arg;
+end;
+$$ language plpgsql security definer;
+
+create or replace function decrement_kudos(post_id_arg uuid)
+returns void as $$
+begin
+  update public.posts
+  set likes_count = greatest(coalesce(likes_count, 0) - 1, 0)
+  where id = post_id_arg;
+end;
+$$ language plpgsql security definer;
+
 -- Set up Storage for images (Avatars and Covers)
 insert into storage.buckets (id, name)
 values ('images', 'images');

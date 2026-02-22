@@ -1,17 +1,22 @@
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Search, Flame, MessageSquare, Heart, Share2, MoreHorizontal, Bookmark } from 'lucide-react';
+import { Search, Flame, MessageSquare, ThumbsUp, Share2, MoreHorizontal, Bookmark } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Post } from '../lib/types';
 import { toggleBookmark, isBookmarked } from './BookmarksPage';
+import { toggleKudos, getUserKudos } from '../lib/kudos';
+import { useAuth } from '../components/auth/AuthProvider';
 
 export function Dashboard() {
+    const { user } = useAuth();
     const [posts, setPosts] = useState<Post[]>([]);
     const [suggestedUsers, setSuggestedUsers] = useState<{ username: string; full_name: string | null; avatar_url: string | null }[]>([]);
     const [trendingTags, setTrendingTags] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
+    const [kudosGiven, setKudosGiven] = useState<Set<string>>(new Set());
+    const [kudosLoading, setKudosLoading] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         fetchData();
@@ -40,6 +45,13 @@ export function Dashboard() {
                 if (isBookmarked(p.id)) bIds.add(p.id);
             });
             setBookmarkedIds(bIds);
+
+            // Initialize kudos state
+            if (user) {
+                const postIds = fetchedPosts.map(p => p.id);
+                const givenKudos = await getUserKudos(user.id, postIds);
+                setKudosGiven(givenKudos);
+            }
 
             // 2. Process Tags for Trending
             const allTags = fetchedPosts.flatMap(p => p.tags || []);
@@ -74,6 +86,40 @@ export function Dashboard() {
             }
             return next;
         });
+    }
+
+    async function handleToggleKudos(postId: string) {
+        if (!user || kudosLoading.has(postId)) return;
+
+        setKudosLoading(prev => new Set(prev).add(postId));
+
+        try {
+            const { given, newCount } = await toggleKudos(postId, user.id);
+
+            // Update kudos given state
+            setKudosGiven(prev => {
+                const next = new Set(prev);
+                if (given) {
+                    next.add(postId);
+                } else {
+                    next.delete(postId);
+                }
+                return next;
+            });
+
+            // Update post's kudos count
+            setPosts(prev => prev.map(p =>
+                p.id === postId ? { ...p, likes_count: newCount } : p
+            ));
+        } catch (error) {
+            console.error('Error toggling kudos:', error);
+        } finally {
+            setKudosLoading(prev => {
+                const next = new Set(prev);
+                next.delete(postId);
+                return next;
+            });
+        }
     }
 
     return (
@@ -156,8 +202,16 @@ export function Dashboard() {
 
                                 <div className="flex items-center justify-between pt-4 border-t border-slate-50">
                                     <div className="flex gap-6">
-                                        <button className="flex items-center gap-2 text-slate-500 hover:text-pink-500 transition-colors text-sm group">
-                                            <Heart className="w-5 h-5 group-hover:fill-pink-500 transition-colors" />
+                                        <button
+                                            onClick={() => handleToggleKudos(post.id)}
+                                            disabled={kudosLoading.has(post.id)}
+                                            className={`flex items-center gap-2 transition-colors text-sm group ${kudosGiven.has(post.id)
+                                                    ? 'text-blue-600'
+                                                    : 'text-slate-500 hover:text-blue-600'
+                                                }`}
+                                        >
+                                            <ThumbsUp className={`w-5 h-5 transition-all ${kudosGiven.has(post.id) ? 'fill-blue-600' : 'group-hover:scale-110'
+                                                } ${kudosLoading.has(post.id) ? 'animate-pulse' : ''}`} />
                                             <span>{post.likes_count || 0}</span>
                                         </button>
                                         <button className="flex items-center gap-2 text-slate-500 hover:text-blue-500 transition-colors text-sm">
@@ -169,8 +223,8 @@ export function Dashboard() {
                                         <button
                                             onClick={() => handleToggleBookmark(post.id)}
                                             className={`p-1.5 rounded-lg transition-colors ${bookmarkedIds.has(post.id)
-                                                    ? 'text-amber-500 bg-amber-50'
-                                                    : 'text-slate-400 hover:text-amber-500 hover:bg-amber-50'
+                                                ? 'text-amber-500 bg-amber-50'
+                                                : 'text-slate-400 hover:text-amber-500 hover:bg-amber-50'
                                                 }`}
                                             title={bookmarkedIds.has(post.id) ? 'Saqlangandan olib tashlash' : 'Saqlash'}
                                         >

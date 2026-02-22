@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card } from '../components/ui/Card';
-import { Search, Heart, MessageSquare, TrendingUp, Filter } from 'lucide-react';
+import { Search, ThumbsUp, MessageSquare, TrendingUp, Filter } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Post } from '../lib/types';
 
@@ -179,7 +179,7 @@ export function ExplorePage() {
 
                                 <div className="flex items-center gap-5 pt-3 border-t border-slate-50 text-sm text-slate-400">
                                     <span className="flex items-center gap-1.5">
-                                        <Heart className="w-4 h-4" /> {post.likes_count || 0}
+                                        <ThumbsUp className="w-4 h-4" /> {post.likes_count || 0}
                                     </span>
                                     <span className="flex items-center gap-1.5">
                                         <MessageSquare className="w-4 h-4" /> 0

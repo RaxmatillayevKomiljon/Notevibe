@@ -1,5 +1,5 @@
 import { Button } from '../components/ui/Button';
-import { Settings, MapPin, Calendar, Link as LinkIcon, Edit3, Heart, MessageSquare } from 'lucide-react';
+import { Settings, MapPin, Calendar, Link as LinkIcon, Edit3, ThumbsUp, MessageSquare } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../components/auth/AuthProvider';
 import { supabase } from '../lib/supabase';
@@ -338,7 +338,7 @@ export function Profile() {
                                     <h3 className="font-bold text-lg mb-2">{post.title}</h3>
                                     <p className="text-slate-600 line-clamp-2 mb-4">{post.content}</p>
                                     <div className="flex items-center gap-4 text-sm text-slate-400">
-                                        <span className="flex items-center gap-1"><Heart className="w-4 h-4" /> {post.likes_count}</span>
+                                        <span className="flex items-center gap-1"><ThumbsUp className="w-4 h-4" /> {post.likes_count}</span>
                                         <span className="flex items-center gap-1"><MessageSquare className="w-4 h-4" /> 0</span>
                                         <span>{new Date(post.created_at).toLocaleDateString()}</span>
                                     </div>
