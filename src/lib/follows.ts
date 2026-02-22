@@ -50,10 +50,23 @@ export async function getFollowingIds(userId: string, candidateIds: string[]): P
  * Get follower and following counts for a user.
  */
 export async function getFollowCounts(userId: string): Promise<{ followers: number; following: number }> {
-    const [{ count: followers }, { count: following }] = await Promise.all([
-        supabase.from('follows').select('*', { count: 'exact', head: true }).eq('following_id', userId),
-        supabase.from('follows').select('*', { count: 'exact', head: true }).eq('follower_id', userId),
-    ]);
+    try {
+        const followersRes = await supabase
+            .from('follows')
+            .select('id', { count: 'exact', head: true })
+            .eq('following_id', userId);
 
-    return { followers: followers || 0, following: following || 0 };
+        const followingRes = await supabase
+            .from('follows')
+            .select('id', { count: 'exact', head: true })
+            .eq('follower_id', userId);
+
+        return {
+            followers: followersRes.count ?? 0,
+            following: followingRes.count ?? 0
+        };
+    } catch (err) {
+        console.error('getFollowCounts error:', err);
+        return { followers: 0, following: 0 };
+    }
 }
