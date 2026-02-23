@@ -53,14 +53,14 @@ export function Sidebar() {
         `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email || 'User'}`;
 
     return (
-        <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-50">
+        <aside className="fixed left-0 top-0 h-screen w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 hidden md:flex flex-col z-50">
             {/* Logo */}
             <div className="p-6">
                 <Link to="/dashboard" className="flex items-center gap-2 mb-8">
                     <div className="bg-blue-600 p-2 rounded-xl">
                         <PenSquare className="w-5 h-5 text-white" />
                     </div>
-                    <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700">
+                    <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300">
                         Notevibe
                     </span>
                 </Link>
@@ -82,10 +82,10 @@ export function Sidebar() {
                             <div className={cn(
                                 "flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-sm",
                                 isActive
-                                    ? "bg-blue-50 text-blue-600"
-                                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                                    ? "bg-blue-50 dark:bg-blue-900/30 text-blue-600"
+                                    : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
                             )}>
-                                <item.icon className={cn("w-5 h-5", isActive ? "text-blue-600" : "text-slate-400")} />
+                                <item.icon className={cn("w-5 h-5", isActive ? "text-blue-600" : "text-slate-400 dark:text-slate-500")} />
                                 {item.label}
                             </div>
                         </Link>
@@ -94,9 +94,9 @@ export function Sidebar() {
             </nav>
 
             {/* User & Logout */}
-            <div className="p-4 border-t border-slate-100">
+            <div className="p-4 border-t border-slate-100 dark:border-slate-700">
                 <Link to="/profile">
-                    <div className="flex items-center gap-3 p-3 mb-2 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-3 p-3 mb-2 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer">
                         <img
                             src={avatarUrl}
                             alt="User"
@@ -104,10 +104,10 @@ export function Sidebar() {
                             referrerPolicy="no-referrer"
                         />
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-bold text-slate-900 truncate">
+                            <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
                                 {displayName}
                             </p>
-                            <p className="text-xs text-slate-500 truncate">{user?.email}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user?.email}</p>
                         </div>
                     </div>
                 </Link>

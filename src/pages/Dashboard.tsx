@@ -284,27 +284,27 @@ export function Dashboard() {
                         <p className="text-sm text-slate-400">Tavsiyalar yo'q</p>
                     ) : (
                         <div className="space-y-4">
-                            {suggestedUsers.map((user, i) => (
+                            {suggestedUsers.map((suggestedUser, i) => (
                                 <div key={i} className="flex items-center gap-3">
                                     <img
-                                        src={user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username}`}
-                                        alt={user.full_name || user.username}
+                                        src={suggestedUser.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${suggestedUser.username}`}
+                                        alt={suggestedUser.full_name || suggestedUser.username}
                                         className="w-9 h-9 rounded-full bg-slate-100"
                                     />
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-bold text-slate-900 truncate">{user.full_name || user.username}</p>
-                                        <p className="text-xs text-slate-500 truncate">@{user.username}</p>
+                                        <p className="text-sm font-bold text-slate-900 truncate">{suggestedUser.full_name || suggestedUser.username}</p>
+                                        <p className="text-xs text-slate-500 truncate">@{suggestedUser.username}</p>
                                     </div>
                                     <Button
                                         size="sm"
-                                        variant={followingIds.has(suggestedUsers[i]?.id) ? 'primary' : 'outline'}
-                                        className={`h-8 px-3 text-xs transition-all ${followingIds.has(suggestedUsers[i]?.id)
+                                        variant={followingIds.has(suggestedUser.id) ? 'primary' : 'outline'}
+                                        className={`h-8 px-3 text-xs transition-all ${followingIds.has(suggestedUser.id)
                                             ? 'bg-blue-600 text-white hover:bg-red-500'
                                             : ''
                                             }`}
-                                        disabled={followLoading.has(suggestedUsers[i]?.id)}
+                                        disabled={followLoading.has(suggestedUser.id)}
                                         onClick={async () => {
-                                            const targetId = suggestedUsers[i]?.id;
+                                            const targetId = suggestedUser.id;
                                             if (!user || !targetId || followLoading.has(targetId)) return;
                                             setFollowLoading(prev => new Set(prev).add(targetId));
                                             try {
@@ -326,9 +326,9 @@ export function Dashboard() {
                                             }
                                         }}
                                     >
-                                        {followLoading.has(suggestedUsers[i]?.id)
+                                        {followLoading.has(suggestedUser.id)
                                             ? '...'
-                                            : followingIds.has(suggestedUsers[i]?.id)
+                                            : followingIds.has(suggestedUser.id)
                                                 ? 'Obuna'
                                                 : "A'zo bo'lish"
                                         }

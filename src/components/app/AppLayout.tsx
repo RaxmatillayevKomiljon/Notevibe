@@ -20,7 +20,7 @@ export function AppLayout() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-50/50">
+            <div className="min-h-screen flex items-center justify-center bg-slate-50/50 dark:bg-slate-950">
                 <div className="animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full" />
             </div>
         );
@@ -29,7 +29,7 @@ export function AppLayout() {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen bg-slate-50/50">
+        <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950">
             <Sidebar />
 
             {/* Main Content */}
@@ -49,7 +49,7 @@ export function AppLayout() {
             </div>
 
             {/* Mobile Bottom Nav */}
-            <nav className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 z-50 px-6 py-3 flex justify-between items-center">
+            <nav className="md:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 z-50 px-6 py-3 flex justify-between items-center">
                 <Link to="/dashboard" className={cn("p-2", location.pathname === '/dashboard' ? "text-blue-600" : "text-slate-400")}>
                     <Home className="w-6 h-6" />
                 </Link>
