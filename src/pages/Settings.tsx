@@ -1,8 +1,10 @@
 import { Button } from '../components/ui/Button';
 import { useAuth } from '../components/auth/AuthProvider';
-import { User, Bell, Shield, LogOut, ChevronRight, Moon, Sun, Monitor, Globe } from 'lucide-react';
+import { User, Bell, Shield, LogOut, ChevronRight, Moon, Sun, Monitor, Globe, Lock, Eye, EyeOff } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
+import { useToast } from '../components/ui/Toast';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 
@@ -18,6 +20,13 @@ const themeIcons: Record<ThemeMode, typeof Sun> = {
     system: Monitor,
 };
 
+type Language = 'uz' | 'ru' | 'en';
+const langLabels: Record<Language, string> = {
+    uz: "O'zbekcha",
+    ru: 'Русский',
+    en: 'English',
+};
+
 function applyTheme(mode: ThemeMode) {
     const root = document.documentElement;
     if (mode === 'system') {
@@ -30,9 +39,22 @@ function applyTheme(mode: ThemeMode) {
 
 export function Settings() {
     const { user, signOut } = useAuth();
+    const { addToast } = useToast();
     const [theme, setTheme] = useState<ThemeMode>(() => {
         return (localStorage.getItem('notevibe-theme') as ThemeMode) || 'light';
     });
+    const [language, setLanguage] = useState<Language>(() => {
+        return (localStorage.getItem('notevibe-lang') as Language) || 'uz';
+    });
+    const [showLangMenu, setShowLangMenu] = useState(false);
+
+    // Password change state
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [showNewPass, setShowNewPass] = useState(false);
+    const [showConfirmPass, setShowConfirmPass] = useState(false);
+    const [changingPassword, setChangingPassword] = useState(false);
 
     useEffect(() => {
         applyTheme(theme);
@@ -53,6 +75,37 @@ export function Settings() {
         setTheme(modes[nextIndex]);
     }
 
+    function selectLanguage(lang: Language) {
+        setLanguage(lang);
+        localStorage.setItem('notevibe-lang', lang);
+        setShowLangMenu(false);
+        addToast(`Til o'zgartirildi: ${langLabels[lang]}`, 'success');
+    }
+
+    async function handleChangePassword() {
+        if (newPassword.length < 6) {
+            addToast("Parol kamida 6 ta belgidan iborat bo'lishi kerak", 'error');
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            addToast("Parollar mos kelmadi", 'error');
+            return;
+        }
+        setChangingPassword(true);
+        try {
+            const { error } = await supabase.auth.updateUser({ password: newPassword });
+            if (error) throw error;
+            addToast("Parol muvaffaqiyatli o'zgartirildi!", 'success');
+            setShowPasswordModal(false);
+            setNewPassword('');
+            setConfirmPassword('');
+        } catch (error: any) {
+            addToast(error.message || "Parolni o'zgartirishda xatolik", 'error');
+        } finally {
+            setChangingPassword(false);
+        }
+    }
+
     const handleLogout = async () => {
         await signOut();
     };
@@ -62,6 +115,78 @@ export function Settings() {
     return (
         <div className="max-w-2xl mx-auto py-8">
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Sozlamalar</h1>
+
+            {/* Password Change Modal */}
+            {showPasswordModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+                        <div className="flex items-center justify-between p-5 border-b border-slate-100 dark:border-slate-700">
+                            <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <Lock className="w-5 h-5 text-blue-600" />
+                                Parolni o'zgartirish
+                            </h3>
+                            <button
+                                onClick={() => { setShowPasswordModal(false); setNewPassword(''); setConfirmPassword(''); }}
+                                className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <div className="p-5 space-y-4">
+                            <div className="space-y-2">
+                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Yangi parol</label>
+                                <div className="relative">
+                                    <input
+                                        type={showNewPass ? 'text' : 'password'}
+                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-600 rounded-xl focus:outline-none focus:border-blue-500 transition-all text-slate-900 dark:text-white font-medium placeholder:text-slate-400"
+                                        placeholder="Kamida 6 ta belgi"
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        minLength={6}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowNewPass(!showNewPass)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                                    >
+                                        {showNewPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Parolni tasdiqlang</label>
+                                <div className="relative">
+                                    <input
+                                        type={showConfirmPass ? 'text' : 'password'}
+                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-600 rounded-xl focus:outline-none focus:border-blue-500 transition-all text-slate-900 dark:text-white font-medium placeholder:text-slate-400"
+                                        placeholder="Parolni qayta kiriting"
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowConfirmPass(!showConfirmPass)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                                    >
+                                        {showConfirmPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
+                                </div>
+                            </div>
+                            {newPassword && confirmPassword && newPassword !== confirmPassword && (
+                                <p className="text-sm text-red-500">Parollar mos kelmadi</p>
+                            )}
+                            <Button
+                                className="w-full h-12 mt-2"
+                                onClick={handleChangePassword}
+                                disabled={changingPassword || !newPassword || !confirmPassword}
+                                isLoading={changingPassword}
+                            >
+                                Parolni o'zgartirish
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="space-y-6">
                 {/* Account Section */}
@@ -124,18 +249,41 @@ export function Settings() {
                             </div>
                         </button>
 
-                        <button className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left">
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg">
-                                    <Globe className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+                        {/* Language Selector */}
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowLangMenu(!showLangMenu)}
+                                className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg">
+                                        <Globe className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-slate-900 dark:text-white">Til</p>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400">{langLabels[language]}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="font-medium text-slate-900 dark:text-white">Til</p>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400">O'zbekcha</p>
+                                <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${showLangMenu ? 'rotate-90' : ''}`} />
+                            </button>
+                            {showLangMenu && (
+                                <div className="px-4 pb-4 space-y-1">
+                                    {(Object.keys(langLabels) as Language[]).map(lang => (
+                                        <button
+                                            key={lang}
+                                            onClick={() => selectLanguage(lang)}
+                                            className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-colors ${language === lang
+                                                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800'
+                                                    : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
+                                                }`}
+                                        >
+                                            {langLabels[lang]} {language === lang && '✓'}
+                                        </button>
+                                    ))}
                                 </div>
-                            </div>
-                            <ChevronRight className="w-5 h-5 text-slate-400" />
-                        </button>
+                            )}
+                        </div>
+
                         <button className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg">
@@ -165,9 +313,9 @@ export function Settings() {
                         <div className="flex items-center justify-between py-2">
                             <div>
                                 <p className="font-medium text-slate-900 dark:text-white">Parolni o'zgartirish</p>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">Oxirgi o'zgarish: 3 oy oldin</p>
+                                <p className="text-sm text-slate-500 dark:text-slate-400">Hisobingiz xavfsizligini ta'minlang</p>
                             </div>
-                            <Button variant="outline" size="sm">
+                            <Button variant="outline" size="sm" onClick={() => setShowPasswordModal(true)}>
                                 O'zgartirish
                             </Button>
                         </div>
@@ -185,7 +333,7 @@ export function Settings() {
                         Akkauntdan chiqish
                     </Button>
                     <p className="text-center text-xs text-slate-400 mt-4">
-                        Notevibe v1.0.2 • 2024
+                        Notevibe v1.0.3 • 2024
                     </p>
                 </div>
             </div>
