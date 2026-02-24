@@ -5,6 +5,7 @@ import { Bookmark, BookmarkX, ThumbsUp, MessageSquare } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Post } from '../lib/types';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from '../lib/i18n';
 
 const BOOKMARKS_KEY = 'notevibe_bookmarks';
 
@@ -41,6 +42,7 @@ export function isBookmarked(postId: string): boolean {
 
 export function BookmarksPage() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [bookmarkIds, setBookmarkIds] = useState<string[]>(getBookmarkIds());
@@ -91,7 +93,7 @@ export function BookmarksPage() {
             <div className="mb-8">
                 <div className="flex items-center gap-3 mb-2">
                     <Bookmark className="w-7 h-7 text-blue-600" />
-                    <h1 className="text-2xl font-bold text-slate-900">Saqlanganlar</h1>
+                    <h1 className="text-2xl font-bold text-slate-900">{t('bookmarks.title')}</h1>
                 </div>
                 <p className="text-slate-500">Saqlangan notelaringiz ({bookmarkIds.length})</p>
             </div>
@@ -101,14 +103,14 @@ export function BookmarksPage() {
                 {loading ? (
                     <div className="text-center py-16 text-slate-400">
                         <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                        Yuklanmoqda...
+                        {t('common.loading')}
                     </div>
                 ) : posts.length === 0 ? (
                     <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
                         <Bookmark className="w-14 h-14 text-slate-300 mx-auto mb-4" />
-                        <p className="text-slate-500 font-medium mb-2">Hozircha saqlangan notelar yo'q</p>
+                        <p className="text-slate-500 font-medium mb-2">{t('bookmarks.empty')}</p>
                         <p className="text-sm text-slate-400 mb-6">
-                            Dashboard dan notelarni saqlash uchun 🔖 tugmasini bosing
+                            {t('bookmarks.emptyDesc')}
                         </p>
                         <Button variant="outline" onClick={() => navigate('/dashboard')}>
                             Dashboard ga o'tish

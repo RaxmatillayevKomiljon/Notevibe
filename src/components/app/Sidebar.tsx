@@ -5,18 +5,20 @@ import { Button } from '../ui/Button';
 import { useAuth } from '../auth/AuthProvider';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
+import { useTranslation } from '../../lib/i18n';
 
-const navItems = [
-    { icon: Home, label: 'Bosh sahifa', path: '/dashboard' },
-    { icon: Compass, label: 'Kesht etish', path: '/explore' },
-    { icon: Bookmark, label: 'Saqlanganlar', path: '/bookmarks' },
-    { icon: User, label: 'Profil', path: '/profile' },
-    { icon: Settings, label: 'Sozlamalar', path: '/settings' },
+const navItemKeys = [
+    { icon: Home, labelKey: 'nav.home', path: '/dashboard' },
+    { icon: Compass, labelKey: 'nav.explore', path: '/explore' },
+    { icon: Bookmark, labelKey: 'nav.bookmarks', path: '/bookmarks' },
+    { icon: User, labelKey: 'nav.profile', path: '/profile' },
+    { icon: Settings, labelKey: 'nav.settings', path: '/settings' },
 ];
 
 export function Sidebar() {
     const location = useLocation();
     const { user, signOut } = useAuth();
+    const { t } = useTranslation();
     const [profileData, setProfileData] = useState<{ full_name: string | null; avatar_url: string | null } | null>(null);
 
     // Fetch profile from DB for accurate display
@@ -68,14 +70,14 @@ export function Sidebar() {
                 <Link to="/create-post">
                     <Button className="w-full justify-start gap-2 shadow-lg shadow-blue-500/20 mb-6">
                         <PenSquare className="w-4 h-4" />
-                        Note yozish
+                        {t('nav.newPost')}
                     </Button>
                 </Link>
             </div>
 
             {/* Navigation */}
             <nav className="flex-1 px-4 space-y-1">
-                {navItems.map((item) => {
+                {navItemKeys.map((item) => {
                     const isActive = location.pathname === item.path;
                     return (
                         <Link key={item.path} to={item.path}>
@@ -86,7 +88,7 @@ export function Sidebar() {
                                     : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
                             )}>
                                 <item.icon className={cn("w-5 h-5", isActive ? "text-blue-600" : "text-slate-400 dark:text-slate-500")} />
-                                {item.label}
+                                {t(item.labelKey)}
                             </div>
                         </Link>
                     );
@@ -116,7 +118,7 @@ export function Sidebar() {
                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 rounded-lg transition-colors font-medium"
                 >
                     <LogOut className="w-4 h-4" />
-                    Chiqish
+                    {t('nav.logout')}
                 </button>
             </div>
         </aside>

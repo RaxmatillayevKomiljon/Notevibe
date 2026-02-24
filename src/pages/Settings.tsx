@@ -5,26 +5,14 @@ import { Card } from '../components/ui/Card';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../components/ui/Toast';
+import { useTranslation, Language } from '../lib/i18n';
 
 type ThemeMode = 'light' | 'dark' | 'system';
-
-const themeLabels: Record<ThemeMode, string> = {
-    light: "Yorug'",
-    dark: "Qorong'i",
-    system: 'Sistema',
-};
 
 const themeIcons: Record<ThemeMode, typeof Sun> = {
     light: Sun,
     dark: Moon,
     system: Monitor,
-};
-
-type Language = 'uz' | 'ru' | 'en';
-const langLabels: Record<Language, string> = {
-    uz: "O'zbekcha",
-    ru: 'Русский',
-    en: 'English',
 };
 
 function applyTheme(mode: ThemeMode) {
@@ -40,11 +28,9 @@ function applyTheme(mode: ThemeMode) {
 export function Settings() {
     const { user, signOut } = useAuth();
     const { addToast } = useToast();
+    const { t, language, setLanguage } = useTranslation();
     const [theme, setTheme] = useState<ThemeMode>(() => {
         return (localStorage.getItem('notevibe-theme') as ThemeMode) || 'light';
-    });
-    const [language, setLanguage] = useState<Language>(() => {
-        return (localStorage.getItem('notevibe-lang') as Language) || 'uz';
     });
     const [showLangMenu, setShowLangMenu] = useState(false);
 
@@ -68,6 +54,12 @@ export function Settings() {
         }
     }, [theme]);
 
+    const themeKey: Record<ThemeMode, string> = {
+        light: 'settings.themeLight',
+        dark: 'settings.themeDark',
+        system: 'settings.themeSystem',
+    };
+
     function cycleTheme() {
         const modes: ThemeMode[] = ['light', 'dark', 'system'];
         const currentIndex = modes.indexOf(theme);
@@ -77,30 +69,29 @@ export function Settings() {
 
     function selectLanguage(lang: Language) {
         setLanguage(lang);
-        localStorage.setItem('notevibe-lang', lang);
         setShowLangMenu(false);
-        addToast(`Til o'zgartirildi: ${langLabels[lang]}`, 'success');
+        addToast(`${t('settings.langChanged')}: ${t('settings.lang' + lang.charAt(0).toUpperCase() + lang.slice(1))}`, 'success');
     }
 
     async function handleChangePassword() {
         if (newPassword.length < 6) {
-            addToast("Parol kamida 6 ta belgidan iborat bo'lishi kerak", 'error');
+            addToast(t('settings.passwordMinLength'), 'error');
             return;
         }
         if (newPassword !== confirmPassword) {
-            addToast("Parollar mos kelmadi", 'error');
+            addToast(t('settings.passwordMismatch'), 'error');
             return;
         }
         setChangingPassword(true);
         try {
             const { error } = await supabase.auth.updateUser({ password: newPassword });
             if (error) throw error;
-            addToast("Parol muvaffaqiyatli o'zgartirildi!", 'success');
+            addToast(t('settings.passwordChanged'), 'success');
             setShowPasswordModal(false);
             setNewPassword('');
             setConfirmPassword('');
         } catch (error: any) {
-            addToast(error.message || "Parolni o'zgartirishda xatolik", 'error');
+            addToast(error.message || t('settings.passwordError'), 'error');
         } finally {
             setChangingPassword(false);
         }
@@ -111,10 +102,11 @@ export function Settings() {
     };
 
     const ThemeIcon = themeIcons[theme];
+    const langKeys: Language[] = ['uz', 'ru', 'en'];
 
     return (
         <div className="max-w-2xl mx-auto py-8">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Sozlamalar</h1>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">{t('settings.title')}</h1>
 
             {/* Password Change Modal */}
             {showPasswordModal && (
@@ -123,7 +115,7 @@ export function Settings() {
                         <div className="flex items-center justify-between p-5 border-b border-slate-100 dark:border-slate-700">
                             <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                 <Lock className="w-5 h-5 text-blue-600" />
-                                Parolni o'zgartirish
+                                {t('settings.changePassword')}
                             </h3>
                             <button
                                 onClick={() => { setShowPasswordModal(false); setNewPassword(''); setConfirmPassword(''); }}
@@ -134,12 +126,12 @@ export function Settings() {
                         </div>
                         <div className="p-5 space-y-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Yangi parol</label>
+                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{t('settings.newPassword')}</label>
                                 <div className="relative">
                                     <input
                                         type={showNewPass ? 'text' : 'password'}
                                         className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-600 rounded-xl focus:outline-none focus:border-blue-500 transition-all text-slate-900 dark:text-white font-medium placeholder:text-slate-400"
-                                        placeholder="Kamida 6 ta belgi"
+                                        placeholder={t('settings.newPasswordPlaceholder')}
                                         value={newPassword}
                                         onChange={(e) => setNewPassword(e.target.value)}
                                         minLength={6}
@@ -154,12 +146,12 @@ export function Settings() {
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Parolni tasdiqlang</label>
+                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{t('settings.confirmPassword')}</label>
                                 <div className="relative">
                                     <input
                                         type={showConfirmPass ? 'text' : 'password'}
                                         className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-600 rounded-xl focus:outline-none focus:border-blue-500 transition-all text-slate-900 dark:text-white font-medium placeholder:text-slate-400"
-                                        placeholder="Parolni qayta kiriting"
+                                        placeholder={t('settings.confirmPasswordPlaceholder')}
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                     />
@@ -173,7 +165,7 @@ export function Settings() {
                                 </div>
                             </div>
                             {newPassword && confirmPassword && newPassword !== confirmPassword && (
-                                <p className="text-sm text-red-500">Parollar mos kelmadi</p>
+                                <p className="text-sm text-red-500">{t('settings.passwordMismatch')}</p>
                             )}
                             <Button
                                 className="w-full h-12 mt-2"
@@ -181,7 +173,7 @@ export function Settings() {
                                 disabled={changingPassword || !newPassword || !confirmPassword}
                                 isLoading={changingPassword}
                             >
-                                Parolni o'zgartirish
+                                {t('settings.changePassword')}
                             </Button>
                         </div>
                     </div>
@@ -194,27 +186,27 @@ export function Settings() {
                     <div className="p-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
                         <h2 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                             <User className="w-5 h-5 text-blue-600" />
-                            Akkaunt
+                            {t('settings.account')}
                         </h2>
                     </div>
                     <div className="p-4 space-y-4">
                         <div className="flex items-center justify-between py-2">
                             <div>
-                                <p className="font-medium text-slate-900 dark:text-white">Profil ma'lumotlari</p>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">Ism, rasm va bio</p>
+                                <p className="font-medium text-slate-900 dark:text-white">{t('settings.profileInfo')}</p>
+                                <p className="text-sm text-slate-500 dark:text-slate-400">{t('settings.profileInfoDesc')}</p>
                             </div>
                             <Button variant="outline" size="sm" onClick={() => window.location.href = '/profile'}>
-                                O'zgartirish
+                                {t('settings.edit')}
                             </Button>
                         </div>
                         <div className="border-t border-slate-50 dark:border-slate-700 my-2" />
                         <div className="flex items-center justify-between py-2">
                             <div>
-                                <p className="font-medium text-slate-900 dark:text-white">Email manzili</p>
+                                <p className="font-medium text-slate-900 dark:text-white">{t('settings.email')}</p>
                                 <p className="text-sm text-slate-500 dark:text-slate-400">{user?.email}</p>
                             </div>
                             <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
-                                Tasdiqlangan
+                                {t('settings.verified')}
                             </span>
                         </div>
                     </div>
@@ -225,7 +217,7 @@ export function Settings() {
                     <div className="p-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
                         <h2 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                             <Globe className="w-5 h-5 text-purple-600" />
-                            Ilova sozlamalari
+                            {t('settings.appSettings')}
                         </h2>
                     </div>
                     <div className="divide-y divide-slate-50 dark:divide-slate-700">
@@ -239,12 +231,12 @@ export function Settings() {
                                     <ThemeIcon className="w-5 h-5 text-slate-600 dark:text-slate-300" />
                                 </div>
                                 <div>
-                                    <p className="font-medium text-slate-900 dark:text-white">Mavzu</p>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400">{themeLabels[theme]}</p>
+                                    <p className="font-medium text-slate-900 dark:text-white">{t('settings.theme')}</p>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400">{t(themeKey[theme])}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="text-xs text-slate-400">Bosing</span>
+                                <span className="text-xs text-slate-400">{t('settings.press')}</span>
                                 <ChevronRight className="w-5 h-5 text-slate-400" />
                             </div>
                         </button>
@@ -260,15 +252,15 @@ export function Settings() {
                                         <Globe className="w-5 h-5 text-slate-600 dark:text-slate-300" />
                                     </div>
                                     <div>
-                                        <p className="font-medium text-slate-900 dark:text-white">Til</p>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400">{langLabels[language]}</p>
+                                        <p className="font-medium text-slate-900 dark:text-white">{t('settings.language')}</p>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400">{t('settings.lang' + language.charAt(0).toUpperCase() + language.slice(1))}</p>
                                     </div>
                                 </div>
                                 <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${showLangMenu ? 'rotate-90' : ''}`} />
                             </button>
                             {showLangMenu && (
                                 <div className="px-4 pb-4 space-y-1">
-                                    {(Object.keys(langLabels) as Language[]).map(lang => (
+                                    {langKeys.map(lang => (
                                         <button
                                             key={lang}
                                             onClick={() => selectLanguage(lang)}
@@ -277,7 +269,7 @@ export function Settings() {
                                                     : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
                                                 }`}
                                         >
-                                            {langLabels[lang]} {language === lang && '✓'}
+                                            {t('settings.lang' + lang.charAt(0).toUpperCase() + lang.slice(1))} {language === lang && '✓'}
                                         </button>
                                     ))}
                                 </div>
@@ -290,8 +282,8 @@ export function Settings() {
                                     <Bell className="w-5 h-5 text-slate-600 dark:text-slate-300" />
                                 </div>
                                 <div>
-                                    <p className="font-medium text-slate-900 dark:text-white">Bildirishnomalar</p>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400">Yoqilgan</p>
+                                    <p className="font-medium text-slate-900 dark:text-white">{t('settings.notifications')}</p>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400">{t('settings.notifEnabled')}</p>
                                 </div>
                             </div>
                             <div className="w-10 h-6 bg-blue-600 rounded-full relative">
@@ -306,17 +298,17 @@ export function Settings() {
                     <div className="p-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
                         <h2 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                             <Shield className="w-5 h-5 text-emerald-600" />
-                            Xavfsizlik
+                            {t('settings.security')}
                         </h2>
                     </div>
                     <div className="p-4 space-y-4">
                         <div className="flex items-center justify-between py-2">
                             <div>
-                                <p className="font-medium text-slate-900 dark:text-white">Parolni o'zgartirish</p>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">Hisobingiz xavfsizligini ta'minlang</p>
+                                <p className="font-medium text-slate-900 dark:text-white">{t('settings.changePassword')}</p>
+                                <p className="text-sm text-slate-500 dark:text-slate-400">{t('settings.changePasswordDesc')}</p>
                             </div>
                             <Button variant="outline" size="sm" onClick={() => setShowPasswordModal(true)}>
-                                O'zgartirish
+                                {t('settings.edit')}
                             </Button>
                         </div>
                     </div>
@@ -330,7 +322,7 @@ export function Settings() {
                         onClick={handleLogout}
                     >
                         <LogOut className="w-5 h-5" />
-                        Akkauntdan chiqish
+                        {t('settings.logout')}
                     </Button>
                     <p className="text-center text-xs text-slate-400 mt-4">
                         Notevibe v1.0.3 • 2024

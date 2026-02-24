@@ -5,11 +5,13 @@ import { useToast } from '../components/ui/Toast';
 import { supabase } from '../lib/supabase';
 import { PenTool, ArrowLeft, Lock, Mail } from 'lucide-react';
 import { useAuth } from '../components/auth/AuthProvider';
+import { useTranslation } from '../lib/i18n';
 
 export function LoginPage() {
     const navigate = useNavigate();
     const { addToast } = useToast();
     const { user } = useAuth();
+    const { t } = useTranslation();
 
     const [isLogin, setIsLogin] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -70,16 +72,16 @@ export function LoginPage() {
                 if (error) throw error;
 
                 if (data.session) {
-                    addToast('Ro\'yxatdan o\'tish muvaffaqiyatli!', 'success');
+                    addToast(t('login.registerSuccess'), 'success');
                     navigate('/dashboard');
                 } else {
-                    addToast('Ro\'yxatdan o\'tdingiz! Endi kirish tugmasini bosing.', 'success');
+                    addToast(t('login.registerSuccessLogin'), 'success');
                     setIsLogin(true);
                 }
             }
         } catch (error: any) {
             console.error("Auth error:", error);
-            addToast(error.message || 'Xatolik yuz berdi', 'error');
+            addToast(error.message || t('common.error'), 'error');
         } finally {
             setIsLoading(false);
         }
@@ -94,7 +96,7 @@ export function LoginPage() {
             {/* Back Link */}
             <Link to="/" className="absolute top-8 left-8 text-slate-500 hover:text-slate-900 flex items-center gap-2 transition-colors font-medium">
                 <ArrowLeft className="w-4 h-4" />
-                Bosh sahifaga qaytish
+                {t('login.backHome')}
             </Link>
 
             <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 md:p-12 animate-in-up border border-slate-100">
@@ -103,10 +105,10 @@ export function LoginPage() {
                         <PenTool className="w-7 h-7" />
                     </div>
                     <h1 className="text-2xl font-bold text-slate-900 mb-2">
-                        {isLogin ? 'Xush kelibsiz!' : 'Ro\'yxatdan o\'tish'}
+                        {isLogin ? t('login.welcome') : t('login.register')}
                     </h1>
                     <p className="text-slate-500">
-                        {isLogin ? 'Davom etish uchun hisobingizga kiring.' : 'Yangi hisob yarating va jamiyatga qo\'shiling.'}
+                        {isLogin ? t('login.loginDesc') : t('login.registerDesc')}
                     </p>
                 </div>
 
@@ -127,19 +129,19 @@ export function LoginPage() {
                             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
                         </svg>
                     )}
-                    {isGoogleLoading ? 'Kuting...' : 'Google orqali kirish'}
+                    {isGoogleLoading ? t('login.wait') : t('login.google')}
                 </button>
 
                 {/* Divider */}
                 <div className="flex items-center gap-4 my-6">
                     <div className="flex-1 h-px bg-slate-200" />
-                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">yoki</span>
+                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">{t('login.or')}</span>
                     <div className="flex-1 h-px bg-slate-200" />
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-semibold text-slate-700 ml-1">Email</label>
+                        <label className="text-sm font-semibold text-slate-700 ml-1">{t('login.email')}</label>
                         <div className="relative">
                             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                             <input
@@ -154,7 +156,7 @@ export function LoginPage() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-semibold text-slate-700 ml-1">Parol</label>
+                        <label className="text-sm font-semibold text-slate-700 ml-1">{t('login.password')}</label>
                         <div className="relative">
                             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                             <input
@@ -175,7 +177,7 @@ export function LoginPage() {
                         disabled={isLoading}
                         isLoading={isLoading}
                     >
-                        {isLogin ? 'Kirish' : 'Ro\'yxatdan o\'tish'}
+                        {isLogin ? t('login.submit') : t('login.submitRegister')}
                     </Button>
 
                     <div className="text-center mt-6">
@@ -185,8 +187,8 @@ export function LoginPage() {
                             className="text-sm text-slate-500 hover:text-blue-600 transition-colors"
                         >
                             {isLogin
-                                ? "Hisobingiz yo'qmi? Ro'yxatdan o'tish"
-                                : "Hisobingiz bormi? Kirish"}
+                                ? t('login.noAccount')
+                                : t('login.hasAccount')}
                         </button>
                     </div>
                 </form>

@@ -9,9 +9,11 @@ import { toggleKudos, getUserKudos } from '../lib/kudos';
 import { toggleFollow, getFollowingIds } from '../lib/follows';
 import { useAuth } from '../components/auth/AuthProvider';
 import { Link } from 'react-router-dom';
+import { useTranslation } from '../lib/i18n';
 
 export function Dashboard() {
     const { user } = useAuth();
+    const { t } = useTranslation();
     const [posts, setPosts] = useState<Post[]>([]);
     const [suggestedUsers, setSuggestedUsers] = useState<{ id: string; username: string; full_name: string | null; avatar_url: string | null }[]>([]);
     const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
@@ -168,10 +170,10 @@ export function Dashboard() {
                 {/* Posts */}
                 <div className="space-y-6">
                     {loading ? (
-                        <div className="text-center py-10 text-slate-500">Yuklanmoqda...</div>
+                        <div className="text-center py-10 text-slate-500">{t('dashboard.loading')}</div>
                     ) : posts.length === 0 ? (
                         <div className="text-center py-10 text-slate-500 bg-white rounded-2xl border border-slate-200">
-                            <p>Hozircha postlar yo'q.</p>
+                            <p>{t('dashboard.noPosts')}</p>
                             <p className="text-sm">Birinchi bo'lib siz yozing!</p>
                         </div>
                     ) : (
@@ -282,7 +284,7 @@ export function Dashboard() {
 
                 {/* Suggested Users */}
                 <Card className="p-5 border-slate-100 shadow-sm sticky top-64">
-                    <h3 className="font-bold text-slate-900 mb-4">Tavsiya etilgan avtorlar</h3>
+                    <h3 className="font-bold text-slate-900 mb-4">{t('dashboard.suggested')}</h3>
                     {suggestedUsers.length === 0 ? (
                         <p className="text-sm text-slate-400">Tavsiyalar yo'q</p>
                     ) : (
@@ -334,7 +336,7 @@ export function Dashboard() {
                                         {followLoading.has(suggestedUser.id)
                                             ? '...'
                                             : followingIds.has(suggestedUser.id)
-                                                ? 'Obuna'
+                                                ? t('dashboard.following')
                                                 : "A'zo bo'lish"
                                         }
                                     </Button>
