@@ -3,6 +3,7 @@ import { Card } from '../components/ui/Card';
 import { Search, ThumbsUp, MessageSquare, TrendingUp, Filter } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Post } from '../lib/types';
+import { Link } from 'react-router-dom';
 
 export function ExplorePage() {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -145,17 +146,17 @@ export function ExplorePage() {
                         <p className="text-sm text-slate-400 mb-2">{filteredPosts.length} ta natija topildi</p>
                         {filteredPosts.map(post => (
                             <Card key={post.id} className="p-6 border-slate-100 shadow-sm hover:shadow-md transition-all">
-                                <div className="flex items-center gap-3 mb-3">
+                                <Link to={`/user/${post.author_id}`} className="flex items-center gap-3 mb-3 hover:opacity-80 transition-opacity">
                                     <img
                                         src={post.author?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.author?.username || 'User'}`}
                                         alt={post.author?.full_name || 'User'}
                                         className="w-9 h-9 rounded-full bg-slate-100"
                                     />
                                     <div>
-                                        <p className="text-sm font-bold text-slate-900">{post.author?.full_name || post.author?.username || 'Anonymous'}</p>
+                                        <p className="text-sm font-bold text-slate-900 hover:text-blue-600 transition-colors">{post.author?.full_name || post.author?.username || 'Anonymous'}</p>
                                         <p className="text-xs text-slate-400">@{post.author?.username} • {new Date(post.created_at).toLocaleDateString()}</p>
                                     </div>
-                                </div>
+                                </Link>
 
                                 <h2 className="text-lg font-bold text-slate-900 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
                                     {post.title}

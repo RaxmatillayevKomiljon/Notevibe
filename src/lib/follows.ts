@@ -59,3 +59,58 @@ export async function getFollowCounts(userId: string): Promise<{ followers: numb
         return { followers: 0, following: 0 };
     }
 }
+
+/**
+ * Check if followerId is following followingId.
+ */
+export async function isFollowing(followerId: string, followingId: string): Promise<boolean> {
+    const { data } = await supabase
+        .from('follows')
+        .select('id')
+        .eq('follower_id', followerId)
+        .eq('following_id', followingId)
+        .maybeSingle();
+    return !!data;
+}
+
+/**
+ * Get list of follower profiles for a user.
+ */
+export async function getFollowers(userId: string): Promise<{ id: string; username: string; full_name: string | null; avatar_url: string | null }[]> {
+    const { data } = await supabase
+        .from('follows')
+        .select('follower_id')
+        .eq('following_id', userId);
+
+    if (!data || data.length === 0) return [];
+
+    const ids = data.map(f => f.follower_id);
+    const { data: profiles } = await supabase
+        .from('profiles')
+        .select('id, username, full_name, avatar_url')
+        .in('id', ids);
+
+    return profiles || [];
+}
+
+/**
+ * Get list of following profiles for a user.
+ */
+export async function getFollowingUsers(userId: string): Promise<{ id: string; username: string; full_name: string | null; avatar_url: string | null }[]> {
+    const { data } = await supabase
+        .from('follows')
+        .select('following_id')
+        .eq('follower_id', userId);
+
+    if (!data || data.length === 0) return [];
+
+    const ids = data.map(f => f.following_id);
+    const { data: profiles } = await supabase
+        .from('profiles')
+        .select('id, username, full_name, avatar_url')
+        .in('id', ids);
+
+    return profiles || [];
+}
+
+11

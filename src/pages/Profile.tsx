@@ -5,8 +5,10 @@ import { useAuth } from '../components/auth/AuthProvider';
 import { supabase } from '../lib/supabase';
 import { Post, Profile as UserProfile } from '../lib/types';
 import { Card } from '../components/ui/Card';
-import { useNavigate } from 'react-router-dom';
-import { getFollowCounts } from '../lib/follows';
+import { useNavigate, Link } from 'react-router-dom';
+import { getFollowCounts, getFollowers, getFollowingUsers } from '../lib/follows';
+
+type FollowUser = { id: string; username: string; full_name: string | null; avatar_url: string | null };
 
 const TABS = ['Notelar', 'Haqida', 'Saqlanganlar'];
 
@@ -18,6 +20,12 @@ export function Profile() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [followCounts, setFollowCounts] = useState({ followers: 0, following: 0 });
+    const [totalKudos, setTotalKudos] = useState(0);
+
+    // Follow list modal
+    const [showFollowList, setShowFollowList] = useState<'followers' | 'following' | null>(null);
+    const [followList, setFollowList] = useState<FollowUser[]>([]);
+    const [followListLoading, setFollowListLoading] = useState(false);
 
     // Edit Mode State
     const [isEditing, setIsEditing] = useState(false);
@@ -74,9 +82,14 @@ export function Profile() {
                 .eq('author_id', user?.id)
                 .order('created_at', { ascending: false });
 
-            setPosts(postsData || []);
+            const userPosts = postsData || [];
+            setPosts(userPosts);
 
-            // 3. Fetch Follow Counts
+            // 3. Calculate total kudos
+            const kudos = userPosts.reduce((sum, p) => sum + (p.likes_count || 0), 0);
+            setTotalKudos(kudos);
+
+            // 4. Fetch Follow Counts
             if (user) {
                 const counts = await getFollowCounts(user.id);
                 setFollowCounts(counts);
@@ -158,8 +171,72 @@ export function Profile() {
     if (loading) return <div className="p-10 text-center text-slate-500">Yuklanmoqda...</div>;
     if (!user) return <div className="p-10 text-center">Iltimos, tizimga kiring.</div>;
 
+    async function openFollowList(type: 'followers' | 'following') {
+        setShowFollowList(type);
+        setFollowListLoading(true);
+        try {
+            const list = type === 'followers'
+                ? await getFollowers(user!.id)
+                : await getFollowingUsers(user!.id);
+            setFollowList(list);
+        } catch (e) {
+            console.error('Error loading follow list:', e);
+        } finally {
+            setFollowListLoading(false);
+        }
+    }
+
     return (
         <div>
+            {/* Follow List Modal */}
+            {showFollowList && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700">
+                            <h3 className="font-bold text-slate-900 dark:text-white">
+                                {showFollowList === 'followers' ? 'Obunachilari' : 'Obunalari'}
+                            </h3>
+                            <button
+                                onClick={() => setShowFollowList(null)}
+                                className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <div className="max-h-96 overflow-y-auto p-4 space-y-3">
+                            {followListLoading ? (
+                                <p className="text-center text-slate-400 py-8">Yuklanmoqda...</p>
+                            ) : followList.length === 0 ? (
+                                <p className="text-center text-slate-400 py-8">
+                                    {showFollowList === 'followers' ? 'Obunachilari yo\'q' : 'Hech kimga obuna bo\'lmagan'}
+                                </p>
+                            ) : (
+                                followList.map(u => (
+                                    <Link
+                                        key={u.id}
+                                        to={`/user/${u.id}`}
+                                        onClick={() => setShowFollowList(null)}
+                                        className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                                    >
+                                        <img
+                                            src={u.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${u.username}`}
+                                            alt={u.username}
+                                            className="w-10 h-10 rounded-full bg-slate-100"
+                                        />
+                                        <div>
+                                            <p className="font-semibold text-sm text-slate-900 dark:text-white">
+                                                {u.full_name || u.username}
+                                            </p>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">@{u.username}</p>
+                                        </div>
+                                    </Link>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Edit Profile Modal */}
             {isEditing && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
@@ -297,18 +374,28 @@ export function Profile() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-8 max-w-lg">
-                <div className="text-center p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
-                    <p className="text-2xl font-bold text-slate-900">{posts.length}</p>
+            <div className="grid grid-cols-4 gap-3 mb-8 max-w-2xl">
+                <div className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{posts.length}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Note</p>
                 </div>
-                <div className="text-center p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
-                    <p className="text-2xl font-bold text-slate-900">{followCounts.followers}</p>
+                <button
+                    onClick={() => openFollowList('followers')}
+                    className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer"
+                >
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{followCounts.followers}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Obunachi</p>
-                </div>
-                <div className="text-center p-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
-                    <p className="text-2xl font-bold text-slate-900">{followCounts.following}</p>
+                </button>
+                <button
+                    onClick={() => openFollowList('following')}
+                    className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer"
+                >
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{followCounts.following}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Obuna</p>
+                </button>
+                <div className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{totalKudos}</p>
+                    <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Kudos</p>
                 </div>
             </div>
 

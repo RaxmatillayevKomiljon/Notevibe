@@ -6,6 +6,7 @@ export interface Profile {
     website: string | null;
     bio: string | null;
     updated_at: string | null;
+    created_at: string;
 }
 
 export interface Post {

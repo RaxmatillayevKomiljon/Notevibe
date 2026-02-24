@@ -9,6 +9,7 @@ import { Profile } from './pages/Profile';
 import { Settings } from './pages/Settings';
 import { ExplorePage } from './pages/ExplorePage';
 import { BookmarksPage } from './pages/BookmarksPage';
+import { UserProfilePage } from './pages/UserProfilePage';
 
 import { AuthProvider } from './components/auth/AuthProvider';
 
@@ -29,6 +30,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/create-post" element={<CreatePost />} />
+              <Route path="/user/:userId" element={<UserProfilePage />} />
             </Route>
 
           </Routes>

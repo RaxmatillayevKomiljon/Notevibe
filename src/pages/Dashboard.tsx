@@ -8,6 +8,7 @@ import { toggleBookmark, isBookmarked } from './BookmarksPage';
 import { toggleKudos, getUserKudos } from '../lib/kudos';
 import { toggleFollow, getFollowingIds } from '../lib/follows';
 import { useAuth } from '../components/auth/AuthProvider';
+import { Link } from 'react-router-dom';
 
 export function Dashboard() {
     const { user } = useAuth();
@@ -178,17 +179,19 @@ export function Dashboard() {
                             <Card key={post.id} className="p-6 border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex items-center gap-3">
-                                        <img
-                                            src={post.author?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.author?.username || 'User'}`}
-                                            alt={post.author?.full_name || 'User'}
-                                            className="w-10 h-10 rounded-full bg-slate-100"
-                                        />
-                                        <div>
-                                            <h3 className="font-bold text-slate-900 text-sm">{post.author?.full_name || post.author?.username || 'Anonymous'}</h3>
-                                            <p className="text-xs text-slate-500">
-                                                @{post.author?.username} • {new Date(post.created_at).toLocaleDateString()}
-                                            </p>
-                                        </div>
+                                        <Link to={`/user/${post.author_id}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                                            <img
+                                                src={post.author?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.author?.username || 'User'}`}
+                                                alt={post.author?.full_name || 'User'}
+                                                className="w-10 h-10 rounded-full bg-slate-100"
+                                            />
+                                            <div>
+                                                <h3 className="font-bold text-slate-900 text-sm hover:text-blue-600 transition-colors">{post.author?.full_name || post.author?.username || 'Anonymous'}</h3>
+                                                <p className="text-xs text-slate-500">
+                                                    @{post.author?.username} • {new Date(post.created_at).toLocaleDateString()}
+                                                </p>
+                                            </div>
+                                        </Link>
                                     </div>
                                     <button className="text-slate-400 hover:text-slate-600">
                                         <MoreHorizontal className="w-5 h-5" />
@@ -286,15 +289,17 @@ export function Dashboard() {
                         <div className="space-y-4">
                             {suggestedUsers.map((suggestedUser, i) => (
                                 <div key={i} className="flex items-center gap-3">
-                                    <img
-                                        src={suggestedUser.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${suggestedUser.username}`}
-                                        alt={suggestedUser.full_name || suggestedUser.username}
-                                        className="w-9 h-9 rounded-full bg-slate-100"
-                                    />
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-bold text-slate-900 truncate">{suggestedUser.full_name || suggestedUser.username}</p>
-                                        <p className="text-xs text-slate-500 truncate">@{suggestedUser.username}</p>
-                                    </div>
+                                    <Link to={`/user/${suggestedUser.id}`} className="flex items-center gap-3 flex-1 min-w-0 hover:opacity-80 transition-opacity">
+                                        <img
+                                            src={suggestedUser.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${suggestedUser.username}`}
+                                            alt={suggestedUser.full_name || suggestedUser.username}
+                                            className="w-9 h-9 rounded-full bg-slate-100"
+                                        />
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-bold text-slate-900 truncate hover:text-blue-600 transition-colors">{suggestedUser.full_name || suggestedUser.username}</p>
+                                            <p className="text-xs text-slate-500 truncate">@{suggestedUser.username}</p>
+                                        </div>
+                                    </Link>
                                     <Button
                                         size="sm"
                                         variant={followingIds.has(suggestedUser.id) ? 'primary' : 'outline'}

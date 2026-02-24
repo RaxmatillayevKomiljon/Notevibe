@@ -56,6 +56,7 @@ export function LoginPage() {
                     password,
                 });
                 if (error) throw error;
+                navigate('/dashboard');
             } else {
                 const { data, error } = await supabase.auth.signUp({
                     email,
@@ -70,8 +71,9 @@ export function LoginPage() {
 
                 if (data.session) {
                     addToast('Ro\'yxatdan o\'tish muvaffaqiyatli!', 'success');
+                    navigate('/dashboard');
                 } else {
-                    addToast('Ro\'yxatdan o\'tish muvaffaqiyatli! Iltimos, kirish tugmasini bosing.', 'success');
+                    addToast('Ro\'yxatdan o\'tdingiz! Endi kirish tugmasini bosing.', 'success');
                     setIsLogin(true);
                 }
             }
