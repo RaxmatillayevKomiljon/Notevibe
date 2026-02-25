@@ -9,7 +9,7 @@ import { getAllReports, updateReportStatus } from '../lib/reports';
 import type { Report } from '../lib/reports';
 
 // Admin emails — add your admin email(s) here
-const ADMIN_EMAILS = ['komiljonraxmatillayev@gmail.com'];
+const ADMIN_EMAILS = ['komiljonraxmatillayev5@gmail.com'];
 
 type Tab = 'users' | 'posts' | 'reports';
 
@@ -139,8 +139,8 @@ export function AdminPage() {
                         key={tb.key}
                         onClick={() => setTab(tb.key)}
                         className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${tab === tb.key
-                                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                                : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                            ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                            : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                             }`}
                     >
                         <tb.icon className="w-4 h-4" />
@@ -199,8 +199,8 @@ export function AdminPage() {
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1">
                                         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${r.status === 'pending' ? 'bg-red-100 dark:bg-red-900/30 text-red-600' :
-                                                r.status === 'reviewed' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-600' :
-                                                    'bg-green-100 dark:bg-green-900/30 text-green-600'
+                                            r.status === 'reviewed' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-600' :
+                                                'bg-green-100 dark:bg-green-900/30 text-green-600'
                                             }`}>
                                             {r.status}
                                         </span>

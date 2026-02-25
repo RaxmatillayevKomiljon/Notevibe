@@ -18,7 +18,7 @@ const navItemKeys = [
     { icon: Settings, labelKey: 'nav.settings', path: '/settings' },
 ];
 
-const ADMIN_EMAILS = ['komiljonraxmatillayev@gmail.com'];
+const ADMIN_EMAILS = ['komiljonraxmatillayev5@gmail.com'];
 
 export function Sidebar() {
     const location = useLocation();
