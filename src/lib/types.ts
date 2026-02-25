@@ -22,3 +22,12 @@ export interface Post {
     updated_at: string;
     author?: Profile; // Joined data
 }
+
+export interface Comment {
+    id: string;
+    post_id: string;
+    user_id: string;
+    content: string;
+    created_at: string;
+    author?: { username: string; full_name: string | null; avatar_url: string | null };
+}

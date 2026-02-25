@@ -33,6 +33,16 @@ const translations: Record<Language, Record<string, string>> = {
         'dashboard.unsave': 'Saqlangandan olib tashlash',
         'dashboard.noSuggestions': "Tavsiyalar yo'q",
         'dashboard.followBtn': "A'zo bo'lish",
+        'dashboard.linkCopied': 'Havola nusxalandi!',
+
+        // Comments
+        'comments.placeholder': 'Fikr bildiring...',
+        'comments.empty': "Hali izohlar yo'q. Birinchi bo'ling!",
+        'comments.delete': "O'chirish",
+        'comments.justNow': 'Hozirgina',
+        'comments.minAgo': 'daqiqa oldin',
+        'comments.hourAgo': 'soat oldin',
+        'comments.dayAgo': 'kun oldin',
 
         // Explore
         'explore.title': "Kesht etish",
@@ -183,6 +193,16 @@ const translations: Record<Language, Record<string, string>> = {
         'dashboard.unsave': 'Убрать из сохранённых',
         'dashboard.noSuggestions': 'Нет рекомендаций',
         'dashboard.followBtn': 'Подписаться',
+        'dashboard.linkCopied': 'Ссылка скопирована!',
+
+        // Comments
+        'comments.placeholder': 'Напишите комментарий...',
+        'comments.empty': 'Пока нет комментариев. Будьте первым!',
+        'comments.delete': 'Удалить',
+        'comments.justNow': 'Только что',
+        'comments.minAgo': 'мин. назад',
+        'comments.hourAgo': 'ч. назад',
+        'comments.dayAgo': 'дн. назад',
 
         // Explore
         'explore.title': 'Обзор',
@@ -333,6 +353,16 @@ const translations: Record<Language, Record<string, string>> = {
         'dashboard.unsave': 'Remove from saved',
         'dashboard.noSuggestions': 'No suggestions',
         'dashboard.followBtn': 'Follow',
+        'dashboard.linkCopied': 'Link copied!',
+
+        // Comments
+        'comments.placeholder': 'Write a comment...',
+        'comments.empty': 'No comments yet. Be the first!',
+        'comments.delete': 'Delete',
+        'comments.justNow': 'Just now',
+        'comments.minAgo': 'min ago',
+        'comments.hourAgo': 'hr ago',
+        'comments.dayAgo': 'days ago',
 
         // Explore
         'explore.title': 'Explore',
