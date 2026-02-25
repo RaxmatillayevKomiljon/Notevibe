@@ -24,6 +24,15 @@ const translations: Record<Language, Record<string, string>> = {
         'dashboard.following': "Obuna bo'lgan",
         'dashboard.unfollow': 'Bekor qilish',
         'dashboard.anonymous': 'Anonim',
+        'dashboard.feed': 'Mening lentam',
+        'dashboard.trending': 'Trenddagi mavzular',
+        'dashboard.noTopics': "Hozircha mavzular yo'q",
+        'dashboard.all': 'Barchasi',
+        'dashboard.readTime': "o'qish",
+        'dashboard.save': 'Saqlash',
+        'dashboard.unsave': 'Saqlangandan olib tashlash',
+        'dashboard.noSuggestions': "Tavsiyalar yo'q",
+        'dashboard.followBtn': "A'zo bo'lish",
 
         // Explore
         'explore.title': "Kesht etish",
@@ -55,6 +64,14 @@ const translations: Record<Language, Record<string, string>> = {
         'profile.username': 'Foydalanuvchi nomi',
         'profile.bio': 'Bio',
         'profile.website': 'Veb-sayt',
+        'profile.share': 'Ulashish',
+        'profile.saving': 'Saqlanmoqda...',
+        'profile.profileImage': 'Profil rasmi',
+        'profile.bioPlaceholder': "Hozircha ma'lumot yo'q. Profilni tahrirlash orqali bio qo'shing.",
+        'profile.info': "Ma'lumotlar",
+        'profile.goToSaved': "Saqlanganlar sahifasiga o'tish →",
+        'profile.savedNotes': 'Saqlangan notelar',
+        'profile.useSavedPage': 'Saqlanganlar sahifasidan foydalaning',
 
         // Settings
         'settings.title': 'Sozlamalar',
@@ -157,6 +174,15 @@ const translations: Record<Language, Record<string, string>> = {
         'dashboard.following': 'Подписан',
         'dashboard.unfollow': 'Отписаться',
         'dashboard.anonymous': 'Аноним',
+        'dashboard.feed': 'Моя лента',
+        'dashboard.trending': 'Трендовые темы',
+        'dashboard.noTopics': 'Пока нет тем',
+        'dashboard.all': 'Все',
+        'dashboard.readTime': 'чтение',
+        'dashboard.save': 'Сохранить',
+        'dashboard.unsave': 'Убрать из сохранённых',
+        'dashboard.noSuggestions': 'Нет рекомендаций',
+        'dashboard.followBtn': 'Подписаться',
 
         // Explore
         'explore.title': 'Обзор',
@@ -188,6 +214,14 @@ const translations: Record<Language, Record<string, string>> = {
         'profile.username': 'Имя пользователя',
         'profile.bio': 'О себе',
         'profile.website': 'Веб-сайт',
+        'profile.share': 'Поделиться',
+        'profile.saving': 'Сохранение...',
+        'profile.profileImage': 'Фото профиля',
+        'profile.bioPlaceholder': 'Пока нет информации. Добавьте био через редактирование профиля.',
+        'profile.info': 'Информация',
+        'profile.goToSaved': 'Перейти к закладкам →',
+        'profile.savedNotes': 'Сохранённые заметки',
+        'profile.useSavedPage': 'Используйте страницу закладок',
 
         // Settings
         'settings.title': 'Настройки',
@@ -290,6 +324,15 @@ const translations: Record<Language, Record<string, string>> = {
         'dashboard.following': 'Following',
         'dashboard.unfollow': 'Unfollow',
         'dashboard.anonymous': 'Anonymous',
+        'dashboard.feed': 'My Feed',
+        'dashboard.trending': 'Trending Topics',
+        'dashboard.noTopics': 'No topics yet',
+        'dashboard.all': 'All',
+        'dashboard.readTime': 'read',
+        'dashboard.save': 'Save',
+        'dashboard.unsave': 'Remove from saved',
+        'dashboard.noSuggestions': 'No suggestions',
+        'dashboard.followBtn': 'Follow',
 
         // Explore
         'explore.title': 'Explore',
@@ -321,6 +364,14 @@ const translations: Record<Language, Record<string, string>> = {
         'profile.username': 'Username',
         'profile.bio': 'Bio',
         'profile.website': 'Website',
+        'profile.share': 'Share',
+        'profile.saving': 'Saving...',
+        'profile.profileImage': 'Profile Image',
+        'profile.bioPlaceholder': 'No info yet. Add a bio by editing your profile.',
+        'profile.info': 'Information',
+        'profile.goToSaved': 'Go to Bookmarks →',
+        'profile.savedNotes': 'Saved notes',
+        'profile.useSavedPage': 'Use the bookmarks page',
 
         // Settings
         'settings.title': 'Settings',

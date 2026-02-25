@@ -141,12 +141,12 @@ export function Dashboard() {
             <div className="lg:col-span-2 space-y-6">
                 {/* Header & Search */}
                 <div className="flex items-center justify-between sticky top-0 bg-slate-50/95 backdrop-blur z-10 py-2">
-                    <h1 className="text-2xl font-bold text-slate-900">Mening lentam</h1>
+                    <h1 className="text-2xl font-bold text-slate-900">{t('dashboard.feed')}</h1>
                     <div className="relative hidden sm:block">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input
                             type="text"
-                            placeholder="Qidirish..."
+                            placeholder={t('dashboard.search')}
                             className="pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-64"
                         />
                     </div>
@@ -154,7 +154,7 @@ export function Dashboard() {
 
                 {/* Categories / Filter */}
                 <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                    {["Barchasi", ...trendingTags].map((cat, i) => (
+                    {[t('dashboard.all'), ...trendingTags].map((cat, i) => (
                         <button
                             key={i}
                             className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${i === 0
@@ -174,7 +174,7 @@ export function Dashboard() {
                     ) : posts.length === 0 ? (
                         <div className="text-center py-10 text-slate-500 bg-white rounded-2xl border border-slate-200">
                             <p>{t('dashboard.noPosts')}</p>
-                            <p className="text-sm">Birinchi bo'lib siz yozing!</p>
+                            <p className="text-sm">{t('dashboard.beFirst')}</p>
                         </div>
                     ) : (
                         posts.map(post => (
@@ -241,11 +241,11 @@ export function Dashboard() {
                                                 ? 'text-amber-500 bg-amber-50'
                                                 : 'text-slate-400 hover:text-amber-500 hover:bg-amber-50'
                                                 }`}
-                                            title={bookmarkedIds.has(post.id) ? 'Saqlangandan olib tashlash' : 'Saqlash'}
+                                            title={bookmarkedIds.has(post.id) ? t('dashboard.unsave') : t('dashboard.save')}
                                         >
                                             <Bookmark className={`w-4 h-4 ${bookmarkedIds.has(post.id) ? 'fill-amber-500' : ''}`} />
                                         </button>
-                                        <span>3 min o'qish</span>
+                                        <span>3 min {t('dashboard.readTime')}</span>
                                         <button className="hover:text-slate-800">
                                             <Share2 className="w-4 h-4" />
                                         </button>
@@ -263,10 +263,10 @@ export function Dashboard() {
                 <Card className="p-5 border-slate-100 shadow-sm sticky top-6">
                     <div className="flex items-center gap-2 mb-4 text-slate-900 font-bold">
                         <Flame className="w-5 h-5 text-orange-500" />
-                        <h3>Trenddagi mavzular</h3>
+                        <h3>{t('dashboard.trending')}</h3>
                     </div>
                     {trendingTags.length === 0 ? (
-                        <p className="text-sm text-slate-400">Hozircha mavzular yo'q</p>
+                        <p className="text-sm text-slate-400">{t('dashboard.noTopics')}</p>
                     ) : (
                         <div className="space-y-4">
                             {trendingTags.map((tag, i) => (
@@ -286,7 +286,7 @@ export function Dashboard() {
                 <Card className="p-5 border-slate-100 shadow-sm sticky top-64">
                     <h3 className="font-bold text-slate-900 mb-4">{t('dashboard.suggested')}</h3>
                     {suggestedUsers.length === 0 ? (
-                        <p className="text-sm text-slate-400">Tavsiyalar yo'q</p>
+                        <p className="text-sm text-slate-400">{t('dashboard.noSuggestions')}</p>
                     ) : (
                         <div className="space-y-4">
                             {suggestedUsers.map((suggestedUser, i) => (
@@ -337,7 +337,7 @@ export function Dashboard() {
                                             ? '...'
                                             : followingIds.has(suggestedUser.id)
                                                 ? t('dashboard.following')
-                                                : "A'zo bo'lish"
+                                                : t('dashboard.followBtn')
                                         }
                                     </Button>
                                 </div>
