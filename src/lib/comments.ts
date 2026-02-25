@@ -48,21 +48,14 @@ export async function addComment(postId: string, userId: string, content: string
         return null;
     }
 
-    // Step 2: Fetch the comment with author profile
-    const { data: full, error: fetchError } = await supabase
+    // Step 2: Fetch with author profile (try join, fallback to plain)
+    const { data: full } = await supabase
         .from('comments')
-        .select(`
-            *,
-            author:profiles!comments_user_id_fkey1(username, full_name, avatar_url)
-        `)
+        .select(`*, author:profiles(username, full_name, avatar_url)`)
         .eq('id', inserted.id)
         .single();
 
-    if (fetchError || !full) {
-        // Fallback: return without author join
-        return inserted as Comment;
-    }
-    return full;
+    return full || (inserted as Comment);
 }
 
 /**
