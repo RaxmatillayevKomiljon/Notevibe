@@ -1,25 +1,31 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Compass, Bookmark, User, LogOut, PenSquare, Settings } from 'lucide-react';
+import { Home, Compass, Bookmark, User, LogOut, PenSquare, Settings, Bell, Shield } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Button } from '../ui/Button';
 import { useAuth } from '../auth/AuthProvider';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useTranslation } from '../../lib/i18n';
+import { getUnreadCount } from '../../lib/notifications';
+
 
 const navItemKeys = [
     { icon: Home, labelKey: 'nav.home', path: '/dashboard' },
     { icon: Compass, labelKey: 'nav.explore', path: '/explore' },
+    { icon: Bell, labelKey: 'nav.notifications', path: '/notifications' },
     { icon: Bookmark, labelKey: 'nav.bookmarks', path: '/bookmarks' },
     { icon: User, labelKey: 'nav.profile', path: '/profile' },
     { icon: Settings, labelKey: 'nav.settings', path: '/settings' },
 ];
+
+const ADMIN_EMAILS = ['komiljonraxmatillayev@gmail.com'];
 
 export function Sidebar() {
     const location = useLocation();
     const { user, signOut } = useAuth();
     const { t } = useTranslation();
     const [profileData, setProfileData] = useState<{ full_name: string | null; avatar_url: string | null } | null>(null);
+    const [unreadNotifs, setUnreadNotifs] = useState(0);
 
     // Fetch profile from DB for accurate display
     useEffect(() => {
@@ -32,6 +38,8 @@ export function Sidebar() {
                 .then(({ data }) => {
                     if (data) setProfileData(data);
                 });
+            // Fetch unread notification count
+            getUnreadCount(user.id).then(setUnreadNotifs);
         }
     }, [user]);
 
@@ -88,11 +96,31 @@ export function Sidebar() {
                                     : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
                             )}>
                                 <item.icon className={cn("w-5 h-5", isActive ? "text-blue-600" : "text-slate-400 dark:text-slate-500")} />
-                                {t(item.labelKey)}
+                                <span className="flex-1">{t(item.labelKey)}</span>
+                                {item.path === '/notifications' && unreadNotifs > 0 && (
+                                    <span className="bg-red-500 text-white text-[10px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full">
+                                        {unreadNotifs > 9 ? '9+' : unreadNotifs}
+                                    </span>
+                                )}
                             </div>
                         </Link>
                     );
                 })}
+
+                {/* Admin Nav (admin only) */}
+                {user && ADMIN_EMAILS.includes(user.email || '') && (
+                    <Link to="/admin">
+                        <div className={cn(
+                            "flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-sm",
+                            location.pathname === '/admin'
+                                ? "bg-violet-50 dark:bg-violet-900/30 text-violet-600"
+                                : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
+                        )}>
+                            <Shield className={cn("w-5 h-5", location.pathname === '/admin' ? "text-violet-600" : "text-slate-400 dark:text-slate-500")} />
+                            <span>{t('nav.admin')}</span>
+                        </div>
+                    </Link>
+                )}
             </nav>
 
             {/* User & Logout */}

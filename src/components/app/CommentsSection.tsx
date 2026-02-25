@@ -4,13 +4,15 @@ import { Comment } from '../../lib/types';
 import { getComments, addComment, deleteComment } from '../../lib/comments';
 import { useAuth } from '../auth/AuthProvider';
 import { useTranslation } from '../../lib/i18n';
+import { createNotification } from '../../lib/notifications';
 
 interface Props {
     postId: string;
+    postAuthorId?: string;
     onCountChange?: (count: number) => void;
 }
 
-export function CommentsSection({ postId, onCountChange }: Props) {
+export function CommentsSection({ postId, postAuthorId, onCountChange }: Props) {
     const { user } = useAuth();
     const { t } = useTranslation();
     const [comments, setComments] = useState<Comment[]>([]);
@@ -39,6 +41,10 @@ export function CommentsSection({ postId, onCountChange }: Props) {
             setComments(prev => [...prev, newComment]);
             onCountChange?.(comments.length + 1);
             setText('');
+            // Notify post author
+            if (postAuthorId) {
+                createNotification('comment', user.id, postAuthorId, postId);
+            }
         }
         setSending(false);
         inputRef.current?.focus();

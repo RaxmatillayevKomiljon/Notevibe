@@ -10,6 +10,7 @@ const translations: Record<Language, Record<string, string>> = {
         'nav.bookmarks': 'Saqlanganlar',
         'nav.profile': 'Profil',
         'nav.settings': 'Sozlamalar',
+        'nav.notifications': 'Bildirishnomalar',
         'nav.newPost': 'Note yozish',
         'nav.logout': 'Chiqish',
 
@@ -44,6 +45,15 @@ const translations: Record<Language, Record<string, string>> = {
         'comments.hourAgo': 'soat oldin',
         'comments.dayAgo': 'kun oldin',
 
+        // Notifications
+        'notifications.title': 'Bildirishnomalar',
+        'notifications.empty': 'Bildirishnomalar yo\'q',
+        'notifications.emptyDesc': 'Sizga kimdir obuna bo\'lganda yoki izoh qoldirganda bu yerda ko\'rinadi',
+        'notifications.markAllRead': 'Barchasini o\'qilgan deb belgilash',
+        'notifications.kudosMsg': 'postingizga kudos berdi',
+        'notifications.commentMsg': 'postingizga izoh qoldirdi',
+        'notifications.followMsg': 'sizga obuna bo\'ldi',
+
         // Explore
         'explore.title': "Kesht etish",
         'explore.search': "Post, muallif yoki mavzu qidirish...",
@@ -51,6 +61,17 @@ const translations: Record<Language, Record<string, string>> = {
         'explore.all': 'Barchasi',
         'explore.results': 'ta natija topildi',
         'explore.noResults': "Natija topilmadi",
+        'explore.subtitle': "Yangi notelar, mualliflar va g'oyalarni toping",
+        'explore.filterByTag': "Teglar bo'yicha filtrlash",
+        'explore.sortNewest': 'Eng yangi',
+        'explore.sortPopular': 'Mashhur',
+        'explore.sortDiscussed': "Ko'p muhokama",
+        'explore.topAuthors': 'Top mualliflar',
+        'explore.trendingTags': 'Trendagi teglar',
+        'explore.posts': 'ta note',
+        'explore.resultsFound': 'ta natija topildi',
+        'explore.noResultsFor': "bo'yicha natija yo'q",
+        'explore.noPosts': "Hozircha notelar yo'q",
 
         // Profile
         'profile.title': 'Profil',
@@ -160,6 +181,31 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Common
         'common.loading': 'Yuklanmoqda...',
+
+        // Report
+        'report.title': 'Shikoyat qilish',
+        'report.selectReason': 'Shikoyat sababini tanlang',
+        'report.reason.spam': 'Spam',
+        'report.reason.inappropriate': "Noto'g'ri kontent",
+        'report.reason.harassment': 'Bezovta qilish',
+        'report.reason.other': 'Boshqa',
+        'report.descPlaceholder': "Qo'shimcha ma'lumot (ixtiyoriy)...",
+        'report.submit': "Shikoyat jo'natish",
+        'report.sent': "Shikoyat jo'natildi",
+        'report.sentDesc': "Adminlar ko'rib chiqadi",
+
+        // Admin
+        'nav.admin': 'Admin panel',
+        'admin.title': 'Admin panel',
+        'admin.subtitle': "Platformani boshqarish",
+        'admin.users': 'Foydalanuvchilar',
+        'admin.posts': 'Notelar',
+        'admin.reports': 'Shikoyatlar',
+        'admin.noReports': 'Shikoyatlar yo\'q',
+        'admin.reportedBy': 'Shikoyatchi',
+        'admin.confirmDelete': "Haqiqatan o'chirmoqchimisiz?",
+        'admin.accessDenied': 'Ruxsat yo\'q',
+        'admin.accessDeniedDesc': 'Sizda admin huquqi yo\'q',
         'common.error': 'Xatolik yuz berdi',
         'common.close': 'Yopish',
     },
@@ -170,6 +216,7 @@ const translations: Record<Language, Record<string, string>> = {
         'nav.bookmarks': 'Закладки',
         'nav.profile': 'Профиль',
         'nav.settings': 'Настройки',
+        'nav.notifications': 'Уведомления',
         'nav.newPost': 'Новая заметка',
         'nav.logout': 'Выйти',
 
@@ -204,6 +251,15 @@ const translations: Record<Language, Record<string, string>> = {
         'comments.hourAgo': 'ч. назад',
         'comments.dayAgo': 'дн. назад',
 
+        // Notifications
+        'notifications.title': 'Уведомления',
+        'notifications.empty': 'Нет уведомлений',
+        'notifications.emptyDesc': 'Здесь появятся уведомления, когда кто-то подпишется или оставит комментарий',
+        'notifications.markAllRead': 'Отметить все как прочитанные',
+        'notifications.kudosMsg': 'поставил(а) кудос на ваш пост',
+        'notifications.commentMsg': 'прокомментировал(а) ваш пост',
+        'notifications.followMsg': 'подписался(-ась) на вас',
+
         // Explore
         'explore.title': 'Обзор',
         'explore.search': 'Поиск по постам, авторам или темам...',
@@ -211,6 +267,17 @@ const translations: Record<Language, Record<string, string>> = {
         'explore.all': 'Все',
         'explore.results': 'результатов найдено',
         'explore.noResults': 'Ничего не найдено',
+        'explore.subtitle': 'Находите новые заметки, авторов и идеи',
+        'explore.filterByTag': 'Фильтр по тегам',
+        'explore.sortNewest': 'Новые',
+        'explore.sortPopular': 'Популярные',
+        'explore.sortDiscussed': 'Обсуждаемые',
+        'explore.topAuthors': 'Топ авторов',
+        'explore.trendingTags': 'Популярные теги',
+        'explore.posts': 'постов',
+        'explore.resultsFound': 'результатов найдено',
+        'explore.noResultsFor': 'по запросу ничего не найдено',
+        'explore.noPosts': 'Пока нет заметок',
 
         // Profile
         'profile.title': 'Профиль',
@@ -320,6 +387,31 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Common
         'common.loading': 'Загрузка...',
+
+        // Report
+        'report.title': 'Пожаловаться',
+        'report.selectReason': 'Выберите причину жалобы',
+        'report.reason.spam': 'Спам',
+        'report.reason.inappropriate': 'Неподобающий контент',
+        'report.reason.harassment': 'Домогательство',
+        'report.reason.other': 'Другое',
+        'report.descPlaceholder': 'Дополнительная информация (необязательно)...',
+        'report.submit': 'Отправить жалобу',
+        'report.sent': 'Жалоба отправлена',
+        'report.sentDesc': 'Администраторы рассмотрят её',
+
+        // Admin
+        'nav.admin': 'Админ панель',
+        'admin.title': 'Админ панель',
+        'admin.subtitle': 'Управление платформой',
+        'admin.users': 'Пользователи',
+        'admin.posts': 'Посты',
+        'admin.reports': 'Жалобы',
+        'admin.noReports': 'Нет жалоб',
+        'admin.reportedBy': 'Отправитель',
+        'admin.confirmDelete': 'Вы действительно хотите удалить?',
+        'admin.accessDenied': 'Доступ запрещён',
+        'admin.accessDeniedDesc': 'У вас нет прав администратора',
         'common.error': 'Произошла ошибка',
         'common.close': 'Закрыть',
     },
@@ -330,6 +422,7 @@ const translations: Record<Language, Record<string, string>> = {
         'nav.bookmarks': 'Bookmarks',
         'nav.profile': 'Profile',
         'nav.settings': 'Settings',
+        'nav.notifications': 'Notifications',
         'nav.newPost': 'New Note',
         'nav.logout': 'Logout',
 
@@ -364,6 +457,15 @@ const translations: Record<Language, Record<string, string>> = {
         'comments.hourAgo': 'hr ago',
         'comments.dayAgo': 'days ago',
 
+        // Notifications
+        'notifications.title': 'Notifications',
+        'notifications.empty': 'No notifications',
+        'notifications.emptyDesc': 'Notifications will appear here when someone follows you or comments on your post',
+        'notifications.markAllRead': 'Mark all as read',
+        'notifications.kudosMsg': 'gave kudos to your post',
+        'notifications.commentMsg': 'commented on your post',
+        'notifications.followMsg': 'started following you',
+
         // Explore
         'explore.title': 'Explore',
         'explore.search': 'Search posts, authors or topics...',
@@ -371,6 +473,17 @@ const translations: Record<Language, Record<string, string>> = {
         'explore.all': 'All',
         'explore.results': 'results found',
         'explore.noResults': 'No results found',
+        'explore.subtitle': 'Find new notes, authors and ideas',
+        'explore.filterByTag': 'Filter by tags',
+        'explore.sortNewest': 'Newest',
+        'explore.sortPopular': 'Popular',
+        'explore.sortDiscussed': 'Most discussed',
+        'explore.topAuthors': 'Top authors',
+        'explore.trendingTags': 'Trending tags',
+        'explore.posts': 'posts',
+        'explore.resultsFound': 'results found',
+        'explore.noResultsFor': 'no results found',
+        'explore.noPosts': 'No posts yet',
 
         // Profile
         'profile.title': 'Profile',
@@ -480,6 +593,31 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Common
         'common.loading': 'Loading...',
+
+        // Report
+        'report.title': 'Report',
+        'report.selectReason': 'Select a reason for reporting',
+        'report.reason.spam': 'Spam',
+        'report.reason.inappropriate': 'Inappropriate content',
+        'report.reason.harassment': 'Harassment',
+        'report.reason.other': 'Other',
+        'report.descPlaceholder': 'Additional details (optional)...',
+        'report.submit': 'Submit report',
+        'report.sent': 'Report submitted',
+        'report.sentDesc': 'Admins will review it',
+
+        // Admin
+        'nav.admin': 'Admin Panel',
+        'admin.title': 'Admin Panel',
+        'admin.subtitle': 'Manage the platform',
+        'admin.users': 'Users',
+        'admin.posts': 'Posts',
+        'admin.reports': 'Reports',
+        'admin.noReports': 'No reports',
+        'admin.reportedBy': 'Reported by',
+        'admin.confirmDelete': 'Are you sure you want to delete?',
+        'admin.accessDenied': 'Access Denied',
+        'admin.accessDeniedDesc': 'You do not have admin permissions',
         'common.error': 'An error occurred',
         'common.close': 'Close',
     },

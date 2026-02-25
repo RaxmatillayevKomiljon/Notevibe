@@ -10,6 +10,8 @@ import { Settings } from './pages/Settings';
 import { ExplorePage } from './pages/ExplorePage';
 import { BookmarksPage } from './pages/BookmarksPage';
 import { UserProfilePage } from './pages/UserProfilePage';
+import { NotificationsPage } from './pages/NotificationsPage';
+import { AdminPage } from './pages/AdminPage';
 
 import { AuthProvider } from './components/auth/AuthProvider';
 
@@ -31,6 +33,8 @@ function App() {
               <Route path="/settings" element={<Settings />} />
               <Route path="/create-post" element={<CreatePost />} />
               <Route path="/user/:userId" element={<UserProfilePage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
+              <Route path="/admin" element={<AdminPage />} />
             </Route>
 
           </Routes>

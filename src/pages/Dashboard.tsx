@@ -1,6 +1,6 @@
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Search, Flame, MessageSquare, ThumbsUp, Share2, MoreHorizontal, Bookmark } from 'lucide-react';
+import { Search, Flame, MessageSquare, ThumbsUp, Share2, MoreHorizontal, Bookmark, Flag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Post } from '../lib/types';
@@ -12,6 +12,8 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from '../lib/i18n';
 import { getCommentCounts } from '../lib/comments';
 import { CommentsSection } from '../components/app/CommentsSection';
+import { createNotification } from '../lib/notifications';
+import { ReportModal } from '../components/app/ReportModal';
 
 export function Dashboard() {
     const { user } = useAuth();
@@ -28,6 +30,8 @@ export function Dashboard() {
     const [commentCounts, setCommentCounts] = useState<Map<string, number>>(new Map());
     const [openComments, setOpenComments] = useState<Set<string>>(new Set());
     const [toast, setToast] = useState<string | null>(null);
+    const [reportPostId, setReportPostId] = useState<string | null>(null);
+    const [menuOpen, setMenuOpen] = useState<string | null>(null);
 
     useEffect(() => {
         fetchData();
@@ -163,6 +167,14 @@ export function Dashboard() {
             setPosts(prev => prev.map(p =>
                 p.id === postId ? { ...p, likes_count: newCount } : p
             ));
+
+            // Send notification to post author
+            if (given) {
+                const post = posts.find(p => p.id === postId);
+                if (post?.author_id) {
+                    createNotification('kudos', user.id, post.author_id, postId);
+                }
+            }
         } catch (error) {
             console.error('Error toggling kudos:', error);
         } finally {
@@ -241,9 +253,22 @@ export function Dashboard() {
                                                 </div>
                                             </Link>
                                         </div>
-                                        <button className="text-slate-400 hover:text-slate-600">
-                                            <MoreHorizontal className="w-5 h-5" />
-                                        </button>
+                                        <div className="relative">
+                                            <button onClick={() => setMenuOpen(menuOpen === post.id ? null : post.id)} className="text-slate-400 hover:text-slate-600">
+                                                <MoreHorizontal className="w-5 h-5" />
+                                            </button>
+                                            {menuOpen === post.id && (
+                                                <div className="absolute right-0 top-8 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg py-1 z-20 min-w-[160px]">
+                                                    <button
+                                                        onClick={() => { setReportPostId(post.id); setMenuOpen(null); }}
+                                                        className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                                    >
+                                                        <Flag className="w-4 h-4" />
+                                                        {t('report.title')}
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
 
                                     <div className="mb-4">
@@ -306,6 +331,7 @@ export function Dashboard() {
                                     {openComments.has(post.id) && (
                                         <CommentsSection
                                             postId={post.id}
+                                            postAuthorId={post.author_id}
                                             onCountChange={(count) => setCommentCounts(prev => {
                                                 const next = new Map(prev);
                                                 next.set(post.id, count);
@@ -409,6 +435,19 @@ export function Dashboard() {
                     </Card>
                 </div>
             </div>
+
+            {/* Report Modal */}
+            {reportPostId && (
+                <ReportModal
+                    type="post"
+                    targetId={reportPostId}
+                    onClose={() => setReportPostId(null)}
+                    onReported={() => {
+                        setToast(t('report.sent'));
+                        setTimeout(() => setToast(null), 2000);
+                    }}
+                />
+            )}
         </>
     );
 }
