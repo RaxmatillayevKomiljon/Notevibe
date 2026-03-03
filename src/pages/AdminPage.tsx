@@ -4,6 +4,7 @@ import { Button } from '../components/ui/Button';
 import { Shield, Users, FileText, Flag, Trash2, CheckCircle, Eye, AlertTriangle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../components/auth/AuthProvider';
+import { Link } from 'react-router-dom';
 import { useTranslation } from '../lib/i18n';
 import { getAllReports, updateReportStatus } from '../lib/reports';
 import type { Report } from '../lib/reports';
@@ -160,17 +161,19 @@ export function AdminPage() {
                 <div className="space-y-3">
                     {/* Users Tab */}
                     {tab === 'users' && users.map(u => (
-                        <Card key={u.id} className="p-4 flex items-center gap-4 border-slate-100 dark:border-slate-700">
-                            <img
-                                src={u.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${u.username}`}
-                                alt=""
-                                className="w-10 h-10 rounded-full bg-slate-100 object-cover"
-                            />
-                            <div className="flex-1 min-w-0">
-                                <p className="font-bold text-slate-900 dark:text-white text-sm">{u.full_name || u.username}</p>
-                                <p className="text-xs text-slate-400">@{u.username} • {new Date(u.created_at).toLocaleDateString()}</p>
-                            </div>
-                        </Card>
+                        <Link key={u.id} to={`/user/${u.id}`}>
+                            <Card className="p-4 flex items-center gap-4 border-slate-100 dark:border-slate-700 hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer">
+                                <img
+                                    src={u.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${u.username}`}
+                                    alt=""
+                                    className="w-10 h-10 rounded-full bg-slate-100 object-cover"
+                                />
+                                <div className="flex-1 min-w-0">
+                                    <p className="font-bold text-slate-900 dark:text-white text-sm">{u.full_name || u.username}</p>
+                                    <p className="text-xs text-slate-400">@{u.username}</p>
+                                </div>
+                            </Card>
+                        </Link>
                     ))}
 
                     {/* Posts Tab */}
