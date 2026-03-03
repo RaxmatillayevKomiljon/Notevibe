@@ -50,10 +50,12 @@ export function AdminPage() {
         setLoading(true);
         try {
             if (tab === 'users') {
-                const { data } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+                const { data, error } = await supabase.from('profiles').select('*');
+                console.log('Admin users fetch:', { data, error });
                 setUsers(data || []);
             } else if (tab === 'posts') {
-                const { data } = await supabase.from('posts').select('*, author:profiles(username, full_name)').order('created_at', { ascending: false });
+                const { data, error } = await supabase.from('posts').select('*, author:profiles(username, full_name)').order('created_at', { ascending: false });
+                console.log('Admin posts fetch:', { data, error });
                 setPosts(data || []);
             } else {
                 const data = await getAllReports();
