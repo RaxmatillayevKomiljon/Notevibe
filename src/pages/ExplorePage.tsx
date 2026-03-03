@@ -6,10 +6,14 @@ import { Post } from '../lib/types';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../lib/i18n';
 import { getCommentCounts } from '../lib/comments';
+import { toggleKudos, getUserKudos } from '../lib/kudos';
+import { useAuth } from '../components/auth/AuthProvider';
+import { CommentsSection } from '../components/app/CommentsSection';
 
 type SortMode = 'newest' | 'popular' | 'discussed';
 
 export function ExplorePage() {
+    const { user } = useAuth();
     const { t } = useTranslation();
     const [posts, setPosts] = useState<Post[]>([]);
     const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
@@ -20,6 +24,9 @@ export function ExplorePage() {
     const [loading, setLoading] = useState(true);
     const [commentCounts, setCommentCounts] = useState<Map<string, number>>(new Map());
     const [topAuthors, setTopAuthors] = useState<{ id: string; username: string; full_name: string | null; avatar_url: string | null; post_count: number }[]>([]);
+    const [kudosGiven, setKudosGiven] = useState<Set<string>>(new Set());
+    const [kudosLoading, setKudosLoading] = useState<Set<string>>(new Set());
+    const [openComments, setOpenComments] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         fetchData();
@@ -43,6 +50,12 @@ export function ExplorePage() {
             if (error) throw error;
             const postsData = data || [];
             setPosts(postsData);
+
+            // Load user kudos
+            if (user && postsData.length > 0) {
+                const kudos = await getUserKudos(user.id, postsData.map(p => p.id));
+                setKudosGiven(kudos);
+            }
 
             // Comment counts
             if (postsData.length > 0) {
@@ -251,13 +264,48 @@ export function ExplorePage() {
                                         )}
 
                                         <div className="flex items-center gap-5 pt-3 border-t border-slate-50 dark:border-slate-700 text-sm text-slate-400">
-                                            <span className="flex items-center gap-1.5">
-                                                <ThumbsUp className="w-4 h-4" /> {post.likes_count || 0}
-                                            </span>
-                                            <span className="flex items-center gap-1.5">
-                                                <MessageSquare className="w-4 h-4" /> {commentCounts.get(post.id) || 0}
-                                            </span>
+                                            <button
+                                                onClick={async () => {
+                                                    if (!user || kudosLoading.has(post.id)) return;
+                                                    setKudosLoading(prev => new Set(prev).add(post.id));
+                                                    try {
+                                                        const { given, newCount } = await toggleKudos(post.id, user.id);
+                                                        setKudosGiven(prev => {
+                                                            const next = new Set(prev);
+                                                            if (given) next.add(post.id); else next.delete(post.id);
+                                                            return next;
+                                                        });
+                                                        setPosts(prev => prev.map(p => p.id === post.id ? { ...p, likes_count: newCount } : p));
+                                                    } catch (e) { console.error(e); }
+                                                    setKudosLoading(prev => { const n = new Set(prev); n.delete(post.id); return n; });
+                                                }}
+                                                className={`flex items-center gap-1.5 transition-colors ${kudosGiven.has(post.id) ? 'text-blue-600' : 'hover:text-blue-500'}`}
+                                            >
+                                                <ThumbsUp className={`w-4 h-4 ${kudosGiven.has(post.id) ? 'fill-blue-100' : ''}`} /> {post.likes_count || 0}
+                                            </button>
+                                            <button
+                                                onClick={() => setOpenComments(prev => {
+                                                    const next = new Set(prev);
+                                                    if (next.has(post.id)) next.delete(post.id); else next.add(post.id);
+                                                    return next;
+                                                })}
+                                                className={`flex items-center gap-1.5 transition-colors ${openComments.has(post.id) ? 'text-blue-600' : 'hover:text-blue-500'}`}
+                                            >
+                                                <MessageSquare className={`w-4 h-4 ${openComments.has(post.id) ? 'fill-blue-100' : ''}`} /> {commentCounts.get(post.id) || 0}
+                                            </button>
                                         </div>
+
+                                        {openComments.has(post.id) && (
+                                            <CommentsSection
+                                                postId={post.id}
+                                                postAuthorId={post.author_id}
+                                                onCountChange={(count) => setCommentCounts(prev => {
+                                                    const next = new Map(prev);
+                                                    next.set(post.id, count);
+                                                    return next;
+                                                })}
+                                            />
+                                        )}
                                     </Card>
                                 ))}
                             </>
