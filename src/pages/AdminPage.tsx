@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Shield, Users, FileText, Flag, Trash2, CheckCircle, Eye, AlertTriangle, MapPin, Globe, Calendar } from 'lucide-react';
+import { Shield, Users, FileText, Flag, Trash2, CheckCircle, Eye, AlertTriangle, MapPin, Globe } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../components/auth/AuthProvider';
 import { Link } from 'react-router-dom';
