@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Shield, Users, FileText, Flag, Trash2, CheckCircle, Eye, AlertTriangle } from 'lucide-react';
+import { Shield, Users, FileText, Flag, Trash2, CheckCircle, Eye, AlertTriangle, MapPin, Globe, Calendar } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../components/auth/AuthProvider';
 import { Link } from 'react-router-dom';
@@ -19,7 +19,9 @@ interface AdminUser {
     username: string;
     full_name: string | null;
     avatar_url: string | null;
-    created_at: string;
+    bio: string | null;
+    location: string | null;
+    website: string | null;
 }
 
 interface AdminPost {
@@ -166,11 +168,24 @@ export function AdminPage() {
                                 <img
                                     src={u.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${u.username}`}
                                     alt=""
-                                    className="w-10 h-10 rounded-full bg-slate-100 object-cover"
+                                    className="w-12 h-12 rounded-full bg-slate-100 object-cover"
                                 />
                                 <div className="flex-1 min-w-0">
                                     <p className="font-bold text-slate-900 dark:text-white text-sm">{u.full_name || u.username}</p>
-                                    <p className="text-xs text-slate-400">@{u.username}</p>
+                                    <p className="text-xs text-slate-400 mb-1">@{u.username}</p>
+                                    {u.bio && <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">{u.bio}</p>}
+                                    <div className="flex items-center gap-3 mt-1 flex-wrap">
+                                        {u.location && (
+                                            <span className="flex items-center gap-1 text-[11px] text-slate-400">
+                                                <MapPin className="w-3 h-3" /> {u.location}
+                                            </span>
+                                        )}
+                                        {u.website && (
+                                            <span className="flex items-center gap-1 text-[11px] text-blue-500">
+                                                <Globe className="w-3 h-3" /> {u.website}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             </Card>
                         </Link>
