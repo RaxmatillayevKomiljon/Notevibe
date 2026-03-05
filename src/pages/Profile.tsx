@@ -35,8 +35,10 @@ export function Profile() {
         full_name: '',
         username: '',
         bio: '',
-        website: ''
+        website: '',
+        location: ''
     });
+    const [locating, setLocating] = useState(false);
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -55,7 +57,8 @@ export function Profile() {
                 full_name: profile.full_name || '',
                 username: profile.username || '',
                 bio: profile.bio || '',
-                website: profile.website || ''
+                website: profile.website || '',
+                location: (profile as any).location || ''
             });
             setAvatarFile(null);
         }
@@ -148,6 +151,7 @@ export function Profile() {
                     username: editForm.username,
                     bio: editForm.bio,
                     website: editForm.website,
+                    location: editForm.location,
                     avatar_url: avatarUrl,
                     updated_at: new Date().toISOString()
                 })
@@ -299,6 +303,46 @@ export function Profile() {
                                     placeholder="https://"
                                 />
                             </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">
+                                    <MapPin className="w-3.5 h-3.5 inline mr-1" />
+                                    {t('profile.location')}
+                                </label>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={editForm.location}
+                                        onChange={e => setEditForm({ ...editForm, location: e.target.value })}
+                                        className="flex-1 px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                                        placeholder="Toshkent, O'zbekiston"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (!navigator.geolocation) return;
+                                            setLocating(true);
+                                            navigator.geolocation.getCurrentPosition(
+                                                async (pos) => {
+                                                    try {
+                                                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`);
+                                                        const json = await res.json();
+                                                        const city = json.address?.city || json.address?.town || json.address?.village || '';
+                                                        const country = json.address?.country || '';
+                                                        setEditForm(prev => ({ ...prev, location: [city, country].filter(Boolean).join(', ') }));
+                                                    } catch { }
+                                                    setLocating(false);
+                                                },
+                                                () => setLocating(false)
+                                            );
+                                        }}
+                                        disabled={locating}
+                                        className="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 flex items-center gap-1"
+                                    >
+                                        <MapPin className="w-4 h-4" />
+                                        {locating ? '...' : t('profile.detectLocation')}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div className="flex justify-end gap-2 mt-6">
                             <Button variant="ghost" onClick={() => setIsEditing(false)}>{t('profile.cancel')}</Button>
@@ -348,7 +392,7 @@ export function Profile() {
                     <div className="flex flex-wrap gap-4 text-sm text-slate-400">
                         <div className="flex items-center gap-1.5">
                             <MapPin className="w-4 h-4" />
-                            Toshkent, O'zbekiston
+                            {(profile as any)?.location || 'Toshkent, O‘zbekiston'}
                         </div>
                         <div className="flex items-center gap-1.5">
                             <Calendar className="w-4 h-4" />
