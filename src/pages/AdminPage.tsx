@@ -101,7 +101,7 @@ export function AdminPage() {
         return (
             <div className="text-center py-20">
                 <Shield className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-                <p className="text-lg font-bold text-slate-900 dark:text-white mb-2">{t('admin.accessDenied')}</p>
+                <p className="text-lg font-bold text-slate-900 dark:text-zinc-50 mb-2">{t('admin.accessDenied')}</p>
                 <p className="text-sm text-slate-400">{t('admin.accessDeniedDesc')}</p>
             </div>
         );
@@ -121,7 +121,7 @@ export function AdminPage() {
                     <Shield className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('admin.title')}</h1>
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{t('admin.title')}</h1>
                     <p className="text-sm text-slate-400">{t('admin.subtitle')}</p>
                 </div>
             </div>
@@ -129,9 +129,9 @@ export function AdminPage() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 mb-6">
                 {tabs.map(tb => (
-                    <Card key={tb.key} className="p-4 text-center border-slate-100 dark:border-slate-700">
+                    <Card key={tb.key} className="p-4 text-center border-slate-100 dark:border-white/10">
                         <tb.icon className="w-6 h-6 text-blue-600 mx-auto mb-1" />
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white">{tb.count}</p>
+                        <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{tb.count}</p>
                         <p className="text-xs text-slate-400">{t(tb.labelKey)}</p>
                     </Card>
                 ))}
@@ -144,8 +144,8 @@ export function AdminPage() {
                         key={tb.key}
                         onClick={() => setTab(tb.key)}
                         className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${tab === tb.key
-                            ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                            : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                            ? 'bg-blue-600 text-white shadow-md dark:shadow-none shadow-blue-600/20'
+                            : 'bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                             }`}
                     >
                         <tb.icon className="w-4 h-4" />
@@ -164,16 +164,16 @@ export function AdminPage() {
                     {/* Users Tab */}
                     {tab === 'users' && users.map(u => (
                         <Link key={u.id} to={`/user/${u.id}`}>
-                            <Card className="p-4 flex items-center gap-4 border-slate-100 dark:border-slate-700 hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer">
+                            <Card className="p-4 flex items-center gap-4 border-slate-100 dark:border-white/10 hover:shadow-md dark:shadow-none hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer">
                                 <img
                                     src={u.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${u.username}`}
                                     alt=""
                                     className="w-12 h-12 rounded-full bg-slate-100 object-cover"
                                 />
                                 <div className="flex-1 min-w-0">
-                                    <p className="font-bold text-slate-900 dark:text-white text-sm">{u.full_name || u.username}</p>
+                                    <p className="font-bold text-slate-900 dark:text-zinc-50 text-sm">{u.full_name || u.username}</p>
                                     <p className="text-xs text-slate-400 mb-1">@{u.username}</p>
-                                    {u.bio && <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">{u.bio}</p>}
+                                    {u.bio && <p className="text-xs text-slate-500 dark:text-zinc-400 line-clamp-1">{u.bio}</p>}
                                     <div className="flex items-center gap-3 mt-1 flex-wrap">
                                         {u.location && (
                                             <span className="flex items-center gap-1 text-[11px] text-slate-400">
@@ -193,9 +193,9 @@ export function AdminPage() {
 
                     {/* Posts Tab */}
                     {tab === 'posts' && posts.map(p => (
-                        <Card key={p.id} className="p-4 flex items-center gap-4 border-slate-100 dark:border-slate-700">
+                        <Card key={p.id} className="p-4 flex items-center gap-4 border-slate-100 dark:border-white/10">
                             <div className="flex-1 min-w-0">
-                                <p className="font-bold text-slate-900 dark:text-white text-sm truncate">{p.title}</p>
+                                <p className="font-bold text-slate-900 dark:text-zinc-50 text-sm truncate">{p.title}</p>
                                 <p className="text-xs text-slate-400">
                                     {p.author?.full_name || p.author?.username || 'Unknown'} • {new Date(p.created_at).toLocaleDateString()} • ❤️ {p.likes_count || 0}
                                 </p>
@@ -208,12 +208,12 @@ export function AdminPage() {
 
                     {/* Reports Tab */}
                     {tab === 'reports' && (reports.length === 0 ? (
-                        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
+                        <div className="text-center py-16 bg-white dark:bg-[#111111] dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10">
                             <CheckCircle className="w-12 h-12 text-green-400 mx-auto mb-3" />
-                            <p className="text-slate-500 dark:text-slate-400 font-medium">{t('admin.noReports')}</p>
+                            <p className="text-slate-500 dark:text-zinc-400 font-medium">{t('admin.noReports')}</p>
                         </div>
                     ) : reports.map(r => (
-                        <Card key={r.id} className={`p-4 border-slate-100 dark:border-slate-700 ${r.status === 'pending' ? 'border-l-4 border-l-red-500' : r.status === 'reviewed' ? 'border-l-4 border-l-amber-500' : 'border-l-4 border-l-green-500'}`}>
+                        <Card key={r.id} className={`p-4 border-slate-100 dark:border-white/10 ${r.status === 'pending' ? 'border-l-4 border-l-red-500' : r.status === 'reviewed' ? 'border-l-4 border-l-amber-500' : 'border-l-4 border-l-green-500'}`}>
                             <div className="flex items-start gap-3">
                                 <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${r.status === 'pending' ? 'text-red-500' : r.status === 'reviewed' ? 'text-amber-500' : 'text-green-500'}`} />
                                 <div className="flex-1 min-w-0">
@@ -226,7 +226,7 @@ export function AdminPage() {
                                         </span>
                                         <span className="text-xs text-slate-400">{t(`report.reason.${r.reason}`)}</span>
                                     </div>
-                                    <p className="text-sm text-slate-600 dark:text-slate-300">{r.description || '—'}</p>
+                                    <p className="text-sm text-slate-600 dark:text-zinc-300">{r.description || '—'}</p>
                                     <p className="text-xs text-slate-400 mt-1">
                                         {t('admin.reportedBy')}: {r.reporter?.full_name || r.reporter?.username || '?'} • {new Date(r.created_at).toLocaleDateString()}
                                     </p>

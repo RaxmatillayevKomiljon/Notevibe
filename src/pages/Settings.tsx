@@ -106,14 +106,14 @@ export function Settings() {
 
     return (
         <div className="max-w-2xl mx-auto py-8">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">{t('settings.title')}</h1>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50 mb-6">{t('settings.title')}</h1>
 
             {/* Password Change Modal */}
             {showPasswordModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-                        <div className="flex items-center justify-between p-5 border-b border-slate-100 dark:border-slate-700">
-                            <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <div className="bg-white dark:bg-[#111111] dark:border-white/5 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+                        <div className="flex items-center justify-between p-5 border-b border-slate-100 dark:border-white/10">
+                            <h3 className="font-bold text-slate-900 dark:text-zinc-50 flex items-center gap-2">
                                 <Lock className="w-5 h-5 text-blue-600" />
                                 {t('settings.changePassword')}
                             </h3>
@@ -126,11 +126,11 @@ export function Settings() {
                         </div>
                         <div className="p-5 space-y-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{t('settings.newPassword')}</label>
+                                <label className="text-sm font-semibold text-slate-700 dark:text-zinc-300">{t('settings.newPassword')}</label>
                                 <div className="relative">
                                     <input
                                         type={showNewPass ? 'text' : 'password'}
-                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-600 rounded-xl focus:outline-none focus:border-blue-500 transition-all text-slate-900 dark:text-white font-medium placeholder:text-slate-400"
+                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-[#222222] border-2 border-slate-100 dark:border-white/15 rounded-xl focus:outline-none focus:border-blue-500 transition-all text-slate-900 dark:text-zinc-50 font-medium placeholder:text-slate-400"
                                         placeholder={t('settings.newPasswordPlaceholder')}
                                         value={newPassword}
                                         onChange={(e) => setNewPassword(e.target.value)}
@@ -146,11 +146,11 @@ export function Settings() {
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{t('settings.confirmPassword')}</label>
+                                <label className="text-sm font-semibold text-slate-700 dark:text-zinc-300">{t('settings.confirmPassword')}</label>
                                 <div className="relative">
                                     <input
                                         type={showConfirmPass ? 'text' : 'password'}
-                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-600 rounded-xl focus:outline-none focus:border-blue-500 transition-all text-slate-900 dark:text-white font-medium placeholder:text-slate-400"
+                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-[#222222] border-2 border-slate-100 dark:border-white/15 rounded-xl focus:outline-none focus:border-blue-500 transition-all text-slate-900 dark:text-zinc-50 font-medium placeholder:text-slate-400"
                                         placeholder={t('settings.confirmPasswordPlaceholder')}
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -183,8 +183,8 @@ export function Settings() {
             <div className="space-y-6">
                 {/* Account Section */}
                 <Card className="p-0 overflow-hidden">
-                    <div className="p-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
-                        <h2 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                    <div className="p-4 border-b border-slate-100 dark:border-white/10 bg-slate-50/50 dark:bg-[#111111] dark:border-white/5/50">
+                        <h2 className="font-semibold text-slate-900 dark:text-zinc-50 flex items-center gap-2">
                             <User className="w-5 h-5 text-blue-600" />
                             {t('settings.account')}
                         </h2>
@@ -192,18 +192,18 @@ export function Settings() {
                     <div className="p-4 space-y-4">
                         <div className="flex items-center justify-between py-2">
                             <div>
-                                <p className="font-medium text-slate-900 dark:text-white">{t('settings.profileInfo')}</p>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">{t('settings.profileInfoDesc')}</p>
+                                <p className="font-medium text-slate-900 dark:text-zinc-50">{t('settings.profileInfo')}</p>
+                                <p className="text-sm text-slate-500 dark:text-zinc-400">{t('settings.profileInfoDesc')}</p>
                             </div>
                             <Button variant="outline" size="sm" onClick={() => window.location.href = '/profile'}>
                                 {t('settings.edit')}
                             </Button>
                         </div>
-                        <div className="border-t border-slate-50 dark:border-slate-700 my-2" />
+                        <div className="border-t border-slate-50 dark:border-white/10 my-2" />
                         <div className="flex items-center justify-between py-2">
                             <div>
-                                <p className="font-medium text-slate-900 dark:text-white">{t('settings.email')}</p>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">{user?.email}</p>
+                                <p className="font-medium text-slate-900 dark:text-zinc-50">{t('settings.email')}</p>
+                                <p className="text-sm text-slate-500 dark:text-zinc-400">{user?.email}</p>
                             </div>
                             <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
                                 {t('settings.verified')}
@@ -214,8 +214,8 @@ export function Settings() {
 
                 {/* Preferences */}
                 <Card className="p-0 overflow-hidden">
-                    <div className="p-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
-                        <h2 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                    <div className="p-4 border-b border-slate-100 dark:border-white/10 bg-slate-50/50 dark:bg-[#111111] dark:border-white/5/50">
+                        <h2 className="font-semibold text-slate-900 dark:text-zinc-50 flex items-center gap-2">
                             <Globe className="w-5 h-5 text-purple-600" />
                             {t('settings.appSettings')}
                         </h2>
@@ -227,12 +227,12 @@ export function Settings() {
                             className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left"
                         >
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg">
-                                    <ThemeIcon className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+                                <div className="p-2 bg-slate-100 dark:bg-[#222222] rounded-lg">
+                                    <ThemeIcon className="w-5 h-5 text-slate-600 dark:text-zinc-300" />
                                 </div>
                                 <div>
-                                    <p className="font-medium text-slate-900 dark:text-white">{t('settings.theme')}</p>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400">{t(themeKey[theme])}</p>
+                                    <p className="font-medium text-slate-900 dark:text-zinc-50">{t('settings.theme')}</p>
+                                    <p className="text-sm text-slate-500 dark:text-zinc-400">{t(themeKey[theme])}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
@@ -248,12 +248,12 @@ export function Settings() {
                                 className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left"
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg">
-                                        <Globe className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+                                    <div className="p-2 bg-slate-100 dark:bg-[#222222] rounded-lg">
+                                        <Globe className="w-5 h-5 text-slate-600 dark:text-zinc-300" />
                                     </div>
                                     <div>
-                                        <p className="font-medium text-slate-900 dark:text-white">{t('settings.language')}</p>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400">{t('settings.lang' + language.charAt(0).toUpperCase() + language.slice(1))}</p>
+                                        <p className="font-medium text-slate-900 dark:text-zinc-50">{t('settings.language')}</p>
+                                        <p className="text-sm text-slate-500 dark:text-zinc-400">{t('settings.lang' + language.charAt(0).toUpperCase() + language.slice(1))}</p>
                                     </div>
                                 </div>
                                 <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${showLangMenu ? 'rotate-90' : ''}`} />
@@ -266,7 +266,7 @@ export function Settings() {
                                             onClick={() => selectLanguage(lang)}
                                             className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-colors ${language === lang
                                                     ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800'
-                                                    : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
+                                                    : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-zinc-300'
                                                 }`}
                                         >
                                             {t('settings.lang' + lang.charAt(0).toUpperCase() + lang.slice(1))} {language === lang && '✓'}
@@ -278,16 +278,16 @@ export function Settings() {
 
                         <button className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left">
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg">
-                                    <Bell className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+                                <div className="p-2 bg-slate-100 dark:bg-[#222222] rounded-lg">
+                                    <Bell className="w-5 h-5 text-slate-600 dark:text-zinc-300" />
                                 </div>
                                 <div>
-                                    <p className="font-medium text-slate-900 dark:text-white">{t('settings.notifications')}</p>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400">{t('settings.notifEnabled')}</p>
+                                    <p className="font-medium text-slate-900 dark:text-zinc-50">{t('settings.notifications')}</p>
+                                    <p className="text-sm text-slate-500 dark:text-zinc-400">{t('settings.notifEnabled')}</p>
                                 </div>
                             </div>
                             <div className="w-10 h-6 bg-blue-600 rounded-full relative">
-                                <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm" />
+                                <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm dark:shadow-none" />
                             </div>
                         </button>
                     </div>
@@ -295,8 +295,8 @@ export function Settings() {
 
                 {/* Security */}
                 <Card className="p-0 overflow-hidden">
-                    <div className="p-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
-                        <h2 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                    <div className="p-4 border-b border-slate-100 dark:border-white/10 bg-slate-50/50 dark:bg-[#111111] dark:border-white/5/50">
+                        <h2 className="font-semibold text-slate-900 dark:text-zinc-50 flex items-center gap-2">
                             <Shield className="w-5 h-5 text-emerald-600" />
                             {t('settings.security')}
                         </h2>
@@ -304,8 +304,8 @@ export function Settings() {
                     <div className="p-4 space-y-4">
                         <div className="flex items-center justify-between py-2">
                             <div>
-                                <p className="font-medium text-slate-900 dark:text-white">{t('settings.changePassword')}</p>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">{t('settings.changePasswordDesc')}</p>
+                                <p className="font-medium text-slate-900 dark:text-zinc-50">{t('settings.changePassword')}</p>
+                                <p className="text-sm text-slate-500 dark:text-zinc-400">{t('settings.changePasswordDesc')}</p>
                             </div>
                             <Button variant="outline" size="sm" onClick={() => setShowPasswordModal(true)}>
                                 {t('settings.edit')}

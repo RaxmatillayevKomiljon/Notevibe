@@ -49,7 +49,7 @@ export function AppLayout() {
             </div>
 
             {/* Mobile Bottom Nav */}
-            <nav className="md:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 z-50 px-6 py-3 flex justify-between items-center">
+            <nav className="md:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-[#050505] border-t border-slate-200 dark:border-white/10 z-50 px-6 py-3 flex justify-between items-center">
                 <Link to="/dashboard" className={cn("p-2", location.pathname === '/dashboard' ? "text-blue-600" : "text-slate-400")}>
                     <Home className="w-6 h-6" />
                 </Link>

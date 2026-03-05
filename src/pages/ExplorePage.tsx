@@ -147,9 +147,9 @@ export function ExplorePage() {
                     <div className="mb-2">
                         <div className="flex items-center gap-3 mb-1">
                             <TrendingUp className="w-7 h-7 text-blue-600" />
-                            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('explore.title')}</h1>
+                            <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{t('explore.title')}</h1>
                         </div>
-                        <p className="text-slate-500 dark:text-slate-400">{t('explore.subtitle')}</p>
+                        <p className="text-slate-500 dark:text-zinc-400">{t('explore.subtitle')}</p>
                     </div>
 
                     {/* Search */}
@@ -158,7 +158,7 @@ export function ExplorePage() {
                         <input
                             type="text"
                             placeholder={t('explore.search')}
-                            className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 shadow-sm transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+                            className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 shadow-sm dark:shadow-none transition-all text-slate-900 dark:text-zinc-50 placeholder:text-slate-400"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -172,8 +172,8 @@ export function ExplorePage() {
                                 key={opt.key}
                                 onClick={() => setSortMode(opt.key)}
                                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${sortMode === opt.key
-                                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                                    : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                                    ? 'bg-blue-600 text-white shadow-md dark:shadow-none shadow-blue-600/20'
+                                    : 'bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                                     }`}
                             >
                                 {t(opt.labelKey)}
@@ -186,14 +186,14 @@ export function ExplorePage() {
                         <div>
                             <div className="flex items-center gap-2 mb-3">
                                 <Filter className="w-4 h-4 text-slate-400" />
-                                <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{t('explore.filterByTag')}:</span>
+                                <span className="text-sm font-medium text-slate-500 dark:text-zinc-400">{t('explore.filterByTag')}:</span>
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 <button
                                     onClick={() => setSelectedTag(null)}
                                     className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedTag === null
                                         ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
-                                        : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                                        : 'bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                                         }`}
                                 >
                                     {t('dashboard.all')}
@@ -204,7 +204,7 @@ export function ExplorePage() {
                                         onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
                                         className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedTag === tag
                                             ? 'bg-blue-600 text-white'
-                                            : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                                            : 'bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                                             }`}
                                     >
                                         #{tag} <span className="text-xs opacity-60">({count})</span>
@@ -222,9 +222,9 @@ export function ExplorePage() {
                                 {t('common.loading')}
                             </div>
                         ) : filteredPosts.length === 0 ? (
-                            <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
+                            <div className="text-center py-16 bg-white dark:bg-[#111111] dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10">
                                 <Search className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-                                <p className="text-slate-500 dark:text-slate-400 font-medium mb-1">{t('explore.noResults')}</p>
+                                <p className="text-slate-500 dark:text-zinc-400 font-medium mb-1">{t('explore.noResults')}</p>
                                 <p className="text-sm text-slate-400 dark:text-slate-500">
                                     {searchQuery ? `"${searchQuery}" ${t('explore.noResultsFor')}` : t('explore.noPosts')}
                                 </p>
@@ -233,7 +233,7 @@ export function ExplorePage() {
                             <>
                                 <p className="text-sm text-slate-400">{filteredPosts.length} {t('explore.resultsFound')}</p>
                                 {filteredPosts.map(post => (
-                                    <Card key={post.id} className="p-6 border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+                                    <Card key={post.id} className="p-6 border-slate-100 dark:border-white/10 shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none transition-all">
                                         <Link to={`/user/${post.author_id}`} className="flex items-center gap-3 mb-3 hover:opacity-80 transition-opacity">
                                             <img
                                                 src={post.author?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.author?.username || 'User'}`}
@@ -241,14 +241,14 @@ export function ExplorePage() {
                                                 className="w-9 h-9 rounded-full bg-slate-100 object-cover"
                                             />
                                             <div>
-                                                <p className="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 transition-colors">{post.author?.full_name || post.author?.username || 'Anonymous'}</p>
+                                                <p className="text-sm font-bold text-slate-900 dark:text-zinc-50 hover:text-blue-600 transition-colors">{post.author?.full_name || post.author?.username || 'Anonymous'}</p>
                                                 <p className="text-xs text-slate-400">@{post.author?.username} • {new Date(post.created_at).toLocaleDateString()}</p>
                                             </div>
                                         </Link>
 
-                                        <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{post.title}</h2>
+                                        <h2 className="text-lg font-bold text-slate-900 dark:text-zinc-50 mb-2">{post.title}</h2>
                                         {(post.excerpt || post.content) && (
-                                            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed line-clamp-2 mb-3">
+                                            <p className="text-slate-600 dark:text-zinc-300 text-sm leading-relaxed line-clamp-2 mb-3">
                                                 {post.excerpt || post.content}
                                             </p>
                                         )}
@@ -256,14 +256,14 @@ export function ExplorePage() {
                                         {post.tags && post.tags.length > 0 && (
                                             <div className="flex flex-wrap gap-1.5 mb-3">
                                                 {post.tags.map(tag => (
-                                                    <span key={tag} className="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs px-2 py-1 rounded-md font-medium">
+                                                    <span key={tag} className="bg-slate-100 dark:bg-[#222222] text-slate-600 dark:text-zinc-300 text-xs px-2 py-1 rounded-md font-medium">
                                                         #{tag}
                                                     </span>
                                                 ))}
                                             </div>
                                         )}
 
-                                        <div className="flex items-center gap-5 pt-3 border-t border-slate-50 dark:border-slate-700 text-sm text-slate-400">
+                                        <div className="flex items-center gap-5 pt-3 border-t border-slate-50 dark:border-white/10 text-sm text-slate-400">
                                             <button
                                                 onClick={async () => {
                                                     if (!user || kudosLoading.has(post.id)) return;
@@ -317,10 +317,10 @@ export function ExplorePage() {
                 <div className="space-y-6">
                     {/* Top Authors */}
                     {topAuthors.length > 0 && (
-                        <Card className="p-5 border-slate-100 dark:border-slate-700">
+                        <Card className="p-5 border-slate-100 dark:border-white/10">
                             <div className="flex items-center gap-2 mb-4">
                                 <Crown className="w-5 h-5 text-amber-500" />
-                                <h3 className="font-bold text-slate-900 dark:text-white">{t('explore.topAuthors')}</h3>
+                                <h3 className="font-bold text-slate-900 dark:text-zinc-50">{t('explore.topAuthors')}</h3>
                             </div>
                             <div className="space-y-3">
                                 {topAuthors.map((author, i) => (
@@ -332,7 +332,7 @@ export function ExplorePage() {
                                             className="w-9 h-9 rounded-full bg-slate-100 object-cover"
                                         />
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{author.full_name || author.username}</p>
+                                            <p className="text-sm font-bold text-slate-900 dark:text-zinc-50 truncate">{author.full_name || author.username}</p>
                                             <p className="text-xs text-slate-400">@{author.username} • {author.post_count} {t('explore.posts')}</p>
                                         </div>
                                     </Link>
@@ -343,10 +343,10 @@ export function ExplorePage() {
 
                     {/* Trending Tags */}
                     {allTags.length > 0 && (
-                        <Card className="p-5 border-slate-100 dark:border-slate-700">
+                        <Card className="p-5 border-slate-100 dark:border-white/10">
                             <div className="flex items-center gap-2 mb-4">
                                 <TrendingUp className="w-5 h-5 text-blue-600" />
-                                <h3 className="font-bold text-slate-900 dark:text-white">{t('explore.trendingTags')}</h3>
+                                <h3 className="font-bold text-slate-900 dark:text-zinc-50">{t('explore.trendingTags')}</h3>
                             </div>
                             <div className="space-y-2">
                                 {allTags.slice(0, 8).map(({ tag, count }) => (
@@ -355,7 +355,7 @@ export function ExplorePage() {
                                         onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
                                         className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${selectedTag === tag
                                             ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600'
-                                            : 'hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300'
+                                            : 'hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-zinc-300'
                                             }`}
                                     >
                                         <span className="font-medium">#{tag}</span>

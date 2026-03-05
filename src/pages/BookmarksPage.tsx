@@ -118,7 +118,7 @@ export function BookmarksPage() {
                     </div>
                 ) : (
                     posts.map(post => (
-                        <Card key={post.id} className="p-6 border-slate-100 shadow-sm hover:shadow-md transition-all">
+                        <Card key={post.id} className="p-6 border-slate-100 shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none transition-all">
                             <div className="flex items-start justify-between mb-3">
                                 <div className="flex items-center gap-3">
                                     <img

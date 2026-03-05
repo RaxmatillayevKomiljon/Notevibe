@@ -236,7 +236,7 @@ export function Dashboard() {
                             </div>
                         ) : (
                             posts.map(post => (
-                                <Card key={post.id} className="p-6 border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                                <Card key={post.id} className="p-6 border-slate-100 shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none transition-shadow">
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="flex items-center gap-3">
                                             <Link to={`/user/${post.author_id}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
@@ -258,7 +258,7 @@ export function Dashboard() {
                                                 <MoreHorizontal className="w-5 h-5" />
                                             </button>
                                             {menuOpen === post.id && (
-                                                <div className="absolute right-0 top-8 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg py-1 z-20 min-w-[160px]">
+                                                <div className="absolute right-0 top-8 bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 rounded-xl shadow-lg py-1 z-20 min-w-[160px]">
                                                     <button
                                                         onClick={() => { setReportPostId(post.id); setMenuOpen(null); }}
                                                         className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
@@ -348,7 +348,7 @@ export function Dashboard() {
                 {/* Right Sidebar (Trending & Recommendations) */}
                 <div className="hidden lg:block space-y-6">
                     {/* Trending Topics */}
-                    <Card className="p-5 border-slate-100 shadow-sm sticky top-6">
+                    <Card className="p-5 border-slate-100 shadow-sm dark:shadow-none sticky top-6">
                         <div className="flex items-center gap-2 mb-4 text-slate-900 font-bold">
                             <Flame className="w-5 h-5 text-orange-500" />
                             <h3>{t('dashboard.trending')}</h3>
@@ -371,7 +371,7 @@ export function Dashboard() {
                     </Card>
 
                     {/* Suggested Users */}
-                    <Card className="p-5 border-slate-100 shadow-sm sticky top-64">
+                    <Card className="p-5 border-slate-100 shadow-sm dark:shadow-none sticky top-64">
                         <h3 className="font-bold text-slate-900 mb-4">{t('dashboard.suggested')}</h3>
                         {suggestedUsers.length === 0 ? (
                             <p className="text-sm text-slate-400">{t('dashboard.noSuggestions')}</p>

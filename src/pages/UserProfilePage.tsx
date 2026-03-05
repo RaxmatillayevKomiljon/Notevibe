@@ -120,7 +120,7 @@ export function UserProfilePage() {
 
     if (loading) {
         return (
-            <div className="p-10 text-center text-slate-500 dark:text-slate-400">
+            <div className="p-10 text-center text-slate-500 dark:text-zinc-400">
                 Yuklanmoqda...
             </div>
         );
@@ -129,7 +129,7 @@ export function UserProfilePage() {
     if (!profile) {
         return (
             <div className="p-10 text-center">
-                <p className="text-slate-500 dark:text-slate-400 mb-4">Foydalanuvchi topilmadi</p>
+                <p className="text-slate-500 dark:text-zinc-400 mb-4">Foydalanuvchi topilmadi</p>
                 <Button variant="outline" onClick={() => navigate(-1)}>
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Orqaga
@@ -143,9 +143,9 @@ export function UserProfilePage() {
             {/* Follow List Modal */}
             {showFollowList && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-                        <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700">
-                            <h3 className="font-bold text-slate-900 dark:text-white">
+                    <div className="bg-white dark:bg-[#111111] dark:border-white/5 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-white/10">
+                            <h3 className="font-bold text-slate-900 dark:text-zinc-50">
                                 {showFollowList === 'followers' ? 'Obunachilari' : 'Obunalari'}
                             </h3>
                             <button
@@ -176,10 +176,10 @@ export function UserProfilePage() {
                                             className="w-10 h-10 rounded-full bg-slate-100"
                                         />
                                         <div>
-                                            <p className="font-semibold text-sm text-slate-900 dark:text-white">
+                                            <p className="font-semibold text-sm text-slate-900 dark:text-zinc-50">
                                                 {u.full_name || u.username}
                                             </p>
-                                            <p className="text-xs text-slate-500 dark:text-slate-400">@{u.username}</p>
+                                            <p className="text-xs text-slate-500 dark:text-zinc-400">@{u.username}</p>
                                         </div>
                                     </Link>
                                 ))
@@ -192,7 +192,7 @@ export function UserProfilePage() {
             {/* Back Button */}
             <button
                 onClick={() => navigate(-1)}
-                className="flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white mb-4 text-sm font-medium transition-colors"
+                className="flex items-center gap-2 text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-white mb-4 text-sm font-medium transition-colors"
             >
                 <ArrowLeft className="w-4 h-4" />
                 Orqaga
@@ -201,7 +201,7 @@ export function UserProfilePage() {
             {/* Cover Image */}
             <div className="h-48 md:h-64 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-3xl mb-16 relative">
                 <div className="absolute -bottom-12 left-4 md:left-10 flex items-end">
-                    <div className="p-1.5 bg-white dark:bg-slate-800 rounded-2xl">
+                    <div className="p-1.5 bg-white dark:bg-[#111111] dark:border-white/5 rounded-2xl">
                         <img
                             src={profile.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.username}`}
                             alt="Profile"
@@ -215,14 +215,14 @@ export function UserProfilePage() {
             {/* Profile Info */}
             <div className="px-2 md:px-4 mb-8 flex flex-col md:flex-row justify-between items-start gap-4">
                 <div>
-                    <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-1">
+                    <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-zinc-50 mb-1">
                         {profile.full_name || profile.username || 'Foydalanuvchi'}
                     </h1>
-                    <p className="text-slate-500 dark:text-slate-400 font-medium mb-4">
+                    <p className="text-slate-500 dark:text-zinc-400 font-medium mb-4">
                         @{profile.username || 'user'}
                     </p>
 
-                    <p className="text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed mb-4">
+                    <p className="text-slate-600 dark:text-zinc-300 max-w-xl leading-relaxed mb-4">
                         {profile.bio || "Bio qo'shilmagan."}
                     </p>
 
@@ -269,39 +269,39 @@ export function UserProfilePage() {
 
             {/* Stats */}
             <div className="grid grid-cols-4 gap-3 mb-8 max-w-2xl">
-                <div className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm">
-                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{posts.length}</p>
+                <div className="text-center p-4 bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-100 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{posts.length}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Note</p>
                 </div>
                 <button
                     onClick={() => openFollowList('followers')}
-                    className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer"
+                    className="text-center p-4 bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-100 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer"
                 >
-                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{followCounts.followers}</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{followCounts.followers}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Obunachi</p>
                 </button>
                 <button
                     onClick={() => openFollowList('following')}
-                    className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer"
+                    className="text-center p-4 bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-100 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer"
                 >
-                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{followCounts.following}</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{followCounts.following}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Obuna</p>
                 </button>
-                <div className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm">
-                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{totalKudos}</p>
+                <div className="text-center p-4 bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-100 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{totalKudos}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Kudos</p>
                 </div>
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-slate-200 dark:border-slate-700 mb-6">
+            <div className="flex border-b border-slate-200 dark:border-white/10 mb-6">
                 {['Notelar', 'Haqida'].map(tab => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
                         className={`px-6 py-3 text-sm font-medium transition-colors relative ${activeTab === tab
                             ? "text-blue-600"
-                            : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                            : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
                             }`}
                     >
                         {tab}
@@ -317,14 +317,14 @@ export function UserProfilePage() {
                 {activeTab === 'Notelar' && (
                     <div className="space-y-4">
                         {posts.length === 0 ? (
-                            <div className="text-center py-20 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+                            <div className="text-center py-20 bg-slate-50 dark:bg-[#111111] dark:border-white/5/50 rounded-2xl border-2 border-dashed border-slate-200 dark:border-white/10">
                                 <p className="text-slate-400">Hozircha notelar topilmadi</p>
                             </div>
                         ) : (
                             posts.map(post => (
                                 <Card key={post.id} className="p-6">
-                                    <h3 className="font-bold text-lg mb-2 text-slate-900 dark:text-white">{post.title}</h3>
-                                    <p className="text-slate-600 dark:text-slate-300 line-clamp-2 mb-4">{post.content}</p>
+                                    <h3 className="font-bold text-lg mb-2 text-slate-900 dark:text-zinc-50">{post.title}</h3>
+                                    <p className="text-slate-600 dark:text-zinc-300 line-clamp-2 mb-4">{post.content}</p>
                                     {post.tags && post.tags.length > 0 && (
                                         <div className="flex flex-wrap gap-2 mb-3">
                                             {post.tags.map(tag => (
@@ -346,16 +346,16 @@ export function UserProfilePage() {
                 )}
                 {activeTab === 'Haqida' && (
                     <Card className="p-8">
-                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Bio</h3>
-                        <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-zinc-50 mb-4">Bio</h3>
+                        <p className="text-slate-600 dark:text-zinc-300 leading-relaxed mb-6">
                             {profile.bio || "Bio qo'shilmagan."}
                         </p>
 
-                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Ma'lumotlar</h3>
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-zinc-50 mb-4">Ma'lumotlar</h3>
                         <div className="space-y-3">
                             <div className="flex items-center gap-3">
                                 <Calendar className="w-5 h-5 text-slate-400" />
-                                <span className="text-slate-600 dark:text-slate-300">{new Date(profile.created_at).getFullYear()} yildan beri a'zo</span>
+                                <span className="text-slate-600 dark:text-zinc-300">{new Date(profile.created_at).getFullYear()} yildan beri a'zo</span>
                             </div>
                             {profile.website && (
                                 <div className="flex items-center gap-3">
@@ -367,11 +367,11 @@ export function UserProfilePage() {
                             )}
                             <div className="flex items-center gap-3">
                                 <MapPin className="w-5 h-5 text-slate-400" />
-                                <span className="text-slate-600 dark:text-slate-300">Toshkent, O'zbekiston</span>
+                                <span className="text-slate-600 dark:text-zinc-300">Toshkent, O'zbekiston</span>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Users className="w-5 h-5 text-slate-400" />
-                                <span className="text-slate-600 dark:text-slate-300">{followCounts.followers} obunachi · {followCounts.following} obuna · {totalKudos} kudos</span>
+                                <span className="text-slate-600 dark:text-zinc-300">{followCounts.followers} obunachi · {followCounts.following} obuna · {totalKudos} kudos</span>
                             </div>
                         </div>
                     </Card>

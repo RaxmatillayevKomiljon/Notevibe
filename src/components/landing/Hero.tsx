@@ -33,7 +33,7 @@ export function Hero() {
                         <Button
                             size="lg"
                             variant="secondary"
-                            className="w-full sm:w-auto shadow-sm"
+                            className="w-full sm:w-auto shadow-sm dark:shadow-none"
                             onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
                         >
                             Batafsil

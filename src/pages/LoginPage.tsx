@@ -117,7 +117,7 @@ export function LoginPage() {
                     type="button"
                     onClick={handleGoogleSignIn}
                     disabled={isGoogleLoading}
-                    className="w-full flex items-center justify-center gap-3 h-12 px-6 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none shadow-sm"
+                    className="w-full flex items-center justify-center gap-3 h-12 px-6 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none shadow-sm dark:shadow-none"
                 >
                     {isGoogleLoading ? (
                         <span className="h-5 w-5 animate-spin rounded-full border-2 border-slate-400 border-t-transparent" />

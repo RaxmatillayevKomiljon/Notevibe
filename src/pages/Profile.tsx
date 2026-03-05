@@ -197,9 +197,9 @@ export function Profile() {
             {/* Follow List Modal */}
             {showFollowList && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-                        <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700">
-                            <h3 className="font-bold text-slate-900 dark:text-white">
+                    <div className="bg-white dark:bg-[#111111] dark:border-white/5 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-white/10">
+                            <h3 className="font-bold text-slate-900 dark:text-zinc-50">
                                 {showFollowList === 'followers' ? t('userProfile.followersList') : t('userProfile.followingList')}
                             </h3>
                             <button
@@ -230,10 +230,10 @@ export function Profile() {
                                             className="w-10 h-10 rounded-full bg-slate-100"
                                         />
                                         <div>
-                                            <p className="font-semibold text-sm text-slate-900 dark:text-white">
+                                            <p className="font-semibold text-sm text-slate-900 dark:text-zinc-50">
                                                 {u.full_name || u.username}
                                             </p>
-                                            <p className="text-xs text-slate-500 dark:text-slate-400">@{u.username}</p>
+                                            <p className="text-xs text-slate-500 dark:text-zinc-400">@{u.username}</p>
                                         </div>
                                     </Link>
                                 ))
@@ -421,26 +421,26 @@ export function Profile() {
 
             {/* Stats */}
             <div className="grid grid-cols-4 gap-3 mb-8 max-w-2xl">
-                <div className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm">
-                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{posts.length}</p>
+                <div className="text-center p-4 bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-100 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{posts.length}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">{t('profile.notes')}</p>
                 </div>
                 <button
                     onClick={() => openFollowList('followers')}
-                    className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer"
+                    className="text-center p-4 bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-100 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer"
                 >
-                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{followCounts.followers}</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{followCounts.followers}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">{t('profile.followers')}</p>
                 </button>
                 <button
                     onClick={() => openFollowList('following')}
-                    className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer"
+                    className="text-center p-4 bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-100 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none hover:border-blue-200 dark:hover:border-blue-800 transition-all cursor-pointer"
                 >
-                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{followCounts.following}</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{followCounts.following}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">{t('profile.followingCount')}</p>
                 </button>
-                <div className="text-center p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm">
-                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{totalKudos}</p>
+                <div className="text-center p-4 bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-100 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-none">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{totalKudos}</p>
                     <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Kudos</p>
                 </div>
             </div>
@@ -489,7 +489,7 @@ export function Profile() {
                     </div>
                 )}
                 {activeTab === 'profile.about' && (
-                    <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
+                    <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm dark:shadow-none">
                         <h3 className="text-lg font-bold text-slate-900 mb-4">{t('profile.bio')}</h3>
                         <p className="text-slate-600 leading-relaxed mb-6">
                             {profile?.bio || t('profile.bioPlaceholder')}

@@ -71,7 +71,7 @@ export function CommentsSection({ postId, postAuthorId, onCountChange }: Props) 
     }
 
     return (
-        <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/10 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
             {/* Comment Input */}
             {user && (
                 <div className="flex items-center gap-2">
@@ -89,7 +89,7 @@ export function CommentsSection({ postId, postAuthorId, onCountChange }: Props) 
                             onChange={e => setText(e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && handleSend()}
                             placeholder={t('comments.placeholder')}
-                            className="w-full px-4 py-2.5 pr-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+                            className="w-full px-4 py-2.5 pr-12 bg-slate-50 dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/15 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all text-slate-900 dark:text-zinc-50 placeholder:text-slate-400"
                             disabled={sending}
                         />
                         <button
@@ -120,11 +120,11 @@ export function CommentsSection({ postId, postAuthorId, onCountChange }: Props) 
                                 className="w-7 h-7 rounded-full bg-slate-100 flex-shrink-0 mt-0.5"
                             />
                             <div className="flex-1 min-w-0">
-                                <div className="bg-slate-50 dark:bg-slate-800 rounded-2xl rounded-tl-md px-3.5 py-2.5">
-                                    <p className="text-xs font-bold text-slate-900 dark:text-white mb-0.5">
+                                <div className="bg-slate-50 dark:bg-[#111111] dark:border-white/5 rounded-2xl rounded-tl-md px-3.5 py-2.5">
+                                    <p className="text-xs font-bold text-slate-900 dark:text-zinc-50 mb-0.5">
                                         {comment.author?.full_name || comment.author?.username || 'User'}
                                     </p>
-                                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed break-words">
+                                    <p className="text-sm text-slate-600 dark:text-zinc-300 leading-relaxed break-words">
                                         {comment.content}
                                     </p>
                                 </div>

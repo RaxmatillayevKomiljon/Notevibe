@@ -105,7 +105,7 @@ export function CreatePost() {
             </div>
 
             {/* Editor Container */}
-            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8 md:p-12 min-h-[70vh]">
+            <div className="bg-white rounded-3xl shadow-sm dark:shadow-none border border-slate-100 p-8 md:p-12 min-h-[70vh]">
                 {/* Title Input */}
                 <input
                     type="text"

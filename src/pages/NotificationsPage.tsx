@@ -73,7 +73,7 @@ export function NotificationsPage() {
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                     <Bell className="w-7 h-7 text-blue-600" />
-                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('notifications.title')}</h1>
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{t('notifications.title')}</h1>
                     {unreadCount > 0 && (
                         <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                             {unreadCount}
@@ -95,9 +95,9 @@ export function NotificationsPage() {
                     <p className="text-slate-400">{t('common.loading')}</p>
                 </div>
             ) : notifications.length === 0 ? (
-                <div className="text-center py-20 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <div className="text-center py-20 bg-white dark:bg-[#111111] dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10">
                     <Bell className="w-16 h-16 text-slate-200 dark:text-slate-600 mx-auto mb-4" />
-                    <p className="text-slate-500 dark:text-slate-400 font-medium">{t('notifications.empty')}</p>
+                    <p className="text-slate-500 dark:text-zinc-400 font-medium">{t('notifications.empty')}</p>
                     <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">{t('notifications.emptyDesc')}</p>
                 </div>
             ) : (
@@ -107,7 +107,7 @@ export function NotificationsPage() {
                             key={n.id}
                             onClick={() => !n.read && handleMarkRead(n.id)}
                             className={`flex items-start gap-4 p-4 rounded-xl transition-all cursor-pointer ${n.read
-                                    ? 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750'
+                                    ? 'bg-white dark:bg-[#111111] dark:border-white/5 hover:bg-slate-50 dark:hover:bg-slate-750'
                                     : 'bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100/60 dark:hover:bg-blue-900/30 border border-blue-100 dark:border-blue-800'
                                 }`}
                         >
