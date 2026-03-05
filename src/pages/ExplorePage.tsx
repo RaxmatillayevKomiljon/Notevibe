@@ -173,7 +173,7 @@ export function ExplorePage() {
                                 onClick={() => setSortMode(opt.key)}
                                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${sortMode === opt.key
                                     ? 'bg-blue-600 text-white shadow-md dark:shadow-none shadow-blue-600/20'
-                                    : 'bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                                    : 'bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-white/5'
                                     }`}
                             >
                                 {t(opt.labelKey)}
@@ -192,8 +192,8 @@ export function ExplorePage() {
                                 <button
                                     onClick={() => setSelectedTag(null)}
                                     className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedTag === null
-                                        ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 dark:text-zinc-50'
-                                        : 'bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-white/5'
                                         }`}
                                 >
                                     {t('dashboard.all')}
@@ -204,7 +204,7 @@ export function ExplorePage() {
                                         onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
                                         className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedTag === tag
                                             ? 'bg-blue-600 text-white'
-                                            : 'bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                                            : 'bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-white/5'
                                             }`}
                                     >
                                         #{tag} <span className="text-xs opacity-60">({count})</span>

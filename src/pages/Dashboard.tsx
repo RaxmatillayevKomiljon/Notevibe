@@ -216,7 +216,7 @@ export function Dashboard() {
                             <button
                                 key={i}
                                 className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${i === 0
-                                    ? "bg-slate-900 dark:bg-white text-white dark:text-[#050505]"
+                                    ? "bg-blue-600 text-white"
                                     : "bg-white dark:bg-[#111111] border border-slate-200 dark:border-white/5 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-white/5"
                                     }`}
                             >
