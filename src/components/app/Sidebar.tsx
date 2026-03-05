@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Compass, Bookmark, User, LogOut, PenSquare, Settings, Bell, Shield } from 'lucide-react';
+import { Home, Compass, Bookmark, User, LogOut, PenSquare, Settings, Bell, Shield, Sun, Moon, Monitor } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Button } from '../ui/Button';
 import { useAuth } from '../auth/AuthProvider';
@@ -24,8 +24,29 @@ export function Sidebar() {
     const location = useLocation();
     const { user, signOut } = useAuth();
     const { t } = useTranslation();
-    const [profileData, setProfileData] = useState<{ full_name: string | null; avatar_url: string | null } | null>(null);
     const [unreadNotifs, setUnreadNotifs] = useState(0);
+    const [profileData, setProfileData] = useState<{ full_name: string | null; avatar_url: string | null } | null>(null);
+
+    // Theme state
+    type ThemeMode = 'light' | 'dark' | 'system';
+    const [theme, setTheme] = useState<ThemeMode>(
+        () => (localStorage.getItem('notevibe-theme') as ThemeMode) || 'light'
+    );
+    const themeIcons: Record<ThemeMode, typeof Sun> = { light: Sun, dark: Moon, system: Monitor };
+    const ThemeIcon = themeIcons[theme];
+
+    function cycleTheme() {
+        const modes: ThemeMode[] = ['light', 'dark', 'system'];
+        const next = modes[(modes.indexOf(theme) + 1) % modes.length];
+        setTheme(next);
+        localStorage.setItem('notevibe-theme', next);
+        const root = document.documentElement;
+        if (next === 'system') {
+            root.classList.toggle('dark', window.matchMedia('(prefers-color-scheme: dark)').matches);
+        } else {
+            root.classList.toggle('dark', next === 'dark');
+        }
+    }
 
     // Fetch profile from DB for accurate display
     useEffect(() => {
@@ -141,13 +162,23 @@ export function Sidebar() {
                         </div>
                     </div>
                 </Link>
-                <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 rounded-lg transition-colors font-medium"
-                >
-                    <LogOut className="w-4 h-4" />
-                    {t('nav.logout')}
-                </button>
+                <div className="flex items-center gap-2">
+                    {/* Theme toggle */}
+                    <button
+                        onClick={cycleTheme}
+                        title={theme}
+                        className="flex items-center justify-center w-9 h-9 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                    >
+                        <ThemeIcon className="w-4 h-4" />
+                    </button>
+                    <button
+                        onClick={handleLogout}
+                        className="flex-1 flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors font-medium"
+                    >
+                        <LogOut className="w-4 h-4" />
+                        {t('nav.logout')}
+                    </button>
+                </div>
             </div>
         </aside>
     );
