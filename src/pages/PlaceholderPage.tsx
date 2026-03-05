@@ -14,8 +14,8 @@ export function PlaceholderPage({ title }: PlaceholderPageProps) {
             <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-6">
                 <Construction className="w-8 h-8" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 mb-2">{title}</h1>
-            <p className="text-slate-500 mb-8 max-w-sm">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50 mb-2">{title}</h1>
+            <p className="text-slate-500 dark:text-zinc-400 mb-8 max-w-sm">
                 Ushbu sahifa hozirda ishlab chiqilmoqda. Tez orada bu yerda ajoyib imkoniyatlar paydo bo'ladi!
             </p>
             <Button onClick={() => navigate('/dashboard')} variant="outline">

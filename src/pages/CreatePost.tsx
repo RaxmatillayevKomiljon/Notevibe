@@ -89,11 +89,11 @@ export function CreatePost() {
         <div className="max-w-3xl mx-auto">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
-                <Link to="/dashboard" className="text-slate-400 hover:text-slate-600 transition-colors">
+                <Link to="/dashboard" className="text-slate-400 hover:text-slate-600 dark:text-zinc-300 transition-colors">
                     <ArrowLeft className="w-6 h-6" />
                 </Link>
                 <div className="flex gap-4">
-                    <Button variant="ghost" className="text-slate-500">Qoralama saqlash</Button>
+                    <Button variant="ghost" className="text-slate-500 dark:text-zinc-400">Qoralama saqlash</Button>
                     <Button
                         onClick={handlePublish}
                         isLoading={isPublishing}
@@ -110,7 +110,7 @@ export function CreatePost() {
                 <input
                     type="text"
                     placeholder="Sarlavha..."
-                    className="w-full text-4xl md:text-5xl font-black placeholder:text-slate-300 border-none focus:outline-none focus:ring-0 bg-transparent text-slate-900 mb-8"
+                    className="w-full text-4xl md:text-5xl font-black placeholder:text-slate-300 border-none focus:outline-none focus:ring-0 bg-transparent text-slate-900 dark:text-zinc-50 mb-8"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     autoFocus
@@ -126,7 +126,7 @@ export function CreatePost() {
                         <input
                             type="text"
                             placeholder="Teglar (vergul bilan ajrating)"
-                            className="bg-transparent border-none focus:outline-none text-sm w-full text-slate-600 placeholder:text-slate-400"
+                            className="bg-transparent border-none focus:outline-none text-sm w-full text-slate-600 dark:text-zinc-300 placeholder:text-slate-400"
                             value={tags}
                             onChange={(e) => setTags(e.target.value)}
                         />
@@ -137,7 +137,7 @@ export function CreatePost() {
                 <textarea
                     ref={textareaRef}
                     placeholder="Fikrlaringizni yozing..."
-                    className="w-full resize-none text-lg text-slate-700 placeholder:text-slate-300 border-none focus:outline-none focus:ring-0 bg-transparent leading-relaxed min-h-[300px]"
+                    className="w-full resize-none text-lg text-slate-700 dark:text-zinc-200 placeholder:text-slate-300 border-none focus:outline-none focus:ring-0 bg-transparent leading-relaxed min-h-[300px]"
                     value={content}
                     onChange={handleInput}
                 />

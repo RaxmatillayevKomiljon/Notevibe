@@ -119,7 +119,7 @@ export function Settings() {
                             </h3>
                             <button
                                 onClick={() => { setShowPasswordModal(false); setNewPassword(''); setConfirmPassword(''); }}
-                                className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl"
+                                className="text-slate-400 hover:text-slate-600 dark:text-zinc-300 dark:hover:text-white text-xl"
                             >
                                 ✕
                             </button>
@@ -139,7 +139,7 @@ export function Settings() {
                                     <button
                                         type="button"
                                         onClick={() => setShowNewPass(!showNewPass)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-zinc-300"
                                     >
                                         {showNewPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                     </button>
@@ -158,7 +158,7 @@ export function Settings() {
                                     <button
                                         type="button"
                                         onClick={() => setShowConfirmPass(!showConfirmPass)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-zinc-300"
                                     >
                                         {showConfirmPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                     </button>

@@ -94,7 +94,7 @@ export function LoginPage() {
             <div className="absolute bottom-0 left-0 w-[50vh] h-[50vh] bg-indigo-500/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2 pointer-events-none" />
 
             {/* Back Link */}
-            <Link to="/" className="absolute top-8 left-8 text-slate-500 hover:text-slate-900 flex items-center gap-2 transition-colors font-medium">
+            <Link to="/" className="absolute top-8 left-8 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:text-zinc-50 flex items-center gap-2 transition-colors font-medium">
                 <ArrowLeft className="w-4 h-4" />
                 {t('login.backHome')}
             </Link>
@@ -104,10 +104,10 @@ export function LoginPage() {
                     <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center text-white mx-auto mb-6 shadow-lg shadow-blue-600/30">
                         <PenTool className="w-7 h-7" />
                     </div>
-                    <h1 className="text-2xl font-bold text-slate-900 mb-2">
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50 mb-2">
                         {isLogin ? t('login.welcome') : t('login.register')}
                     </h1>
-                    <p className="text-slate-500">
+                    <p className="text-slate-500 dark:text-zinc-400">
                         {isLogin ? t('login.loginDesc') : t('login.registerDesc')}
                     </p>
                 </div>
@@ -117,7 +117,7 @@ export function LoginPage() {
                     type="button"
                     onClick={handleGoogleSignIn}
                     disabled={isGoogleLoading}
-                    className="w-full flex items-center justify-center gap-3 h-12 px-6 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none shadow-sm dark:shadow-none"
+                    className="w-full flex items-center justify-center gap-3 h-12 px-6 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-700 dark:text-zinc-200 hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none shadow-sm dark:shadow-none"
                 >
                     {isGoogleLoading ? (
                         <span className="h-5 w-5 animate-spin rounded-full border-2 border-slate-400 border-t-transparent" />
@@ -141,12 +141,12 @@ export function LoginPage() {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-semibold text-slate-700 ml-1">{t('login.email')}</label>
+                        <label className="text-sm font-semibold text-slate-700 dark:text-zinc-200 ml-1">{t('login.email')}</label>
                         <div className="relative">
                             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                             <input
                                 type="email"
-                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all text-slate-900 font-medium placeholder:text-slate-400"
+                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all text-slate-900 dark:text-zinc-50 font-medium placeholder:text-slate-400"
                                 placeholder="name@company.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -156,12 +156,12 @@ export function LoginPage() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-semibold text-slate-700 ml-1">{t('login.password')}</label>
+                        <label className="text-sm font-semibold text-slate-700 dark:text-zinc-200 ml-1">{t('login.password')}</label>
                         <div className="relative">
                             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                             <input
                                 type="password"
-                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all text-slate-900 font-medium placeholder:text-slate-400"
+                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all text-slate-900 dark:text-zinc-50 font-medium placeholder:text-slate-400"
                                 placeholder="••••••••"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -184,7 +184,7 @@ export function LoginPage() {
                         <button
                             type="button"
                             onClick={() => setIsLogin(!isLogin)}
-                            className="text-sm text-slate-500 hover:text-blue-600 transition-colors"
+                            className="text-sm text-slate-500 dark:text-zinc-400 hover:text-blue-600 transition-colors"
                         >
                             {isLogin
                                 ? t('login.noAccount')

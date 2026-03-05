@@ -6,8 +6,8 @@ export function FeatureGrid() {
         <section id="features" className="py-20 bg-slate-50/50">
             <div className="container mx-auto px-4">
                 <div className="text-center max-w-2xl mx-auto mb-16">
-                    <h2 className="text-3xl font-bold text-slate-900 mb-4">Nega aynan Notevibe?</h2>
-                    <p className="text-slate-600">Biz shunchaki blog emasmiz. Biz sizning shaxsiy rivojlanishingiz uchun mo'ljallangan ekotizimmiz.</p>
+                    <h2 className="text-3xl font-bold text-slate-900 dark:text-zinc-50 mb-4">Nega aynan Notevibe?</h2>
+                    <p className="text-slate-600 dark:text-zinc-300">Biz shunchaki blog emasmiz. Biz sizning shaxsiy rivojlanishingiz uchun mo'ljallangan ekotizimmiz.</p>
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -16,8 +16,8 @@ export function FeatureGrid() {
                             <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-4">
                                 <feature.icon className="w-6 h-6" />
                             </div>
-                            <h3 className="text-lg font-bold text-slate-900 mb-2">{feature.title}</h3>
-                            <p className="text-slate-500 text-sm leading-relaxed">{feature.desc}</p>
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-zinc-50 mb-2">{feature.title}</h3>
+                            <p className="text-slate-500 dark:text-zinc-400 text-sm leading-relaxed">{feature.desc}</p>
                         </Card>
                     ))}
                 </div>

@@ -93,9 +93,9 @@ export function BookmarksPage() {
             <div className="mb-8">
                 <div className="flex items-center gap-3 mb-2">
                     <Bookmark className="w-7 h-7 text-blue-600" />
-                    <h1 className="text-2xl font-bold text-slate-900">{t('bookmarks.title')}</h1>
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{t('bookmarks.title')}</h1>
                 </div>
-                <p className="text-slate-500">Saqlangan notelaringiz ({bookmarkIds.length})</p>
+                <p className="text-slate-500 dark:text-zinc-400">Saqlangan notelaringiz ({bookmarkIds.length})</p>
             </div>
 
             {/* Content */}
@@ -108,7 +108,7 @@ export function BookmarksPage() {
                 ) : posts.length === 0 ? (
                     <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
                         <Bookmark className="w-14 h-14 text-slate-300 mx-auto mb-4" />
-                        <p className="text-slate-500 font-medium mb-2">{t('bookmarks.empty')}</p>
+                        <p className="text-slate-500 dark:text-zinc-400 font-medium mb-2">{t('bookmarks.empty')}</p>
                         <p className="text-sm text-slate-400 mb-6">
                             {t('bookmarks.emptyDesc')}
                         </p>
@@ -127,7 +127,7 @@ export function BookmarksPage() {
                                         className="w-9 h-9 rounded-full bg-slate-100"
                                     />
                                     <div>
-                                        <p className="text-sm font-bold text-slate-900">{post.author?.full_name || post.author?.username || 'Anonymous'}</p>
+                                        <p className="text-sm font-bold text-slate-900 dark:text-zinc-50">{post.author?.full_name || post.author?.username || 'Anonymous'}</p>
                                         <p className="text-xs text-slate-400">@{post.author?.username} • {new Date(post.created_at).toLocaleDateString()}</p>
                                     </div>
                                 </div>
@@ -140,15 +140,15 @@ export function BookmarksPage() {
                                 </button>
                             </div>
 
-                            <h2 className="text-lg font-bold text-slate-900 mb-2">{post.title}</h2>
+                            <h2 className="text-lg font-bold text-slate-900 dark:text-zinc-50 mb-2">{post.title}</h2>
                             {post.content && (
-                                <p className="text-slate-600 text-sm leading-relaxed line-clamp-2 mb-3">{post.content}</p>
+                                <p className="text-slate-600 dark:text-zinc-300 text-sm leading-relaxed line-clamp-2 mb-3">{post.content}</p>
                             )}
 
                             {post.tags && post.tags.length > 0 && (
                                 <div className="flex flex-wrap gap-1.5 mb-3">
                                     {post.tags.map(tag => (
-                                        <span key={tag} className="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-md font-medium">
+                                        <span key={tag} className="bg-slate-100 text-slate-600 dark:text-zinc-300 text-xs px-2 py-1 rounded-md font-medium">
                                             #{tag}
                                         </span>
                                     ))}

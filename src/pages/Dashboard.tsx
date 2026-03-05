@@ -198,14 +198,14 @@ export function Dashboard() {
                 {/* Main Feed */}
                 <div className="lg:col-span-2 space-y-6">
                     {/* Header & Search */}
-                    <div className="flex items-center justify-between sticky top-0 bg-slate-50/95 backdrop-blur z-10 py-2">
-                        <h1 className="text-2xl font-bold text-slate-900">{t('dashboard.feed')}</h1>
+                    <div className="flex items-center justify-between sticky top-0 bg-slate-50/95 dark:bg-[#050505]/95 backdrop-blur z-10 py-2">
+                        <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50">{t('dashboard.feed')}</h1>
                         <div className="relative hidden sm:block">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-zinc-400" />
                             <input
                                 type="text"
                                 placeholder={t('dashboard.search')}
-                                className="pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-64"
+                                className="pl-9 pr-4 py-2 bg-white dark:bg-[#111111] border border-slate-200 dark:border-white/5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-64 text-slate-900 dark:text-zinc-50 placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                             />
                         </div>
                     </div>
@@ -216,8 +216,8 @@ export function Dashboard() {
                             <button
                                 key={i}
                                 className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${i === 0
-                                    ? "bg-slate-900 text-white"
-                                    : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+                                    ? "bg-slate-900 dark:bg-white text-white dark:text-[#050505]"
+                                    : "bg-white dark:bg-[#111111] border border-slate-200 dark:border-white/5 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-white/5"
                                     }`}
                             >
                                 {cat}
@@ -228,9 +228,9 @@ export function Dashboard() {
                     {/* Posts */}
                     <div className="space-y-6">
                         {loading ? (
-                            <div className="text-center py-10 text-slate-500">{t('dashboard.loading')}</div>
+                            <div className="text-center py-10 text-slate-500 dark:text-zinc-400">{t('dashboard.loading')}</div>
                         ) : posts.length === 0 ? (
-                            <div className="text-center py-10 text-slate-500 bg-white rounded-2xl border border-slate-200">
+                            <div className="text-center py-10 text-slate-500 dark:text-zinc-400 bg-white rounded-2xl border border-slate-200">
                                 <p>{t('dashboard.noPosts')}</p>
                                 <p className="text-sm">{t('dashboard.beFirst')}</p>
                             </div>
@@ -246,15 +246,15 @@ export function Dashboard() {
                                                     className="w-10 h-10 rounded-full bg-slate-100"
                                                 />
                                                 <div>
-                                                    <h3 className="font-bold text-slate-900 text-sm hover:text-blue-600 transition-colors">{post.author?.full_name || post.author?.username || 'Anonymous'}</h3>
-                                                    <p className="text-xs text-slate-500">
+                                                    <h3 className="font-bold text-slate-900 dark:text-zinc-50 text-sm hover:text-blue-600 transition-colors">{post.author?.full_name || post.author?.username || 'Anonymous'}</h3>
+                                                    <p className="text-xs text-slate-500 dark:text-zinc-400">
                                                         @{post.author?.username} • {new Date(post.created_at).toLocaleDateString()}
                                                     </p>
                                                 </div>
                                             </Link>
                                         </div>
                                         <div className="relative">
-                                            <button onClick={() => setMenuOpen(menuOpen === post.id ? null : post.id)} className="text-slate-400 hover:text-slate-600">
+                                            <button onClick={() => setMenuOpen(menuOpen === post.id ? null : post.id)} className="text-slate-400 hover:text-slate-600 dark:text-zinc-300">
                                                 <MoreHorizontal className="w-5 h-5" />
                                             </button>
                                             {menuOpen === post.id && (
@@ -272,16 +272,16 @@ export function Dashboard() {
                                     </div>
 
                                     <div className="mb-4">
-                                        <h2 className="text-xl font-bold text-slate-900 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
+                                        <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-50 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
                                             {post.title}
                                         </h2>
-                                        <p className="text-slate-600 leading-relaxed line-clamp-3">
+                                        <p className="text-slate-600 dark:text-zinc-300 leading-relaxed line-clamp-3">
                                             {post.content}
                                         </p>
                                     </div>
 
                                     {post.tags && post.tags.map(tag => (
-                                        <span key={tag} className="inline-block bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-md mr-2 mb-4 font-medium">
+                                        <span key={tag} className="inline-block bg-slate-100 text-slate-600 dark:text-zinc-300 text-xs px-2 py-1 rounded-md mr-2 mb-4 font-medium">
                                             #{tag}
                                         </span>
                                     ))}
@@ -293,7 +293,7 @@ export function Dashboard() {
                                                 disabled={kudosLoading.has(post.id)}
                                                 className={`flex items-center gap-2 transition-colors text-sm group ${kudosGiven.has(post.id)
                                                     ? 'text-blue-600'
-                                                    : 'text-slate-500 hover:text-blue-600'
+                                                    : 'text-slate-500 dark:text-zinc-400 hover:text-blue-600'
                                                     }`}
                                             >
                                                 <ThumbsUp className={`w-5 h-5 transition-all ${kudosGiven.has(post.id) ? 'fill-blue-600' : 'group-hover:scale-110'
@@ -302,7 +302,7 @@ export function Dashboard() {
                                             </button>
                                             <button
                                                 onClick={() => toggleComments(post.id)}
-                                                className={`flex items-center gap-2 transition-colors text-sm group ${openComments.has(post.id) ? 'text-blue-600' : 'text-slate-500 hover:text-blue-500'
+                                                className={`flex items-center gap-2 transition-colors text-sm group ${openComments.has(post.id) ? 'text-blue-600' : 'text-slate-500 dark:text-zinc-400 hover:text-blue-500'
                                                     }`}
                                             >
                                                 <MessageSquare className={`w-5 h-5 ${openComments.has(post.id) ? 'fill-blue-100' : ''}`} />
@@ -321,7 +321,7 @@ export function Dashboard() {
                                                 <Bookmark className={`w-4 h-4 ${bookmarkedIds.has(post.id) ? 'fill-amber-500' : ''}`} />
                                             </button>
                                             <span>3 min {t('dashboard.readTime')}</span>
-                                            <button onClick={() => handleShare(post.id)} className="hover:text-slate-800 transition-colors">
+                                            <button onClick={() => handleShare(post.id)} className="hover:text-slate-800 dark:text-zinc-100 transition-colors">
                                                 <Share2 className="w-4 h-4" />
                                             </button>
                                         </div>
@@ -349,7 +349,7 @@ export function Dashboard() {
                 <div className="hidden lg:block space-y-6">
                     {/* Trending Topics */}
                     <Card className="p-5 border-slate-100 shadow-sm dark:shadow-none sticky top-6">
-                        <div className="flex items-center gap-2 mb-4 text-slate-900 font-bold">
+                        <div className="flex items-center gap-2 mb-4 text-slate-900 dark:text-zinc-50 font-bold">
                             <Flame className="w-5 h-5 text-orange-500" />
                             <h3>{t('dashboard.trending')}</h3>
                         </div>
@@ -360,7 +360,7 @@ export function Dashboard() {
                                 {trendingTags.map((tag, i) => (
                                     <div key={i} className="flex justify-between items-center group cursor-pointer">
                                         <div>
-                                            <p className="text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">#{tag}</p>
+                                            <p className="text-sm font-semibold text-slate-700 dark:text-zinc-200 group-hover:text-blue-600 transition-colors">#{tag}</p>
                                             <p className="text-xs text-slate-400">1.2k views</p>
                                         </div>
                                         <MoreHorizontal className="w-4 h-4 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -372,7 +372,7 @@ export function Dashboard() {
 
                     {/* Suggested Users */}
                     <Card className="p-5 border-slate-100 shadow-sm dark:shadow-none sticky top-64">
-                        <h3 className="font-bold text-slate-900 mb-4">{t('dashboard.suggested')}</h3>
+                        <h3 className="font-bold text-slate-900 dark:text-zinc-50 mb-4">{t('dashboard.suggested')}</h3>
                         {suggestedUsers.length === 0 ? (
                             <p className="text-sm text-slate-400">{t('dashboard.noSuggestions')}</p>
                         ) : (
@@ -386,8 +386,8 @@ export function Dashboard() {
                                                 className="w-9 h-9 rounded-full bg-slate-100"
                                             />
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-bold text-slate-900 truncate hover:text-blue-600 transition-colors">{suggestedUser.full_name || suggestedUser.username}</p>
-                                                <p className="text-xs text-slate-500 truncate">@{suggestedUser.username}</p>
+                                                <p className="text-sm font-bold text-slate-900 dark:text-zinc-50 truncate hover:text-blue-600 transition-colors">{suggestedUser.full_name || suggestedUser.username}</p>
+                                                <p className="text-xs text-slate-500 dark:text-zinc-400 truncate">@{suggestedUser.username}</p>
                                             </div>
                                         </Link>
                                         <Button

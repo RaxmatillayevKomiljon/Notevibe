@@ -15,9 +15,9 @@ export function Awards() {
                             <Trophy className="w-3 h-3" />
                             <span>Oylik g'oliblar</span>
                         </div>
-                        <h2 className="text-3xl font-bold text-slate-900">Eng yaxshilar taqdirlanadi</h2>
+                        <h2 className="text-3xl font-bold text-slate-900 dark:text-zinc-50">Eng yaxshilar taqdirlanadi</h2>
                     </div>
-                    <p className="text-slate-600 max-w-md text-sm md:text-base">
+                    <p className="text-slate-600 dark:text-zinc-300 max-w-md text-sm md:text-base">
                         Biz har oy eng ko'p o'qilgan va eng foydali postlar mualliflarini aniqlaymiz va sovg'alar beramiz.
                     </p>
                 </div>
@@ -33,8 +33,8 @@ export function Awards() {
                             </div>
                             <div>
                                 <p className="text-xs text-blue-600 font-semibold uppercase tracking-wider mb-1">{award.month} oyida</p>
-                                <h3 className="font-bold text-slate-900">{award.title}</h3>
-                                <p className="text-slate-500 text-sm">{award.user}</p>
+                                <h3 className="font-bold text-slate-900 dark:text-zinc-50">{award.title}</h3>
+                                <p className="text-slate-500 dark:text-zinc-400 text-sm">{award.user}</p>
                             </div>
                         </Card>
                     ))}

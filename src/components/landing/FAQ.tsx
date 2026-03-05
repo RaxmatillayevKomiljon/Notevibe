@@ -9,7 +9,7 @@ export function FAQ() {
     return (
         <section id="faq" className="py-20 bg-slate-50">
             <div className="container mx-auto px-4 max-w-3xl">
-                <h2 className="text-3xl font-bold text-slate-900 text-center mb-12">Ko'p so'raladigan savollar</h2>
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-zinc-50 text-center mb-12">Ko'p so'raladigan savollar</h2>
 
                 <div className="space-y-4">
                     {faqs.map((faq, idx) => (
@@ -18,12 +18,12 @@ export function FAQ() {
                                 onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
                                 className="w-full flex items-center justify-between p-6 text-left"
                             >
-                                <span className="font-bold text-slate-900">{faq.q}</span>
+                                <span className="font-bold text-slate-900 dark:text-zinc-50">{faq.q}</span>
                                 {openIndex === idx ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
                             </button>
 
                             <div className={cn(
-                                "px-6 pb-6 text-slate-600 leading-relaxed",
+                                "px-6 pb-6 text-slate-600 dark:text-zinc-300 leading-relaxed",
                                 openIndex === idx ? "block" : "hidden"
                             )}>
                                 {faq.a}

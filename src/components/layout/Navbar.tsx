@@ -29,10 +29,10 @@ export function Navbar() {
 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center gap-8">
-                    <a href="#features" className="text-slate-600 hover:text-blue-600 text-sm font-medium transition-colors">Imkoniyatlar</a>
-                    <a href="#how" className="text-slate-600 hover:text-blue-600 text-sm font-medium transition-colors">Qanday ishlaydi?</a>
-                    <a href="#awards" className="text-slate-600 hover:text-blue-600 text-sm font-medium transition-colors">G'oliblar</a>
-                    <a href="#faq" className="text-slate-600 hover:text-blue-600 text-sm font-medium transition-colors">FAQ</a>
+                    <a href="#features" className="text-slate-600 dark:text-zinc-300 hover:text-blue-600 text-sm font-medium transition-colors">Imkoniyatlar</a>
+                    <a href="#how" className="text-slate-600 dark:text-zinc-300 hover:text-blue-600 text-sm font-medium transition-colors">Qanday ishlaydi?</a>
+                    <a href="#awards" className="text-slate-600 dark:text-zinc-300 hover:text-blue-600 text-sm font-medium transition-colors">G'oliblar</a>
+                    <a href="#faq" className="text-slate-600 dark:text-zinc-300 hover:text-blue-600 text-sm font-medium transition-colors">FAQ</a>
                 </div>
 
                 {/* Auth Button (Desktop) */}
@@ -56,7 +56,7 @@ export function Navbar() {
 
                 {/* Mobile Toggle */}
                 <button
-                    className="md:hidden p-2 text-slate-600"
+                    className="md:hidden p-2 text-slate-600 dark:text-zinc-300"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                     {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -66,10 +66,10 @@ export function Navbar() {
             {/* Mobile Menu */}
             {isMenuOpen && (
                 <div className="md:hidden absolute top-16 left-0 right-0 bg-white border-b border-slate-100 p-4 flex flex-col gap-4 shadow-xl animate-in-up">
-                    <a href="#features" className="text-slate-600 font-medium p-2 block" onClick={() => setIsMenuOpen(false)}>Imkoniyatlar</a>
-                    <a href="#how" className="text-slate-600 font-medium p-2 block" onClick={() => setIsMenuOpen(false)}>Qanday ishlaydi?</a>
-                    <a href="#awards" className="text-slate-600 font-medium p-2 block" onClick={() => setIsMenuOpen(false)}>G'oliblar</a>
-                    <a href="#faq" className="text-slate-600 font-medium p-2 block" onClick={() => setIsMenuOpen(false)}>FAQ</a>
+                    <a href="#features" className="text-slate-600 dark:text-zinc-300 font-medium p-2 block" onClick={() => setIsMenuOpen(false)}>Imkoniyatlar</a>
+                    <a href="#how" className="text-slate-600 dark:text-zinc-300 font-medium p-2 block" onClick={() => setIsMenuOpen(false)}>Qanday ishlaydi?</a>
+                    <a href="#awards" className="text-slate-600 dark:text-zinc-300 font-medium p-2 block" onClick={() => setIsMenuOpen(false)}>G'oliblar</a>
+                    <a href="#faq" className="text-slate-600 dark:text-zinc-300 font-medium p-2 block" onClick={() => setIsMenuOpen(false)}>FAQ</a>
                     <div className="h-px bg-slate-100 my-2" />
                     {user ? (
                         <>

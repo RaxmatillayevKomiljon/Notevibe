@@ -100,7 +100,7 @@ export function AdminPage() {
     if (!isAdmin) {
         return (
             <div className="text-center py-20">
-                <Shield className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+                <Shield className="w-16 h-16 text-slate-300 dark:text-slate-600 dark:text-zinc-300 mx-auto mb-4" />
                 <p className="text-lg font-bold text-slate-900 dark:text-zinc-50 mb-2">{t('admin.accessDenied')}</p>
                 <p className="text-sm text-slate-400">{t('admin.accessDeniedDesc')}</p>
             </div>

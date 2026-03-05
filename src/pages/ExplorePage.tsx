@@ -192,7 +192,7 @@ export function ExplorePage() {
                                 <button
                                     onClick={() => setSelectedTag(null)}
                                     className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedTag === null
-                                        ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
+                                        ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 dark:text-zinc-50'
                                         : 'bg-white dark:bg-[#111111] dark:border-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                                         }`}
                                 >
@@ -223,9 +223,9 @@ export function ExplorePage() {
                             </div>
                         ) : filteredPosts.length === 0 ? (
                             <div className="text-center py-16 bg-white dark:bg-[#111111] dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10">
-                                <Search className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+                                <Search className="w-12 h-12 text-slate-300 dark:text-slate-600 dark:text-zinc-300 mx-auto mb-4" />
                                 <p className="text-slate-500 dark:text-zinc-400 font-medium mb-1">{t('explore.noResults')}</p>
-                                <p className="text-sm text-slate-400 dark:text-slate-500">
+                                <p className="text-sm text-slate-400 dark:text-slate-500 dark:text-zinc-400">
                                     {searchQuery ? `"${searchQuery}" ${t('explore.noResultsFor')}` : t('explore.noPosts')}
                                 </p>
                             </div>

@@ -17,12 +17,12 @@ export function Hero() {
                         <span>Yopiq hamjamiyat • Beta</span>
                     </div>
 
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.15] mb-6 tracking-tight">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-zinc-50 leading-[1.15] mb-6 tracking-tight">
                         Har kuni yozing. <br className="hidden md:block" />
                         <span className="gradient-text">Ilhom ulashing.</span>
                     </h1>
 
-                    <p className="text-lg text-slate-600 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+                    <p className="text-lg text-slate-600 dark:text-zinc-300 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
                         Notevibe — bu o'quvchilar uchun fikrlarini erkin ifoda etish, yozish ko'nikmalarini oshirish va bir-birini qo'llab-quvvatlash makoni.
                     </p>
 
@@ -40,7 +40,7 @@ export function Hero() {
                         </Button>
                     </div>
 
-                    <div className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-slate-500">
+                    <div className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-slate-500 dark:text-zinc-400">
                         <div className="flex -space-x-2">
                             {[1, 2, 3, 4].map(i => (
                                 <img key={i} src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i * 123}`} alt="User" className="w-8 h-8 rounded-full border-2 border-white bg-slate-100" />
@@ -59,8 +59,8 @@ export function Hero() {
                         <div className="flex items-center gap-3 mb-4">
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Author" className="w-10 h-10 rounded-full bg-slate-100" />
                             <div>
-                                <h4 className="font-bold text-slate-900">Asilbek T.</h4>
-                                <p className="text-xs text-slate-500">2 soat oldin • 5 min o'qish</p>
+                                <h4 className="font-bold text-slate-900 dark:text-zinc-50">Asilbek T.</h4>
+                                <p className="text-xs text-slate-500 dark:text-zinc-400">2 soat oldin • 5 min o'qish</p>
                             </div>
                             <div className="ml-auto text-orange-500 flex items-center gap-1 bg-orange-50 px-2 py-1 rounded-full text-xs font-bold">
                                 <Flame className="w-3 h-3" />
@@ -70,8 +70,8 @@ export function Hero() {
 
                         {/* Mock Content */}
                         <div className="space-y-3 mb-6">
-                            <h3 className="text-xl font-bold text-slate-800">Nega men har kuni ertalab kitob o'qiyman? 📚</h3>
-                            <p className="text-slate-600 leading-relaxed text-sm">
+                            <h3 className="text-xl font-bold text-slate-800 dark:text-zinc-100">Nega men har kuni ertalab kitob o'qiyman? 📚</h3>
+                            <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-sm">
                                 Avvallari ertalab turiboq telefonimga yopishardim. Lekin o'tgan oydan boshlab, har tong 20 daqiqa kitob o'qishni odat qildim. Natijalar hayratlanarli: diqqatim oshdi, xotiram kuchaydi...
                             </p>
                             <div className="h-32 bg-slate-100 rounded-xl overflow-hidden relative">
@@ -86,12 +86,12 @@ export function Hero() {
                                     <ThumbsUp className="w-4 h-4 fill-blue-500" />
                                     24 Kudos
                                 </button>
-                                <button className="flex items-center gap-1.5 text-slate-500 text-sm bg-slate-50 px-3 py-1.5 rounded-full hover:bg-slate-100 transition">
+                                <button className="flex items-center gap-1.5 text-slate-500 dark:text-zinc-400 text-sm bg-slate-50 px-3 py-1.5 rounded-full hover:bg-slate-100 transition">
                                     <MessageSquare className="w-4 h-4" />
                                     8
                                 </button>
                             </div>
-                            <button className="text-slate-400 hover:text-slate-600">
+                            <button className="text-slate-400 hover:text-slate-600 dark:text-zinc-300">
                                 <Repeat className="w-4 h-4" />
                             </button>
                         </div>

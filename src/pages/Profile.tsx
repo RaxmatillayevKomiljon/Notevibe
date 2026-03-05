@@ -174,7 +174,7 @@ export function Profile() {
         }
     }
 
-    if (loading) return <div className="p-10 text-center text-slate-500">{t('profile.loading')}</div>;
+    if (loading) return <div className="p-10 text-center text-slate-500 dark:text-zinc-400">{t('profile.loading')}</div>;
     if (!user) return <div className="p-10 text-center">{t('profile.loginRequired')}</div>;
 
     async function openFollowList(type: 'followers' | 'following') {
@@ -204,7 +204,7 @@ export function Profile() {
                             </h3>
                             <button
                                 onClick={() => setShowFollowList(null)}
-                                className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl"
+                                className="text-slate-400 hover:text-slate-600 dark:text-zinc-300 dark:hover:text-white text-xl"
                             >
                                 ✕
                             </button>
@@ -257,18 +257,18 @@ export function Profile() {
                                     className="w-16 h-16 rounded-full bg-slate-100 object-cover border border-slate-200"
                                 />
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('profile.profileImage')}</label>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-zinc-200 mb-1">{t('profile.profileImage')}</label>
                                     <input
                                         type="file"
                                         accept="image/*"
                                         onChange={handleFileChange}
-                                        className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                        className="block w-full text-sm text-slate-500 dark:text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">{t('profile.fullName')}</label>
+                                <label className="block text-sm font-medium text-slate-700 dark:text-zinc-200 mb-1">{t('profile.fullName')}</label>
                                 <input
                                     type="text"
                                     value={editForm.full_name}
@@ -277,7 +277,7 @@ export function Profile() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">{t('profile.username')} (@)</label>
+                                <label className="block text-sm font-medium text-slate-700 dark:text-zinc-200 mb-1">{t('profile.username')} (@)</label>
                                 <input
                                     type="text"
                                     value={editForm.username}
@@ -286,7 +286,7 @@ export function Profile() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">{t('profile.bio')}</label>
+                                <label className="block text-sm font-medium text-slate-700 dark:text-zinc-200 mb-1">{t('profile.bio')}</label>
                                 <textarea
                                     value={editForm.bio}
                                     onChange={e => setEditForm({ ...editForm, bio: e.target.value })}
@@ -294,7 +294,7 @@ export function Profile() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">{t('profile.website')}</label>
+                                <label className="block text-sm font-medium text-slate-700 dark:text-zinc-200 mb-1">{t('profile.website')}</label>
                                 <input
                                     type="url"
                                     value={editForm.website}
@@ -304,7 +304,7 @@ export function Profile() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">
+                                <label className="block text-sm font-medium text-slate-700 dark:text-zinc-200 mb-1">
                                     <MapPin className="w-3.5 h-3.5 inline mr-1" />
                                     {t('profile.location')}
                                 </label>
@@ -378,14 +378,14 @@ export function Profile() {
             {/* Profile Info */}
             <div className="px-2 md:px-4 mb-8 flex flex-col md:flex-row justify-between items-start gap-4">
                 <div>
-                    <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1">
+                    <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-zinc-50 mb-1">
                         {profile?.full_name || user.user_metadata?.full_name || user.user_metadata?.name || user.user_metadata?.username || t('profile.user')}
                     </h1>
-                    <p className="text-slate-500 font-medium mb-4">
+                    <p className="text-slate-500 dark:text-zinc-400 font-medium mb-4">
                         @{profile?.username || user.email?.split('@')[0]}
                     </p>
 
-                    <p className="text-slate-600 max-w-xl leading-relaxed mb-4">
+                    <p className="text-slate-600 dark:text-zinc-300 max-w-xl leading-relaxed mb-4">
                         {profile?.bio || t('profile.bioPlaceholder')}
                     </p>
 
@@ -453,7 +453,7 @@ export function Profile() {
                         onClick={() => setActiveTab(tabKey)}
                         className={`px-6 py-3 text-sm font-medium transition-colors relative ${activeTab === tabKey
                             ? "text-blue-600"
-                            : "text-slate-500 hover:text-slate-900"
+                            : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:text-zinc-50"
                             }`}
                     >
                         {t(tabKey)}
@@ -477,7 +477,7 @@ export function Profile() {
                             posts.map(post => (
                                 <Card key={post.id} className="p-6">
                                     <h3 className="font-bold text-lg mb-2">{post.title}</h3>
-                                    <p className="text-slate-600 line-clamp-2 mb-4">{post.content}</p>
+                                    <p className="text-slate-600 dark:text-zinc-300 line-clamp-2 mb-4">{post.content}</p>
                                     <div className="flex items-center gap-4 text-sm text-slate-400">
                                         <span className="flex items-center gap-1"><ThumbsUp className="w-4 h-4" /> {post.likes_count}</span>
                                         <span className="flex items-center gap-1"><MessageSquare className="w-4 h-4" /> 0</span>
@@ -490,16 +490,16 @@ export function Profile() {
                 )}
                 {activeTab === 'profile.about' && (
                     <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm dark:shadow-none">
-                        <h3 className="text-lg font-bold text-slate-900 mb-4">{t('profile.bio')}</h3>
-                        <p className="text-slate-600 leading-relaxed mb-6">
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-zinc-50 mb-4">{t('profile.bio')}</h3>
+                        <p className="text-slate-600 dark:text-zinc-300 leading-relaxed mb-6">
                             {profile?.bio || t('profile.bioPlaceholder')}
                         </p>
 
-                        <h3 className="text-lg font-bold text-slate-900 mb-4">{t('profile.info')}</h3>
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-zinc-50 mb-4">{t('profile.info')}</h3>
                         <div className="space-y-3">
                             <div className="flex items-center gap-3">
                                 <Calendar className="w-5 h-5 text-slate-400" />
-                                <span className="text-slate-600">{new Date(user.created_at).getFullYear()} yildan beri a'zo</span>
+                                <span className="text-slate-600 dark:text-zinc-300">{new Date(user.created_at).getFullYear()} yildan beri a'zo</span>
                             </div>
                             {profile?.website && (
                                 <div className="flex items-center gap-3">
@@ -511,7 +511,7 @@ export function Profile() {
                             )}
                             <div className="flex items-center gap-3">
                                 <MapPin className="w-5 h-5 text-slate-400" />
-                                <span className="text-slate-600">Toshkent, O'zbekiston</span>
+                                <span className="text-slate-600 dark:text-zinc-300">Toshkent, O'zbekiston</span>
                             </div>
                         </div>
                     </div>

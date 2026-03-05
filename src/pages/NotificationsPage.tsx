@@ -96,9 +96,9 @@ export function NotificationsPage() {
                 </div>
             ) : notifications.length === 0 ? (
                 <div className="text-center py-20 bg-white dark:bg-[#111111] dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10">
-                    <Bell className="w-16 h-16 text-slate-200 dark:text-slate-600 mx-auto mb-4" />
+                    <Bell className="w-16 h-16 text-slate-200 dark:text-slate-600 dark:text-zinc-300 mx-auto mb-4" />
                     <p className="text-slate-500 dark:text-zinc-400 font-medium">{t('notifications.empty')}</p>
-                    <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">{t('notifications.emptyDesc')}</p>
+                    <p className="text-sm text-slate-400 dark:text-slate-500 dark:text-zinc-400 mt-1">{t('notifications.emptyDesc')}</p>
                 </div>
             ) : (
                 <div className="space-y-2">
@@ -124,7 +124,7 @@ export function NotificationsPage() {
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1">
                                     {getIcon(n.type)}
-                                    <p className="text-sm text-slate-800 dark:text-slate-200 font-medium leading-snug">
+                                    <p className="text-sm text-slate-800 dark:text-zinc-100 dark:text-slate-200 font-medium leading-snug">
                                         {getMessage(n)}
                                     </p>
                                 </div>

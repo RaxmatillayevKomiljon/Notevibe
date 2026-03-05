@@ -114,9 +114,9 @@ export function Sidebar() {
                                 "flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-sm",
                                 isActive
                                     ? "bg-blue-50 dark:bg-blue-900/30 text-blue-600"
-                                    : "text-slate-500 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
+                                    : "text-slate-500 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:text-zinc-50 dark:hover:text-white"
                             )}>
-                                <item.icon className={cn("w-5 h-5", isActive ? "text-blue-600" : "text-slate-400 dark:text-slate-500")} />
+                                <item.icon className={cn("w-5 h-5", isActive ? "text-blue-600" : "text-slate-400 dark:text-slate-500 dark:text-zinc-400")} />
                                 <span className="flex-1">{t(item.labelKey)}</span>
                                 {item.path === '/notifications' && unreadNotifs > 0 && (
                                     <span className="bg-red-500 text-white text-[10px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full">
@@ -135,9 +135,9 @@ export function Sidebar() {
                             "flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-sm",
                             location.pathname === '/admin'
                                 ? "bg-violet-50 dark:bg-violet-900/30 text-violet-600"
-                                : "text-slate-500 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
+                                : "text-slate-500 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:text-zinc-50 dark:hover:text-white"
                         )}>
-                            <Shield className={cn("w-5 h-5", location.pathname === '/admin' ? "text-violet-600" : "text-slate-400 dark:text-slate-500")} />
+                            <Shield className={cn("w-5 h-5", location.pathname === '/admin' ? "text-violet-600" : "text-slate-400 dark:text-slate-500 dark:text-zinc-400")} />
                             <span>{t('nav.admin')}</span>
                         </div>
                     </Link>

@@ -9,10 +9,10 @@ export function Footer() {
                         <div className="bg-blue-600 p-1.5 rounded-lg text-white">
                             <PenTool className="w-4 h-4" />
                         </div>
-                        <span className="text-lg font-bold text-slate-900">Notevibe</span>
+                        <span className="text-lg font-bold text-slate-900 dark:text-zinc-50">Notevibe</span>
                     </div>
 
-                    <p className="text-slate-500 text-sm flex items-center gap-1">
+                    <p className="text-slate-500 dark:text-zinc-400 text-sm flex items-center gap-1">
                         Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> for students.
                     </p>
 

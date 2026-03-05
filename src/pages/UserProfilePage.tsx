@@ -150,7 +150,7 @@ export function UserProfilePage() {
                             </h3>
                             <button
                                 onClick={() => setShowFollowList(null)}
-                                className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl"
+                                className="text-slate-400 hover:text-slate-600 dark:text-zinc-300 dark:hover:text-white text-xl"
                             >
                                 ✕
                             </button>
@@ -192,7 +192,7 @@ export function UserProfilePage() {
             {/* Back Button */}
             <button
                 onClick={() => navigate(-1)}
-                className="flex items-center gap-2 text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-white mb-4 text-sm font-medium transition-colors"
+                className="flex items-center gap-2 text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:text-zinc-200 dark:hover:text-white mb-4 text-sm font-medium transition-colors"
             >
                 <ArrowLeft className="w-4 h-4" />
                 Orqaga
@@ -301,7 +301,7 @@ export function UserProfilePage() {
                         onClick={() => setActiveTab(tab)}
                         className={`px-6 py-3 text-sm font-medium transition-colors relative ${activeTab === tab
                             ? "text-blue-600"
-                            : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+                            : "text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:text-zinc-50 dark:hover:text-white"
                             }`}
                     >
                         {tab}
