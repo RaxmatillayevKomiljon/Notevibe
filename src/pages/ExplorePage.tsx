@@ -246,7 +246,11 @@ export function ExplorePage() {
                                             </div>
                                         </Link>
 
-                                        <h2 className="text-lg font-bold text-slate-900 dark:text-zinc-50 mb-2">{post.title}</h2>
+                                        <h2 className="text-lg font-bold text-slate-900 dark:text-zinc-50 mb-2">
+                                            <Link to={`/post/${post.id}`} className="hover:text-blue-600 transition-colors">
+                                                {post.title}
+                                            </Link>
+                                        </h2>
                                         {(post.excerpt || post.content) && (
                                             <p className="text-slate-600 dark:text-zinc-300 text-sm leading-relaxed line-clamp-2 mb-3">
                                                 {post.excerpt || post.content}

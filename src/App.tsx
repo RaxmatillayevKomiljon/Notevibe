@@ -12,6 +12,7 @@ import { BookmarksPage } from './pages/BookmarksPage';
 import { UserProfilePage } from './pages/UserProfilePage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { AdminPage } from './pages/AdminPage';
+import { PostPage } from './pages/PostPage';
 
 import { AuthProvider } from './components/auth/AuthProvider';
 
@@ -32,6 +33,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/create-post" element={<CreatePost />} />
+              <Route path="/post/:id" element={<PostPage />} />
               <Route path="/user/:userId" element={<UserProfilePage />} />
               <Route path="/notifications" element={<NotificationsPage />} />
               <Route path="/admin" element={<AdminPage />} />

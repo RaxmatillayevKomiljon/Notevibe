@@ -272,8 +272,10 @@ export function Dashboard() {
                                     </div>
 
                                     <div className="mb-4">
-                                        <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-50 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
-                                            {post.title}
+                                        <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-50 mb-2">
+                                            <Link to={`/post/${post.id}`} className="hover:text-blue-600 transition-colors">
+                                                {post.title}
+                                            </Link>
                                         </h2>
                                         <p className="text-slate-600 dark:text-zinc-300 leading-relaxed line-clamp-3">
                                             {post.content}

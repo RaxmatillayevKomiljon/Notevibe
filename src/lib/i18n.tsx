@@ -73,6 +73,11 @@ const translations: Record<Language, Record<string, string>> = {
         'explore.noResultsFor': "bo'yicha natija yo'q",
         'explore.noPosts': "Hozircha notelar yo'q",
 
+        // Post Page
+        'post.notFound': 'Note topilmadi yoki ochib tashlangan.',
+        'post.back': 'Ortga',
+        'post.loading': 'Yuklanmoqda...',
+
         // Profile
         'profile.title': 'Profil',
         'profile.notes': 'Note',
@@ -280,6 +285,11 @@ const translations: Record<Language, Record<string, string>> = {
         'explore.resultsFound': 'результатов найдено',
         'explore.noResultsFor': 'по запросу ничего не найдено',
         'explore.noPosts': 'Пока нет заметок',
+
+        // Post Page
+        'post.notFound': 'Заметка не найдена или удалена.',
+        'post.back': 'Назад',
+        'post.loading': 'Загрузка...',
 
         // Profile
         'profile.title': 'Профиль',

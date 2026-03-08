@@ -16,8 +16,10 @@ export interface Post {
     excerpt: string | null;
     content: string | null;
     cover_image: string | null;
-    tags: string[] | null;
+    tags: string[] | null; // Restored
     likes_count: number;
+    kudos?: number; // Added
+    comment_count?: number; // Added
     created_at: string;
     updated_at: string;
     author?: Profile; // Joined data
