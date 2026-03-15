@@ -9,10 +9,7 @@ import { useTranslation } from '../lib/i18n';
 import { getAllReports, updateReportStatus } from '../lib/reports';
 import type { Report } from '../lib/reports';
 
-// Admin emails — add your admin email(s) here
-const ADMIN_EMAILS = ['komiljonraxmatillayev5@gmail.com'];
-
-type Tab = 'users' | 'posts' | 'reports';
+type Tab = 'users' | 'posts' | 'reports' | 'admins';
 
 interface AdminUser {
     id: string;
@@ -34,16 +31,16 @@ interface AdminPost {
 }
 
 export function AdminPage() {
-    const { user } = useAuth();
+    const { isAdmin } = useAuth();
     const { t } = useTranslation();
     const [tab, setTab] = useState<Tab>('users');
     const [users, setUsers] = useState<AdminUser[]>([]);
     const [posts, setPosts] = useState<AdminPost[]>([]);
     const [reports, setReports] = useState<Report[]>([]);
+    const [admins, setAdmins] = useState<{ email: string, created_at: string }[]>([]);
+    const [newAdmin, setNewAdmin] = useState('');
     const [loading, setLoading] = useState(true);
-    const [stats, setStats] = useState({ users: 0, posts: 0, reports: 0 });
-
-    const isAdmin = user && ADMIN_EMAILS.includes(user.email || '');
+    const [stats, setStats] = useState({ users: 0, posts: 0, reports: 0, admins: 0 });
 
     useEffect(() => {
         if (isAdmin) loadData();
@@ -60,18 +57,22 @@ export function AdminPage() {
                 const { data, error } = await supabase.from('posts').select('*, author:profiles(username, full_name)').order('created_at', { ascending: false });
                 console.log('Admin posts fetch:', { data, error });
                 setPosts(data || []);
+            } else if (tab === 'admins') {
+                const { data } = await supabase.from('admin_emails').select('*').order('created_at', { ascending: false });
+                setAdmins(data || []);
             } else {
                 const data = await getAllReports();
                 setReports(data);
             }
 
             // Stats
-            const [u, p, r] = await Promise.all([
+            const [u, p, r, a] = await Promise.all([
                 supabase.from('profiles').select('*', { count: 'exact', head: true }),
                 supabase.from('posts').select('*', { count: 'exact', head: true }),
                 supabase.from('reports').select('*', { count: 'exact', head: true }),
+                supabase.from('admin_emails').select('*', { count: 'exact', head: true }),
             ]);
-            setStats({ users: u.count || 0, posts: p.count || 0, reports: r.count || 0 });
+            setStats({ users: u.count || 0, posts: p.count || 0, reports: r.count || 0, admins: a.count || 1 });
         } catch (e) {
             console.error('Admin load error:', e);
         }
@@ -97,6 +98,28 @@ export function AdminPage() {
         setReports(prev => prev.map(r => r.id === reportId ? { ...r, status: 'resolved' as const } : r));
     }
 
+    async function handleAddAdmin(e: React.FormEvent) {
+        e.preventDefault();
+        if (!newAdmin.trim()) return;
+        setLoading(true);
+        const { error } = await supabase.from('admin_emails').insert({ email: newAdmin.trim() });
+        if (!error) {
+            setNewAdmin('');
+            loadData();
+        } else {
+            setLoading(false);
+            console.error('Failed to add admin', error);
+        }
+    }
+
+    async function handleRemoveAdmin(email: string) {
+        if (email === 'komiljonraxmatillayev5@gmail.com') return; // protect superadmin
+        if (!confirm('Haqiqatan ham bu adminni o`chirmoqchimisiz?')) return;
+        setLoading(true);
+        await supabase.from('admin_emails').delete().eq('email', email);
+        loadData();
+    }
+
     if (!isAdmin) {
         return (
             <div className="text-center py-20">
@@ -111,6 +134,7 @@ export function AdminPage() {
         { key: 'users', icon: Users, labelKey: 'admin.users', count: stats.users },
         { key: 'posts', icon: FileText, labelKey: 'admin.posts', count: stats.posts },
         { key: 'reports', icon: Flag, labelKey: 'admin.reports', count: stats.reports },
+        { key: 'admins', icon: Shield, labelKey: 'Admins', count: stats.admins },
     ];
 
     return (
@@ -251,6 +275,44 @@ export function AdminPage() {
                             </div>
                         </Card>
                     )))}
+
+                    {/* Admins Tab */}
+                    {tab === 'admins' && (
+                        <div className="space-y-4">
+                            <form onSubmit={handleAddAdmin} className="flex gap-2">
+                                <input
+                                    type="email"
+                                    value={newAdmin}
+                                    onChange={e => setNewAdmin(e.target.value)}
+                                    placeholder="Yangi admin emaili..."
+                                    className="flex-1 px-4 py-2 border border-slate-200 dark:border-white/10 bg-white dark:bg-[#111111] rounded-xl text-sm text-slate-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                                    required
+                                />
+                                <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl">
+                                    Qo'shish
+                                </Button>
+                            </form>
+                            
+                            {admins.map(a => (
+                                <Card key={a.email} className="p-4 flex items-center justify-between border-slate-100 dark:border-white/10">
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-full">
+                                            <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                        </div>
+                                        <div>
+                                            <p className="font-medium text-slate-900 dark:text-zinc-50 text-sm">{a.email}</p>
+                                            <p className="text-xs text-slate-400">Qo'shilgan vaqti: {new Date(a.created_at).toLocaleDateString()}</p>
+                                        </div>
+                                    </div>
+                                    {a.email !== 'komiljonraxmatillayev5@gmail.com' && (
+                                        <Button variant="ghost" size="sm" onClick={() => handleRemoveAdmin(a.email)} className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20">
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                    )}
+                                </Card>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
         </div>

@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase';
 interface AuthContextType {
     user: User | null;
     session: Session | null;
+    isAdmin: boolean;
     loading: boolean;
     signOut: () => Promise<void>;
 }
@@ -12,6 +13,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
     user: null,
     session: null,
+    isAdmin: false,
     loading: true,
     signOut: async () => { },
 });
@@ -49,7 +51,28 @@ async function ensureProfile(user: User) {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [session, setSession] = useState<Session | null>(null);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(true);
+
+    async function checkAdmin(email: string | undefined) {
+        if (!email) {
+            setIsAdmin(false);
+            return;
+        }
+        // Check hardcoded first
+        if (email === 'komiljonraxmatillayev5@gmail.com') {
+            setIsAdmin(true);
+            return;
+        }
+        // Then check DB
+        try {
+            const { data } = await supabase.from('admin_emails').select('email').eq('email', email).maybeSingle();
+            setIsAdmin(!!data);
+        } catch (e) {
+            console.error('Failed to check admin status', e);
+            setIsAdmin(false);
+        }
+    }
 
     useEffect(() => {
         // Check active session
@@ -58,6 +81,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(session?.user ?? null);
             if (session?.user) {
                 ensureProfile(session.user);
+                checkAdmin(session.user.email);
+            } else {
+                setIsAdmin(false);
             }
             setLoading(false);
         }).catch((error) => {
@@ -71,6 +97,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(session?.user ?? null);
             if (event === 'SIGNED_IN' && session?.user) {
                 ensureProfile(session.user);
+                checkAdmin(session.user.email);
+            } else if (!session?.user) {
+                setIsAdmin(false);
             }
             setLoading(false);
         });
@@ -83,7 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, session, loading, signOut }}>
+        <AuthContext.Provider value={{ user, session, isAdmin, loading, signOut }}>
             {!loading && children}
         </AuthContext.Provider>
     );

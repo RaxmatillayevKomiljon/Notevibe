@@ -6,16 +6,12 @@ import { CreateLibraryModal } from '../components/library/CreateLibraryModal';
 import { useAuth } from '../components/auth/AuthProvider';
 import type { Library } from '../lib/types';
 
-const ADMIN_EMAILS = ['komiljonraxmatillayev5@gmail.com'];
-
 export function LibrariesPage() {
-    const { user } = useAuth();
+    const { isAdmin } = useAuth();
     const [libraries, setLibraries] = useState<Library[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [showCreate, setShowCreate] = useState(false);
-
-    const isAdmin = user && ADMIN_EMAILS.includes(user.email || '');
 
     useEffect(() => { loadLibraries(); }, []);
 

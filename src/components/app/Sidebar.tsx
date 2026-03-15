@@ -19,11 +19,11 @@ const navItemKeys = [
     { icon: Settings, labelKey: 'nav.settings', path: '/settings' },
 ];
 
-const ADMIN_EMAILS = ['komiljonraxmatillayev5@gmail.com'];
+
 
 export function Sidebar() {
     const location = useLocation();
-    const { user, signOut } = useAuth();
+    const { user, isAdmin, signOut } = useAuth();
     const { t } = useTranslation();
     const [unreadNotifs, setUnreadNotifs] = useState(0);
     const [profileData, setProfileData] = useState<{ full_name: string | null; avatar_url: string | null } | null>(null);
@@ -130,7 +130,7 @@ export function Sidebar() {
                 })}
 
                 {/* Admin Nav (admin only) */}
-                {user && ADMIN_EMAILS.includes(user.email || '') && (
+                {isAdmin && (
                     <Link to="/admin">
                         <div className={cn(
                             "flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-sm",

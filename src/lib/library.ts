@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { createNotification } from './notifications';
 import type { Library, Book, Borrowing, BookReview } from './types';
 
 // ── Libraries ──
@@ -103,15 +104,31 @@ export async function addBook(book: {
         .single();
 
     if (error) { console.error('addBook error:', error); return null; }
+
+    // Notify library creator
+    if (data) {
+        const { data: lib } = await supabase.from('libraries').select('created_by').eq('id', book.library_id).single();
+        if (lib?.created_by && lib.created_by !== book.created_by) {
+            await createNotification('book_request', book.created_by, lib.created_by);
+        }
+    }
+
     return data;
 }
 
-export async function approveBook(bookId: string): Promise<boolean> {
+export async function approveBook(bookId: string, adminId?: string): Promise<boolean> {
+    const { data: book } = await supabase.from('books').select('created_by').eq('id', bookId).single();
     const { error } = await supabase
         .from('books')
         .update({ status: 'approved' })
         .eq('id', bookId);
-    return !error;
+    if (error) return false;
+
+    // Notify book submitter
+    if (book?.created_by && adminId && book.created_by !== adminId) {
+        await createNotification('book_approved', adminId, book.created_by);
+    }
+    return true;
 }
 
 export async function rejectBook(bookId: string): Promise<boolean> {
@@ -143,11 +160,20 @@ export async function requestBorrow(bookId: string, libraryId: string, userId: s
         .single();
 
     if (error) { console.error('requestBorrow error:', error); return null; }
+
+    // Notify library creator
+    if (data) {
+        const { data: lib } = await supabase.from('libraries').select('created_by').eq('id', libraryId).single();
+        if (lib?.created_by && lib.created_by !== userId) {
+            await createNotification('borrow_request', userId, lib.created_by);
+        }
+    }
+
     return data;
 }
 
-export async function approveBorrow(borrowId: string): Promise<boolean> {
-    const { data: borrow } = await supabase.from('borrowings').select('book_id').eq('id', borrowId).single();
+export async function approveBorrow(borrowId: string, adminId?: string): Promise<boolean> {
+    const { data: borrow } = await supabase.from('borrowings').select('book_id, user_id').eq('id', borrowId).single();
     if (!borrow) return false;
 
     const { error } = await supabase
@@ -156,6 +182,11 @@ export async function approveBorrow(borrowId: string): Promise<boolean> {
         .eq('id', borrowId);
 
     if (error) return false;
+
+    // Notify borrower
+    if (borrow.user_id && adminId && borrow.user_id !== adminId) {
+        await createNotification('borrow_approved', adminId, borrow.user_id);
+    }
 
     // Decrease available count
     await supabase.rpc('decrement_available', { bid: borrow.book_id });

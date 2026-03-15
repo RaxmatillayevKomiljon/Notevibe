@@ -51,6 +51,10 @@ export function NotificationsPage() {
             case 'kudos': return <Heart className="w-5 h-5 text-rose-500" />;
             case 'comment': return <MessageSquare className="w-5 h-5 text-blue-500" />;
             case 'follow': return <UserPlus className="w-5 h-5 text-emerald-500" />;
+            case 'book_request': return <Bell className="w-5 h-5 text-amber-500" />;
+            case 'borrow_request': return <Bell className="w-5 h-5 text-orange-500" />;
+            case 'book_approved': return <Check className="w-5 h-5 text-green-500" />;
+            case 'borrow_approved': return <CheckCheck className="w-5 h-5 text-teal-500" />;
             default: return <Bell className="w-5 h-5 text-slate-400" />;
         }
     }
@@ -61,6 +65,10 @@ export function NotificationsPage() {
             case 'kudos': return `${name} ${t('notifications.kudosMsg')}`;
             case 'comment': return `${name} ${t('notifications.commentMsg')}`;
             case 'follow': return `${name} ${t('notifications.followMsg')}`;
+            case 'book_request': return `${name} sizning kutubxonangizga yangi kitob qo'shdi (tasdiqlashingiz kerak).`;
+            case 'borrow_request': return `${name} kitob olish so'rovini yubordi (tasdiqlashingiz kerak).`;
+            case 'book_approved': return `Siz qo'shgan kitob admin tomonidan tasdiqlandi.`;
+            case 'borrow_approved': return `Kitob olish so'rovingiz tasdiqlandi.`;
             default: return name;
         }
     }

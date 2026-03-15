@@ -3,7 +3,7 @@ import { supabase } from './supabase';
 export interface Notification {
     id: string;
     user_id: string;
-    type: 'follow' | 'kudos' | 'comment';
+    type: 'follow' | 'kudos' | 'comment' | 'book_request' | 'borrow_request' | 'book_approved' | 'borrow_approved';
     actor_id: string;
     post_id: string | null;
     read: boolean;
@@ -80,7 +80,7 @@ export async function markAllAsRead(userId: string): Promise<void> {
  * Does NOT notify yourself.
  */
 export async function createNotification(
-    type: 'follow' | 'kudos' | 'comment',
+    type: 'follow' | 'kudos' | 'comment' | 'book_request' | 'borrow_request' | 'book_approved' | 'borrow_approved',
     actorId: string,
     targetUserId: string,
     postId?: string
