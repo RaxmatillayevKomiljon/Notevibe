@@ -54,8 +54,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    async function checkAdmin(email: string | undefined) {
-        if (!email) {
+    async function checkAdmin(userId: string | undefined, email: string | undefined) {
+        if (!userId) {
             setIsAdmin(false);
             return;
         }
@@ -66,7 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
         // Then check DB
         try {
-            const { data } = await supabase.from('admin_emails').select('email').eq('email', email).maybeSingle();
+            const { data } = await supabase.from('admin_users').select('user_id').eq('user_id', userId).maybeSingle();
             setIsAdmin(!!data);
         } catch (e) {
             console.error('Failed to check admin status', e);
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(session?.user ?? null);
             if (session?.user) {
                 ensureProfile(session.user);
-                checkAdmin(session.user.email);
+                checkAdmin(session.user.id, session.user.email);
             } else {
                 setIsAdmin(false);
             }
@@ -97,7 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(session?.user ?? null);
             if (event === 'SIGNED_IN' && session?.user) {
                 ensureProfile(session.user);
-                checkAdmin(session.user.email);
+                checkAdmin(session.user.id, session.user.email);
             } else if (!session?.user) {
                 setIsAdmin(false);
             }

@@ -37,8 +37,10 @@ export function AdminPage() {
     const [users, setUsers] = useState<AdminUser[]>([]);
     const [posts, setPosts] = useState<AdminPost[]>([]);
     const [reports, setReports] = useState<Report[]>([]);
-    const [admins, setAdmins] = useState<{ email: string, created_at: string }[]>([]);
-    const [newAdmin, setNewAdmin] = useState('');
+    const [admins, setAdmins] = useState<{ user_id: string, created_at: string, profile: AdminUser | null }[]>([]);
+    const [searchUsername, setSearchUsername] = useState('');
+    const [searchResults, setSearchResults] = useState<AdminUser[]>([]);
+    const [isSearching, setIsSearching] = useState(false);
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState({ users: 0, posts: 0, reports: 0, admins: 0 });
 
@@ -58,8 +60,16 @@ export function AdminPage() {
                 console.log('Admin posts fetch:', { data, error });
                 setPosts(data || []);
             } else if (tab === 'admins') {
-                const { data } = await supabase.from('admin_emails').select('*').order('created_at', { ascending: false });
-                setAdmins(data || []);
+                const { data } = await supabase
+                    .from('admin_users')
+                    .select('user_id, created_at, profile:profiles(*)')
+                    .order('created_at', { ascending: false });
+                
+                // Supabase join returns an array for 1:1 sometimes depending on foreign keys, so we map it to single object to fit the type
+                setAdmins(data?.map(d => ({
+                    ...d,
+                    profile: Array.isArray(d.profile) ? d.profile[0] : d.profile
+                })) || []);
             } else {
                 const data = await getAllReports();
                 setReports(data);
@@ -70,7 +80,7 @@ export function AdminPage() {
                 supabase.from('profiles').select('*', { count: 'exact', head: true }),
                 supabase.from('posts').select('*', { count: 'exact', head: true }),
                 supabase.from('reports').select('*', { count: 'exact', head: true }),
-                supabase.from('admin_emails').select('*', { count: 'exact', head: true }),
+                supabase.from('admin_users').select('*', { count: 'exact', head: true }),
             ]);
             setStats({ users: u.count || 0, posts: p.count || 0, reports: r.count || 0, admins: a.count || 1 });
         } catch (e) {
@@ -98,13 +108,31 @@ export function AdminPage() {
         setReports(prev => prev.map(r => r.id === reportId ? { ...r, status: 'resolved' as const } : r));
     }
 
-    async function handleAddAdmin(e: React.FormEvent) {
-        e.preventDefault();
-        if (!newAdmin.trim()) return;
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(async () => {
+            if (searchUsername.trim().length < 2) {
+                setSearchResults([]);
+                return;
+            }
+            setIsSearching(true);
+            const { data } = await supabase
+                .from('profiles')
+                .select('*')
+                .ilike('username', `%${searchUsername.trim()}%`)
+                .limit(5);
+            setSearchResults(data || []);
+            setIsSearching(false);
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchUsername]);
+
+    async function handleAddAdmin(userId: string) {
         setLoading(true);
-        const { error } = await supabase.from('admin_emails').insert({ email: newAdmin.trim() });
+        const { error } = await supabase.from('admin_users').insert({ user_id: userId });
         if (!error) {
-            setNewAdmin('');
+            setSearchUsername('');
+            setSearchResults([]);
             loadData();
         } else {
             setLoading(false);
@@ -112,11 +140,10 @@ export function AdminPage() {
         }
     }
 
-    async function handleRemoveAdmin(email: string) {
-        if (email === 'komiljonraxmatillayev5@gmail.com') return; // protect superadmin
+    async function handleRemoveAdmin(userId: string) {
         if (!confirm('Haqiqatan ham bu adminni o`chirmoqchimisiz?')) return;
         setLoading(true);
-        await supabase.from('admin_emails').delete().eq('email', email);
+        await supabase.from('admin_users').delete().eq('user_id', userId);
         loadData();
     }
 
@@ -279,38 +306,58 @@ export function AdminPage() {
                     {/* Admins Tab */}
                     {tab === 'admins' && (
                         <div className="space-y-4">
-                            <form onSubmit={handleAddAdmin} className="flex gap-2">
+                            <div className="relative">
                                 <input
-                                    type="email"
-                                    value={newAdmin}
-                                    onChange={e => setNewAdmin(e.target.value)}
-                                    placeholder="Yangi admin emaili..."
-                                    className="flex-1 px-4 py-2 border border-slate-200 dark:border-white/10 bg-white dark:bg-[#111111] rounded-xl text-sm text-slate-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                                    required
+                                    type="text"
+                                    value={searchUsername}
+                                    onChange={e => setSearchUsername(e.target.value)}
+                                    placeholder="Foydalanuvchi qidirish (username)..."
+                                    className="w-full px-4 py-3 border border-slate-200 dark:border-white/10 bg-white dark:bg-[#111111] rounded-xl text-sm text-slate-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                                 />
-                                <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl">
-                                    Qo'shish
-                                </Button>
-                            </form>
-                            
-                            {admins.map(a => (
-                                <Card key={a.email} className="p-4 flex items-center justify-between border-slate-100 dark:border-white/10">
-                                    <div className="flex items-center gap-3">
-                                        <div className="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-full">
-                                            <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                        </div>
-                                        <div>
-                                            <p className="font-medium text-slate-900 dark:text-zinc-50 text-sm">{a.email}</p>
-                                            <p className="text-xs text-slate-400">Qo'shilgan vaqti: {new Date(a.created_at).toLocaleDateString()}</p>
-                                        </div>
+                                {isSearching && <div className="absolute right-4 top-3.5 w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />}
+                                
+                                {searchResults.length > 0 && (
+                                    <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-[#111111] border border-slate-200 dark:border-white/10 rounded-xl shadow-lg z-10 overflow-hidden">
+                                        {searchResults.map(user => (
+                                            <div key={user.id} className="flex items-center justify-between p-3 border-b border-slate-100 dark:border-white/5 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                                <div className="flex items-center gap-3">
+                                                    <img src={user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username}`} alt="" className="w-8 h-8 rounded-full bg-slate-100" />
+                                                    <div>
+                                                        <p className="font-bold text-slate-900 dark:text-zinc-50 text-sm">{user.full_name || '@' + user.username}</p>
+                                                        <p className="text-xs text-slate-400">@{user.username}</p>
+                                                    </div>
+                                                </div>
+                                                <Button size="sm" onClick={() => handleAddAdmin(user.id)} className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-3 py-1.5 h-auto text-xs">
+                                                    Admin qilish
+                                                </Button>
+                                            </div>
+                                        ))}
                                     </div>
-                                    {a.email !== 'komiljonraxmatillayev5@gmail.com' && (
-                                        <Button variant="ghost" size="sm" onClick={() => handleRemoveAdmin(a.email)} className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20">
+                                )}
+                            </div>
+                            
+                            <div className="space-y-2 mt-6">
+                                <h3 className="font-bold text-slate-900 dark:text-zinc-50 text-sm mb-3">Joriy Adminlar</h3>
+                                {admins.map(a => (
+                                    <Card key={a.user_id} className="p-4 flex items-center justify-between border-slate-100 dark:border-white/10">
+                                        <div className="flex items-center gap-3">
+                                            <div className="relative">
+                                                <img src={a.profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${a.profile?.username}`} alt="" className="w-10 h-10 rounded-full bg-slate-100" />
+                                                <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-0.5 border-2 border-white dark:border-[#111111]">
+                                                    <Shield className="w-3 h-3 text-white" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-slate-900 dark:text-zinc-50 text-sm">{a.profile?.full_name || '@' + a.profile?.username}</p>
+                                                <p className="text-xs text-slate-400">@{a.profile?.username} • Qo'shilgan: {new Date(a.created_at).toLocaleDateString()}</p>
+                                            </div>
+                                        </div>
+                                        <Button variant="ghost" size="sm" onClick={() => handleRemoveAdmin(a.user_id)} className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20">
                                             <Trash2 className="w-4 h-4" />
                                         </Button>
-                                    )}
-                                </Card>
-                            ))}
+                                    </Card>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>
