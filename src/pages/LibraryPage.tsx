@@ -26,7 +26,7 @@ export function LibraryPage() {
         setLoading(true);
         const [lib, bks] = await Promise.all([
             getLibrary(libraryId!),
-            getBooks(libraryId!),
+            getBooks(libraryId!, false),
         ]);
         setLibrary(lib);
         setBooks(bks);
