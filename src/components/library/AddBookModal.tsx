@@ -17,6 +17,7 @@ export function AddBookModal({ libraryId, open, onClose, onAdded }: Props) {
         description: '', cover_url: '', total_count: 1,
     });
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     if (!open) return null;
 
@@ -25,6 +26,8 @@ export function AddBookModal({ libraryId, open, onClose, onAdded }: Props) {
         if (!user || !form.title.trim() || !form.author.trim()) return;
 
         setLoading(true);
+        setError('');
+        console.log('Submitting book:', { libraryId, title: form.title, author: form.author, userId: user.id });
         const result = await addBook({
             library_id: libraryId,
             title: form.title.trim(),
@@ -37,10 +40,14 @@ export function AddBookModal({ libraryId, open, onClose, onAdded }: Props) {
             created_by: user.id,
         });
 
+        console.log('addBook result:', result);
+
         if (result) {
             onAdded();
             onClose();
             setForm({ title: '', author: '', genre: '', language: 'uz', description: '', cover_url: '', total_count: 1 });
+        } else {
+            setError("Kitob qo'shishda xatolik yuz berdi. Konsol (F12) ni tekshiring.");
         }
         setLoading(false);
     };
@@ -96,6 +103,12 @@ export function AddBookModal({ libraryId, open, onClose, onAdded }: Props) {
                     <div className="bg-blue-50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/10 rounded-xl p-3">
                         <p className="text-xs text-blue-600 dark:text-blue-400">ℹ️ Kitob admin tomonidan tasdiqlanganidan keyin boshqa foydalanuvchilarga ko'rinadi.</p>
                     </div>
+
+                    {error && (
+                        <div className="bg-red-50 dark:bg-red-500/5 border border-red-100 dark:border-red-500/10 rounded-xl p-3">
+                            <p className="text-xs text-red-600 dark:text-red-400">❌ {error}</p>
+                        </div>
+                    )}
 
                     <button
                         type="submit"
