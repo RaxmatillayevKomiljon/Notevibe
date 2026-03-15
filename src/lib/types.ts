@@ -33,3 +33,59 @@ export interface Comment {
     created_at: string;
     author?: { username: string; full_name: string | null; avatar_url: string | null };
 }
+
+// ── Library Management Module ──
+
+export interface Library {
+    id: string;
+    name: string;
+    description: string | null;
+    location: string | null;
+    phone: string | null;
+    logo_url: string | null;
+    created_by: string | null;
+    created_at: string;
+    book_count?: number;
+}
+
+export interface Book {
+    id: string;
+    library_id: string;
+    title: string;
+    author: string;
+    genre: string | null;
+    language: string | null;
+    description: string | null;
+    cover_url: string | null;
+    total_count: number;
+    available_count: number;
+    status: 'pending' | 'approved' | 'rejected';
+    created_by: string | null;
+    created_at: string;
+    library?: Library;
+    avg_rating?: number;
+    review_count?: number;
+}
+
+export interface Borrowing {
+    id: string;
+    book_id: string;
+    library_id: string;
+    user_id: string;
+    taken_date: string | null;
+    return_date: string | null;
+    status: 'requested' | 'approved' | 'borrowed' | 'returned' | 'late';
+    created_at: string;
+    book?: Book;
+    user?: Profile;
+}
+
+export interface BookReview {
+    id: string;
+    book_id: string;
+    user_id: string;
+    rating: number;
+    comment: string | null;
+    created_at: string;
+    user?: { username: string; full_name: string | null; avatar_url: string | null };
+}

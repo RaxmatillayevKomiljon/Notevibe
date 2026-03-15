@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Compass, Bookmark, User, LogOut, PenSquare, Settings, Bell, Shield, Sun, Moon, Monitor } from 'lucide-react';
+import { Home, Compass, Bookmark, User, LogOut, PenSquare, Settings, Bell, Shield, Sun, Moon, Monitor, Library } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Button } from '../ui/Button';
 import { useAuth } from '../auth/AuthProvider';
@@ -15,6 +15,7 @@ const navItemKeys = [
     { icon: Bell, labelKey: 'nav.notifications', path: '/notifications' },
     { icon: Bookmark, labelKey: 'nav.bookmarks', path: '/bookmarks' },
     { icon: User, labelKey: 'nav.profile', path: '/profile' },
+    { icon: Library, labelKey: 'nav.libraries', path: '/libraries' },
     { icon: Settings, labelKey: 'nav.settings', path: '/settings' },
 ];
 

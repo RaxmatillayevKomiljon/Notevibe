@@ -11,6 +11,7 @@ const translations: Record<Language, Record<string, string>> = {
         'nav.profile': 'Profil',
         'nav.settings': 'Sozlamalar',
         'nav.notifications': 'Bildirishnomalar',
+        'nav.libraries': 'Kutubxonalar',
         'nav.newPost': 'Note yozish',
         'nav.logout': 'Chiqish',
 
@@ -224,6 +225,7 @@ const translations: Record<Language, Record<string, string>> = {
         'nav.profile': 'Профиль',
         'nav.settings': 'Настройки',
         'nav.notifications': 'Уведомления',
+        'nav.libraries': 'Библиотеки',
         'nav.newPost': 'Новая заметка',
         'nav.logout': 'Выйти',
 
@@ -437,6 +439,7 @@ const translations: Record<Language, Record<string, string>> = {
         'nav.profile': 'Profile',
         'nav.settings': 'Settings',
         'nav.notifications': 'Notifications',
+        'nav.libraries': 'Libraries',
         'nav.newPost': 'New Note',
         'nav.logout': 'Logout',
 

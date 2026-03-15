@@ -13,6 +13,9 @@ import { UserProfilePage } from './pages/UserProfilePage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { AdminPage } from './pages/AdminPage';
 import { PostPage } from './pages/PostPage';
+import { LibrariesPage } from './pages/LibrariesPage';
+import { LibraryPage } from './pages/LibraryPage';
+import { BookPage } from './pages/BookPage';
 
 import { AuthProvider } from './components/auth/AuthProvider';
 
@@ -37,6 +40,9 @@ function App() {
               <Route path="/user/:userId" element={<UserProfilePage />} />
               <Route path="/notifications" element={<NotificationsPage />} />
               <Route path="/admin" element={<AdminPage />} />
+              <Route path="/libraries" element={<LibrariesPage />} />
+              <Route path="/library/:libraryId" element={<LibraryPage />} />
+              <Route path="/library/:libraryId/book/:bookId" element={<BookPage />} />
             </Route>
 
           </Routes>
