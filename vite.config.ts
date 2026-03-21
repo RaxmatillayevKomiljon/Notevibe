@@ -53,14 +53,14 @@ export default defineConfig({
                 display: 'standalone',
                 icons: [
                     {
-                        src: 'pwa-192x192.svg',
+                        src: 'https://ui-avatars.com/api/?name=NV&background=3b82f6&color=fff&size=192',
                         sizes: '192x192',
-                        type: 'image/svg+xml'
+                        type: 'image/png'
                     },
                     {
-                        src: 'pwa-512x512.svg',
+                        src: 'https://ui-avatars.com/api/?name=NV&background=3b82f6&color=fff&size=512',
                         sizes: '512x512',
-                        type: 'image/svg+xml',
+                        type: 'image/png',
                         purpose: 'any maskable'
                     }
                 ]
