@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../components/ui/Toast';
 import { useTranslation, Language } from '../lib/i18n';
+import { requestNotificationPermission, getNotificationPermissionStatus } from '../lib/pushNotifications';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 
@@ -41,6 +42,7 @@ export function Settings() {
     const [showNewPass, setShowNewPass] = useState(false);
     const [showConfirmPass, setShowConfirmPass] = useState(false);
     const [changingPassword, setChangingPassword] = useState(false);
+    const [notifPermission, setNotifPermission] = useState(getNotificationPermissionStatus());
 
     useEffect(() => {
         applyTheme(theme);
@@ -276,18 +278,38 @@ export function Settings() {
                             )}
                         </div>
 
-                        <button className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left">
+                        <button
+                            onClick={async () => {
+                                if (notifPermission === 'granted') {
+                                    addToast('Bildirishnomalarni brauzer sozlamalaridan o\'chirish mumkin', 'info');
+                                } else {
+                                    const granted = await requestNotificationPermission();
+                                    setNotifPermission(granted ? 'granted' : 'denied');
+                                    if (granted) {
+                                        addToast('Bildirishnomalar yoqildi! 🔔', 'success');
+                                    } else {
+                                        addToast('Bildirishnomalar rad etildi', 'error');
+                                    }
+                                }
+                            }}
+                            className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left"
+                        >
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-slate-100 dark:bg-[#222222] rounded-lg">
                                     <Bell className="w-5 h-5 text-slate-600 dark:text-zinc-300" />
                                 </div>
                                 <div>
                                     <p className="font-medium text-slate-900 dark:text-zinc-50">{t('settings.notifications')}</p>
-                                    <p className="text-sm text-slate-500 dark:text-zinc-400">{t('settings.notifEnabled')}</p>
+                                    <p className="text-sm text-slate-500 dark:text-zinc-400">
+                                        {notifPermission === 'granted' ? 'Push bildirishnomalar yoqilgan ✅' :
+                                         notifPermission === 'denied' ? 'Bildirishnomalar rad etilgan ❌' :
+                                         notifPermission === 'unsupported' ? 'Brauzer qo\'llab-quvvatlamaydi' :
+                                         'Bosib yoqing'}
+                                    </p>
                                 </div>
                             </div>
-                            <div className="w-10 h-6 bg-blue-600 rounded-full relative">
-                                <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm dark:shadow-none" />
+                            <div className={`w-10 h-6 ${notifPermission === 'granted' ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'} rounded-full relative transition-colors`}>
+                                <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-all ${notifPermission === 'granted' ? 'right-1' : 'left-1'}`} />
                             </div>
                         </button>
                     </div>

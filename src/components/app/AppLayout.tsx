@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../auth/AuthProvider';
 import { useEffect } from 'react';
+import { NotificationListener } from './NotificationListener';
 
 export function AppLayout() {
     const location = useLocation();
@@ -31,6 +32,7 @@ export function AppLayout() {
     return (
         <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950">
             <Sidebar />
+            <NotificationListener />
 
             {/* Main Content */}
             <main className="md:ml-64 min-h-screen pb-20 md:pb-0">
